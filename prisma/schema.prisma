@@ -1,0 +1,249 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ユーザーアカウント
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  profile       Profile?
+  photos        Photo[]
+  sentLikes     Like[]    @relation("SentLikes")
+  receivedLikes Like[]    @relation("ReceivedLikes")
+  sentMessages  Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  blockedUsers  Block[]   @relation("BlockedBy")
+  blockedBy     Block[]   @relation("BlockedUsers")
+  reports       Report[]  @relation("Reporter")
+  reportedBy    Report[]  @relation("Reported")
+  subscription  Subscription?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+// NextAuth用アカウント
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+// NextAuth用セッション
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// メール認証用トークン
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ユーザープロフィール
+model Profile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // 基本情報
+  nickname        String
+  gender          Gender
+  birthDate       DateTime
+  prefecture      String   // 都道府県
+  city            String?  // 市区町村
+
+  // 自己紹介
+  bio             String?  @db.Text
+  height          Int?     // cm
+  occupation      String?  // 職業
+
+  // 在日関連情報
+  visaType        VisaType?     // 在留資格
+  yearsInJapan    Int?          // 在日年数
+  japaneseLevel   JapaneseLevel? // 日本語能力
+  futurePlan      FuturePlan?   // 将来の計画
+
+  // 出身
+  nationality     String?  // 国籍
+  hometown        String?  // 出身地
+
+  // 設定
+  isProfilePublic Boolean  @default(true)
+  showVisaType    Boolean  @default(false)
+  showYearsInJapan Boolean @default(false)
+  isVerified      Boolean  @default(false)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// 写真
+model Photo {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url       String
+  publicId  String?  // Cloudinary public ID for deletion
+  isMain    Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+// いいね
+model Like {
+  id         String   @id @default(cuid())
+  fromUserId String
+  toUserId   String
+  fromUser   User     @relation("SentLikes", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUser     User     @relation("ReceivedLikes", fields: [toUserId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([fromUserId, toUserId])
+}
+
+// メッセージ
+model Message {
+  id         String   @id @default(cuid())
+  fromUserId String
+  toUserId   String
+  fromUser   User     @relation("SentMessages", fields: [fromUserId], references: [id], onDelete: Cascade)
+  toUser     User     @relation("ReceivedMessages", fields: [toUserId], references: [id], onDelete: Cascade)
+  content    String   @db.Text
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  @@index([fromUserId, toUserId])
+}
+
+// ブロック
+model Block {
+  id            String   @id @default(cuid())
+  blockerId     String
+  blockedUserId String
+  blocker       User     @relation("BlockedBy", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockedUser   User     @relation("BlockedUsers", fields: [blockedUserId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+
+  @@unique([blockerId, blockedUserId])
+}
+
+// 通報
+model Report {
+  id          String       @id @default(cuid())
+  reporterId  String
+  reportedId  String
+  reporter    User         @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  reported    User         @relation("Reported", fields: [reportedId], references: [id], onDelete: Cascade)
+  reason      ReportReason
+  description String?      @db.Text
+  status      ReportStatus @default(PENDING)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+// サブスクリプション
+model Subscription {
+  id        String           @id @default(cuid())
+  userId    String           @unique
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan      SubscriptionPlan
+  status    SubscriptionStatus @default(ACTIVE)
+  startDate DateTime         @default(now())
+  endDate   DateTime
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+// Enums
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum VisaType {
+  PERMANENT_RESIDENT  // 永住
+  WORK_VISA          // 就労ビザ
+  SPOUSE_VISA        // 配偶者ビザ
+  STUDENT_VISA       // 留学
+  DEPENDENT_VISA     // 家族滞在
+  DESIGNATED_ACTIVITIES // 特定活動
+  OTHER              // その他
+  PRIVATE            // 非公開
+}
+
+enum JapaneseLevel {
+  NATIVE      // ネイティブ
+  N1          // JLPT N1
+  N2          // JLPT N2
+  N3          // JLPT N3
+  N4          // JLPT N4
+  N5          // JLPT N5
+  BEGINNER    // 初心者
+}
+
+enum FuturePlan {
+  STAY_LONG_TERM  // 長期滞在予定
+  RETURN_HOME     // 帰国予定
+  UNDECIDED       // 未定
+  PRIVATE         // 非公開
+}
+
+enum ReportReason {
+  FAKE_PROFILE     // 偽プロフィール
+  HARASSMENT       // 嫌がらせ
+  INAPPROPRIATE    // 不適切なコンテンツ
+  SPAM             // スパム
+  SCAM             // 詐欺
+  OTHER            // その他
+}
+
+enum ReportStatus {
+  PENDING   // 対応中
+  REVIEWED  // 確認済み
+  RESOLVED  // 解決済み
+  DISMISSED // 却下
+}
+
+enum SubscriptionPlan {
+  FREE      // 無料
+  PREMIUM   // プレミアム（月額）
+  VIP       // VIP（年額）
+}
+
+enum SubscriptionStatus {
+  ACTIVE    // 有効
+  CANCELLED // キャンセル
+  EXPIRED   // 期限切れ
+}

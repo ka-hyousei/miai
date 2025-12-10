@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx prisma init)",
+      "Bash(cat:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(npm run build:*)",
+      "Bash(while read file)",
+      "Bash(do sed -i \"s|from ''@/generated/prisma''|from ''@/generated/prisma/client''|g\" \"$file\")",
+      "Bash(done)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(PGPASSWORD=postgres psql:*)",
+      "Bash(PGPASSWORD=postgres \"/c/Program Files/PostgreSQL/18/bin/psql.exe\":*)",
+      "Bash(PGPASSWORD=123456 \"/c/Program Files/PostgreSQL/18/bin/psql.exe\":*)",
+      "Bash(node -e:*)"
+    ]
+  }
+}
