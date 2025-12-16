@@ -37,7 +37,7 @@ export default function Home() {
             日本で出会う、<br className="md:hidden" />新しいご縁
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            国籍を超えた真剣な出会いを。日本の方も海外の方も大歓迎。
+            国籍を超えた真剣な出会いをお届けいたします。日本の方も海外の方も大歓迎です。
           </p>
           <Link
             href="/register"
@@ -63,7 +63,7 @@ export default function Home() {
                 多様な出会い
               </h4>
               <p className="text-gray-600">
-                国籍や文化を超えた素敵な出会いをサポート
+                国籍や文化を超えた素敵な出会いをサポートいたします
               </p>
             </div>
             <div className="text-center p-6">
@@ -74,7 +74,7 @@ export default function Home() {
                 真剣な出会い
               </h4>
               <p className="text-gray-600">
-                将来を見据えた真剣なパートナー探しをサポート
+                将来を見据えた真剣なパートナー探しをサポートいたします
               </p>
             </div>
             <div className="text-center p-6">
@@ -85,7 +85,7 @@ export default function Home() {
                 安心・安全
               </h4>
               <p className="text-gray-600">
-                本人確認と24時間監視で安全な環境を提供
+                本人確認と24時間監視で安全な環境をご提供いたします
               </p>
             </div>
             <div className="text-center p-6">
@@ -96,7 +96,7 @@ export default function Home() {
                 丁寧なマッチング
               </h4>
               <p className="text-gray-600">
-                お互いの「いいね」でマッチング後にメッセージ開始
+                お互いの「いいね」でマッチング後にメッセージを開始できます
               </p>
             </div>
           </div>
@@ -107,10 +107,10 @@ export default function Home() {
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h3 className="text-3xl font-bold text-gray-900 mb-6">
-            あなたの運命の人が待っているかも
+            あなたの運命の方がお待ちかもしれません
           </h3>
           <p className="text-xl text-gray-600 mb-8">
-            今すぐ無料登録して、新しい出会いを見つけましょう
+            今すぐ無料登録して、新しい出会いを見つけてみませんか
           </p>
           <Link
             href="/register"
