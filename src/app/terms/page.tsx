@@ -13,7 +13,7 @@ export default function TermsPage() {
               <Sparkles className="w-4 h-4 text-yellow-400 absolute -top-1 -right-1" />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 bg-clip-text text-transparent">
-              ミアイ
+              お見合い
             </span>
           </Link>
           <div className="flex gap-4">
@@ -40,7 +40,7 @@ export default function TermsPage() {
 
           <div className="prose prose-gray max-w-none space-y-8">
             <p className="text-gray-600">
-              この利用規約（以下「本規約」）は、ミアイ（以下「当サービス」）の利用条件を定めるものです。
+              この利用規約（以下「本規約」）は、お見合い（以下「当サービス」）の利用条件を定めるものです。
               ユーザーの皆様には、本規約に同意いただいた上で、当サービスをご利用いただきます。
             </p>
 
@@ -185,7 +185,7 @@ export default function TermsPage() {
             <div className="flex items-center gap-2 mb-4 md:mb-0">
               <Heart className="w-7 h-7 text-pink-400 fill-pink-400" />
               <span className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
-                ミアイ
+                お見合い
               </span>
             </div>
             <div className="flex gap-6">
@@ -195,7 +195,7 @@ export default function TermsPage() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-            <p>&copy; 2025 ミアイ. All rights reserved.</p>
+            <p>&copy; 2025 お見合い. All rights reserved.</p>
           </div>
         </div>
       </footer>

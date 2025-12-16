@@ -13,7 +13,7 @@ export default function Home() {
               <Sparkles className="w-4 h-4 text-yellow-400 absolute -top-1 -right-1" />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 bg-clip-text text-transparent">
-              ミアイ
+              お見合い
             </span>
           </Link>
           <div className="flex gap-4">
@@ -52,7 +52,7 @@ export default function Home() {
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <h3 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            ミアイの特徴
+            お見合いの特徴
           </h3>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center p-6">
@@ -117,7 +117,7 @@ export default function Home() {
             <div className="flex items-center gap-2 mb-4 md:mb-0">
               <Heart className="w-7 h-7 text-pink-400 fill-pink-400" />
               <span className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
-                ミアイ
+                お見合い
               </span>
             </div>
             <div className="flex gap-6">
@@ -127,7 +127,7 @@ export default function Home() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-            <p>&copy; 2025 ミアイ. All rights reserved.</p>
+            <p>&copy; 2025 お見合い. All rights reserved.</p>
           </div>
         </div>
       </footer>

@@ -10,8 +10,8 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "ミアイ - 在日華人向け出会いアプリ",
-  description: "日本で暮らす中国人のための真剣な出会いを応援するマッチングサービス",
+  title: "お見合い - 国籍を超えた出会いをお届けするマッチングサービス",
+  description: "国籍を超えた真剣な出会いをお届けいたします。日本の方も海外の方も大歓迎です。",
 };
 
 export default function RootLayout({

@@ -231,7 +231,7 @@ export default function SettingsPage() {
 
         {/* アプリ情報 */}
         <div className="text-center text-sm text-gray-500 mt-8">
-          <p>ミアイ v1.0.0</p>
+          <p>お見合い v1.0.0</p>
           <div className="flex justify-center gap-4 mt-2">
             <Link href="/terms" className="hover:text-gray-700">利用規約</Link>
             <Link href="/privacy" className="hover:text-gray-700">プライバシーポリシー</Link>

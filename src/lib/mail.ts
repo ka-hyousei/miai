@@ -26,7 +26,7 @@ interface SendEmailOptions {
 }
 
 export async function sendEmail({ to, subject, html }: SendEmailOptions) {
-  const from = process.env.SMTP_FROM || 'ミアイ <noreply@miai.jp>'
+  const from = process.env.SMTP_FROM || 'お見合い <noreply@miai.jp>'
 
   try {
     const info = await transporter.sendMail({
@@ -84,7 +84,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
     <body>
       <div class="container">
         <div class="header">
-          <h1>ミアイ</h1>
+          <h1>お見合い</h1>
         </div>
         <div class="content">
           <h2>パスワードリセットのご依頼</h2>
@@ -99,7 +99,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
           </p>
         </div>
         <div class="footer">
-          <p>© ミアイ - 在日華人向けマッチングアプリ</p>
+          <p>© お見合い - 国籍を超えた出会いを</p>
         </div>
       </div>
     </body>
@@ -108,7 +108,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
 
   return sendEmail({
     to: email,
-    subject: '【ミアイ】パスワードリセットのご案内',
+    subject: '【お見合い】パスワードリセットのご案内',
     html,
   })
 }

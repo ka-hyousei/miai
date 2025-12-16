@@ -115,7 +115,7 @@ export default function ResetPasswordPage() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">ミアイ</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">お見合い</h1>
             <p className="text-gray-600">新しいパスワードを設定</p>
           </div>
 

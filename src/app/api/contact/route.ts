@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       <body>
         <div class="container">
           <div class="header">
-            <h1>ミアイ - お問い合わせ</h1>
+            <h1>お見合い - お問い合わせ</h1>
           </div>
           <div class="content">
             <div class="field">
@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     // 管理者にメール送信（実際の管理者メールアドレスに変更してください）
     await sendEmail({
       to: process.env.ADMIN_EMAIL || 'admin@miai.jp',
-      subject: `【ミアイ】お問い合わせ: ${categoryLabels[category] || category}`,
+      subject: `【お見合い】お問い合わせ: ${categoryLabels[category] || category}`,
       html: adminHtml,
     })
 
@@ -103,7 +103,7 @@ export async function POST(request: Request) {
       <body>
         <div class="container">
           <div class="header">
-            <h1>ミアイ</h1>
+            <h1>お見合い</h1>
           </div>
           <div class="content">
             <p>${name} 様</p>
@@ -119,7 +119,7 @@ export async function POST(request: Request) {
           </div>
           <div class="footer">
             <p>※このメールは自動送信されています。このメールへの返信はできません。</p>
-            <p>&copy; ミアイ - 国籍を超えた出会いを</p>
+            <p>&copy; お見合い - 国籍を超えた出会いを</p>
           </div>
         </div>
       </body>
@@ -128,7 +128,7 @@ export async function POST(request: Request) {
 
     await sendEmail({
       to: email,
-      subject: '【ミアイ】お問い合わせを受け付けました',
+      subject: '【お見合い】お問い合わせを受け付けました',
       html: userHtml,
     })
 
