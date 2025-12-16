@@ -37,8 +37,7 @@ export default function Home() {
             日本で出会う、<br className="md:hidden" />新しいご縁
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            在日華人のための真剣な出会いを応援するマッチングサービス。
-            同じ境遇だからこそ分かり合える、特別な出会いがここにあります。
+            国籍を超えた真剣な出会いを。日本の方も海外の方も大歓迎。
           </p>
           <Link
             href="/register"
