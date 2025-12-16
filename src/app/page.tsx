@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Heart, Users, Shield, MessageCircle, Sparkles } from "lucide-react";
+import { Heart, Users, MessageCircle, Sparkles } from "lucide-react";
 
 export default function Home() {
   return (
@@ -54,7 +54,7 @@ export default function Home() {
           <h3 className="text-3xl font-bold text-center text-gray-900 mb-12">
             ミアイの特徴
           </h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Users className="w-8 h-8 text-pink-500" />
@@ -77,18 +77,7 @@ export default function Home() {
                 将来を見据えた真剣なパートナー探しをサポートいたします
               </p>
             </div>
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-pink-500" />
-              </div>
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                安心・安全
-              </h4>
-              <p className="text-gray-600">
-                本人確認と24時間監視で安全な環境をご提供いたします
-              </p>
-            </div>
-            <div className="text-center p-6">
+                        <div className="text-center p-6">
               <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MessageCircle className="w-8 h-8 text-pink-500" />
               </div>
