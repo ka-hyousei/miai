@@ -13,7 +13,18 @@
       "Bash(PGPASSWORD=postgres psql:*)",
       "Bash(PGPASSWORD=postgres \"/c/Program Files/PostgreSQL/18/bin/psql.exe\":*)",
       "Bash(PGPASSWORD=123456 \"/c/Program Files/PostgreSQL/18/bin/psql.exe\":*)",
-      "Bash(node -e:*)"
+      "Bash(node -e:*)",
+      "Bash(git push:*)",
+      "Bash(npx vercel --prod)",
+      "Bash(npx vercel:*)",
+      "WebFetch(domain:vercel.com)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: パスワードリセット機能を追加\n\n- /forgot-password ページ: メールアドレス入力フォーム\n- /reset-password ページ: 新しいパスワード設定フォーム\n- パスワードリセット用API（トークン生成・検証）\n- メール送信ユーティリティ（開発環境ではコンソール出力）\n- PasswordResetTokenモデルをPrismaスキーマに追加\n- ログインページに「パスワードをお忘れの方」リンクを追加\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n)\")",
+      "WebFetch(domain:miai-gfctgtefz-ka-hyouseis-projects.vercel.app)",
+      "WebFetch(domain:miai-c784werbt-ka-hyouseis-projects.vercel.app)",
+      "Bash(npx prisma:*)",
+      "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_6hxcKCtl5MBP@ep-rough-violet-ahzr1tmi-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require\" npx prisma db push:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
