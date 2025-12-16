@@ -1,9 +1,20 @@
 import nodemailer from 'nodemailer'
-import type SMTPTransport from 'nodemailer/lib/smtp-transport'
 
-// 開発環境ではコンソール出力、本番環境ではSMTP
-const transportConfig: SMTPTransport.Options | { jsonTransport: true } = process.env.SMTP_HOST
-  ? {
+// トランスポーターを取得（環境変数を毎回読み込む）
+function getTransporter() {
+  if (process.env.SMTP_HOST) {
+    // Gmail用設定
+    if (process.env.SMTP_HOST === 'smtp.gmail.com') {
+      return nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASSWORD,
+        },
+      })
+    }
+    // その他のSMTPサーバー
+    return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: process.env.SMTP_SECURE === 'true',
@@ -11,13 +22,11 @@ const transportConfig: SMTPTransport.Options | { jsonTransport: true } = process
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
-    }
-  : {
-      // 開発環境: JSON Transport（コンソール出力）
-      jsonTransport: true,
-    }
-
-const transporter = nodemailer.createTransport(transportConfig as SMTPTransport.Options)
+    })
+  }
+  // 開発環境: JSON Transport（コンソール出力）
+  return nodemailer.createTransport({ jsonTransport: true })
+}
 
 interface SendEmailOptions {
   to: string
@@ -27,6 +36,7 @@ interface SendEmailOptions {
 
 export async function sendEmail({ to, subject, html }: SendEmailOptions) {
   const from = process.env.SMTP_FROM || 'お見合い <noreply@miai.jp>'
+  const transporter = getTransporter()
 
   try {
     const info = await transporter.sendMail({
