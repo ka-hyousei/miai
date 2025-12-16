@@ -11,11 +11,17 @@ function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/discover'
+  const message = searchParams.get('message')
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+
+  // パスワードリセット成功時のメッセージ
+  const successMessage = message === 'password-reset-success'
+    ? 'パスワードが変更されました。新しいパスワードでログインしてください。'
+    : null
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -44,6 +50,12 @@ function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {successMessage && (
+        <div className="bg-green-50 text-green-700 p-3 rounded-lg text-sm">
+          {successMessage}
+        </div>
+      )}
+
       {error && (
         <div className="bg-red-50 text-red-500 p-3 rounded-lg text-sm">
           {error}
@@ -69,6 +81,12 @@ function LoginForm() {
         placeholder="••••••••"
         required
       />
+
+      <div className="text-right">
+        <Link href="/forgot-password" className="text-sm text-pink-500 hover:text-pink-600">
+          パスワードをお忘れの方
+        </Link>
+      </div>
 
       <Button
         type="submit"

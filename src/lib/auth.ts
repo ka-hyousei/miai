@@ -18,25 +18,41 @@ export const authOptions: NextAuthOptions = {
           throw new Error('メールアドレスとパスワードを入力してください')
         }
 
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-          include: { profile: true },
-        })
+        try {
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email },
+            include: { profile: true },
+          })
 
-        if (!user || !user.password) {
-          throw new Error('メールアドレスまたはパスワードが正しくありません')
-        }
+          if (!user || !user.password) {
+            throw new Error('メールアドレスまたはパスワードが正しくありません')
+          }
 
-        const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
+          const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
 
-        if (!isPasswordValid) {
-          throw new Error('メールアドレスまたはパスワードが正しくありません')
-        }
+          if (!isPasswordValid) {
+            throw new Error('メールアドレスまたはパスワードが正しくありません')
+          }
 
-        return {
-          id: user.id,
-          email: user.email,
-          hasProfile: !!user.profile,
+          return {
+            id: user.id,
+            email: user.email,
+            hasProfile: !!user.profile,
+          }
+        } catch (error) {
+          // データベース接続エラーやテーブル不存在エラーの場合
+          if (error instanceof Error) {
+            if (error.message.includes('does not exist') ||
+                error.message.includes('Connection') ||
+                error.message.includes('connect')) {
+              throw new Error('システムエラーが発生しました。しばらくしてから再度お試しください。')
+            }
+            // 既に日本語のエラーメッセージの場合はそのまま投げる
+            if (error.message.includes('メール') || error.message.includes('パスワード')) {
+              throw error
+            }
+          }
+          throw new Error('ログインに失敗しました。アカウントをお持ちでない場合は新規登録してください。')
         }
       },
     }),
