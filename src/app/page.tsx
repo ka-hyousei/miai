@@ -60,10 +60,10 @@ export default function Home() {
                 <Users className="w-8 h-8 text-pink-500" />
               </div>
               <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                在日華人専用
+                多様な出会い
               </h4>
               <p className="text-gray-600">
-                同じ文化背景を持つ人との出会いを大切にしています
+                国籍や文化を超えた素敵な出会いをサポート
               </p>
             </div>
             <div className="text-center p-6">
