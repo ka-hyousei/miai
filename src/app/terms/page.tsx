@@ -51,8 +51,18 @@ export default function TermsPage() {
               </p>
             </section>
 
+            <section className="bg-red-50 border border-red-200 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-red-700 mb-4">第2条（年齢制限）【重要】</h2>
+              <ol className="list-decimal list-inside text-gray-700 space-y-2">
+                <li><strong className="text-red-600">当サービスは、18歳以上の方のみご利用いただけます。</strong></li>
+                <li>18歳未満の方は、当サービスへの登録および利用を固くお断りいたします。</li>
+                <li>利用登録時に18歳以上であることを確認させていただきます。虚偽の年齢を申告した場合、発覚次第アカウントを削除し、以後の利用をお断りいたします。</li>
+                <li>当サービスは、出会い系サイト規制法（インターネット異性紹介事業を利用して児童を誘引する行為の規制等に関する法律）を遵守し、18歳未満の方の利用を防止するための措置を講じております。</li>
+              </ol>
+            </section>
+
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">第2条（利用登録）</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第3条（利用登録）</h2>
               <ol className="list-decimal list-inside text-gray-600 space-y-2">
                 <li>登録希望者が本規約に同意の上、当サービス所定の方法によって利用登録を申請し、当サービスがこれを承認することによって、利用登録が完了するものとします。</li>
                 <li>当サービスは、以下の場合には利用登録の申請を承認しないことがあります。
@@ -67,7 +77,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">第3条（ユーザーIDおよびパスワードの管理）</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第4条（ユーザーIDおよびパスワードの管理）</h2>
               <ol className="list-decimal list-inside text-gray-600 space-y-2">
                 <li>ユーザーは、自己の責任において、当サービスのユーザーIDおよびパスワードを適切に管理するものとします。</li>
                 <li>ユーザーは、いかなる場合にも、ユーザーIDおよびパスワードを第三者に譲渡または貸与し、もしくは第三者と共用することはできません。</li>
@@ -76,7 +86,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">第4条（禁止事項）</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第5条（禁止事項）</h2>
               <p className="text-gray-600 mb-4">ユーザーは、当サービスの利用にあたり、以下の行為をしてはなりません。</p>
               <ul className="list-disc list-inside text-gray-600 space-y-2">
                 <li>法令または公序良俗に違反する行為</li>
@@ -95,7 +105,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">第5条（本サービスの提供の停止等）</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第6条（本サービスの提供の停止等）</h2>
               <p className="text-gray-600 mb-4">
                 当サービスは、以下のいずれかの事由があると判断した場合、ユーザーに事前に通知することなく本サービスの全部または一部の提供を停止または中断することができるものとします。
               </p>
@@ -108,14 +118,14 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">第6条（利用制限および登録抹消）</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第7条（利用制限および登録抹消）</h2>
               <p className="text-gray-600">
                 当サービスは、ユーザーが本規約のいずれかの条項に違反した場合、事前の通知なく、当該ユーザーに対して本サービスの全部もしくは一部の利用を制限し、またはユーザーとしての登録を抹消することができるものとします。
               </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">第7条（免責事項）</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第8条（免責事項）</h2>
               <ol className="list-decimal list-inside text-gray-600 space-y-2">
                 <li>当サービスは、本サービスに関して、ユーザー間またはユーザーと第三者との間において生じた取引、連絡または紛争等について一切責任を負いません。</li>
                 <li>当サービスは、本サービスを通じて出会った相手との交際、結婚等について一切の責任を負いません。</li>
@@ -124,14 +134,14 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">第8条（サービス内容の変更等）</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第9条（サービス内容の変更等）</h2>
               <p className="text-gray-600">
                 当サービスは、ユーザーに通知することなく、本サービスの内容を変更しまたは本サービスの提供を中止することができるものとし、これによってユーザーに生じた損害について一切の責任を負いません。
               </p>
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">第9条（利用規約の変更）</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第10条（利用規約の変更）</h2>
               <p className="text-gray-600">
                 当サービスは、必要と判断した場合には、ユーザーに通知することなくいつでも本規約を変更することができるものとします。
                 なお、本規約の変更後、本サービスの利用を開始した場合には、当該ユーザーは変更後の規約に同意したものとみなします。
@@ -139,7 +149,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">第10条（準拠法・裁判管轄）</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第11条（準拠法・裁判管轄）</h2>
               <p className="text-gray-600">
                 本規約の解釈にあたっては、日本法を準拠法とします。
                 本サービスに関して紛争が生じた場合には、当サービス運営者の本店所在地を管轄する裁判所を専属的合意管轄とします。
