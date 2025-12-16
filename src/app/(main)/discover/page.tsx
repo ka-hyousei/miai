@@ -29,6 +29,7 @@ export default function DiscoverPage() {
   const router = useRouter()
   const [profiles, setProfiles] = useState<UserProfile[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [defaultGender, setDefaultGender] = useState<string>('')
   const [filters, setFilters] = useState({
     gender: '',
     prefecture: '',
@@ -45,7 +46,7 @@ export default function DiscoverPage() {
     }
   }, [status, router])
 
-  const fetchProfiles = async () => {
+  const fetchProfiles = async (isInitial = false) => {
     setIsLoading(true)
     try {
       const params = new URLSearchParams()
@@ -59,6 +60,12 @@ export default function DiscoverPage() {
       const response = await fetch(`/api/discover?${params.toString()}`)
       const data = await response.json()
       setProfiles(data.profiles || [])
+
+      // 初回読み込み時にデフォルトの性別フィルタを設定
+      if (isInitial && data.defaultGender) {
+        setDefaultGender(data.defaultGender)
+        setFilters(prev => ({ ...prev, gender: data.defaultGender }))
+      }
     } catch (error) {
       console.error('Failed to fetch profiles:', error)
     } finally {
@@ -68,9 +75,17 @@ export default function DiscoverPage() {
 
   useEffect(() => {
     if (session) {
+      fetchProfiles(true) // 初回読み込み
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session])
+
+  useEffect(() => {
+    if (session && searchTrigger > 0) {
       fetchProfiles()
     }
-  }, [session, searchTrigger])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTrigger])
 
   const handleSearch = () => {
     setSearchTrigger(prev => prev + 1)
@@ -78,7 +93,7 @@ export default function DiscoverPage() {
 
   const handleClear = () => {
     setFilters({
-      gender: '',
+      gender: defaultGender, // デフォルトで異性を選択
       prefecture: '',
       ageMin: '',
       ageMax: '',

@@ -12,13 +12,26 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'ログインが必要です' }, { status: 401 })
     }
 
+    // ログインユーザーのプロフィールを取得して性別を確認
+    const currentUserProfile = await prisma.profile.findUnique({
+      where: { userId: session.user.id },
+      select: { gender: true },
+    })
+
     const searchParams = request.nextUrl.searchParams
-    const gender = searchParams.get('gender') as Gender | null
+    const genderParam = searchParams.get('gender') as Gender | null
     const prefecture = searchParams.get('prefecture')
     const ageMin = searchParams.get('ageMin')
     const ageMax = searchParams.get('ageMax')
     const nationality = searchParams.get('nationality')
     const visaType = searchParams.get('visaType') as VisaType | null
+
+    // 性別フィルタ: 指定がなければ異性をデフォルト表示
+    let gender: Gender | null = genderParam
+    if (!gender && currentUserProfile?.gender) {
+      // 男性なら女性を、女性なら男性をデフォルト表示
+      gender = currentUserProfile.gender === 'MALE' ? 'FEMALE' : 'MALE'
+    }
 
     // 自分がブロックしたユーザーと、自分をブロックしたユーザーを除外
     const blockedUserIds = await prisma.block.findMany({
@@ -90,7 +103,10 @@ export async function GET(request: NextRequest) {
       take: 50,
     })
 
-    return NextResponse.json({ profiles })
+    // デフォルトの性別フィルタ（異性）を返す
+    const defaultGender = currentUserProfile?.gender === 'MALE' ? 'FEMALE' : 'MALE'
+
+    return NextResponse.json({ profiles, defaultGender })
   } catch (error) {
     console.error('Discover error:', error)
     return NextResponse.json(
