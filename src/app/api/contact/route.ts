@@ -78,9 +78,9 @@ export async function POST(request: Request) {
       </html>
     `
 
-    // 管理者にメール送信（実際の管理者メールアドレスに変更してください）
+    // 管理者にメール送信
     await sendEmail({
-      to: process.env.ADMIN_EMAIL || 'admin@miai.jp',
+      to: 'kahyousei@gmail.com',
       subject: `【お見合い】お問い合わせ: ${categoryLabels[category] || category}`,
       html: adminHtml,
     })
