@@ -25,13 +25,13 @@ export const authOptions: NextAuthOptions = {
           })
 
           if (!user || !user.password) {
-            throw new Error('メールアドレスまたはパスワードが正しくありません')
+            throw new Error('ユーザーが存在しません。新規登録してください')
           }
 
           const isPasswordValid = await bcrypt.compare(credentials.password, user.password)
 
           if (!isPasswordValid) {
-            throw new Error('メールアドレスまたはパスワードが正しくありません')
+            throw new Error('パスワードが正しくありません')
           }
 
           return {
@@ -48,7 +48,7 @@ export const authOptions: NextAuthOptions = {
               throw new Error('システムエラーが発生しました。しばらくしてから再度お試しください。')
             }
             // 既に日本語のエラーメッセージの場合はそのまま投げる
-            if (error.message.includes('メール') || error.message.includes('パスワード')) {
+            if (error.message.includes('メール') || error.message.includes('パスワード') || error.message.includes('ユーザー')) {
               throw error
             }
           }

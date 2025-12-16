@@ -81,6 +81,19 @@ model PasswordResetToken {
   @@unique([email, token])
 }
 
+// メール認証コード（登録時）
+model EmailVerificationCode {
+  id        String   @id @default(cuid())
+  email     String
+  code      String   // 6桁の認証コード
+  expires   DateTime
+  verified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@unique([email, code])
+  @@index([email])
+}
+
 // ユーザープロフィール
 model Profile {
   id              String   @id @default(cuid())

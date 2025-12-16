@@ -21,6 +21,21 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const validatedData = registerSchema.parse(body)
 
+    // メールアドレスが認証済みか確認
+    const verifiedCode = await prisma.emailVerificationCode.findFirst({
+      where: {
+        email: validatedData.email,
+        verified: true,
+      },
+    })
+
+    if (!verifiedCode) {
+      return NextResponse.json(
+        { error: 'メールアドレスが認証されていません' },
+        { status: 400 }
+      )
+    }
+
     const existingUser = await prisma.user.findUnique({
       where: { email: validatedData.email },
     })
@@ -34,11 +49,22 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await bcrypt.hash(validatedData.password, 12)
 
-    const user = await prisma.user.create({
-      data: {
-        email: validatedData.email,
-        password: hashedPassword,
-      },
+    // ユーザー作成と認証コード削除をトランザクションで実行
+    const user = await prisma.$transaction(async (tx) => {
+      const newUser = await tx.user.create({
+        data: {
+          email: validatedData.email,
+          password: hashedPassword,
+          emailVerified: new Date(), // メール認証済み
+        },
+      })
+
+      // 使用済みの認証コードを削除
+      await tx.emailVerificationCode.deleteMany({
+        where: { email: validatedData.email },
+      })
+
+      return newUser
     })
 
     return NextResponse.json(
