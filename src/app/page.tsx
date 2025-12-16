@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Heart, Users, Shield, MessageCircle } from "lucide-react";
+import { Heart, Users, Shield, MessageCircle, Sparkles } from "lucide-react";
 
 export default function Home() {
   return (
@@ -7,7 +7,15 @@ export default function Home() {
       {/* Hero Section */}
       <header className="relative">
         <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
-          <h1 className="text-2xl font-bold text-pink-500">ミアイ</h1>
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="relative">
+              <Heart className="w-8 h-8 text-pink-500 fill-pink-500 group-hover:scale-110 transition-transform" />
+              <Sparkles className="w-4 h-4 text-yellow-400 absolute -top-1 -right-1" />
+            </div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 bg-clip-text text-transparent">
+              ミアイ
+            </span>
+          </Link>
           <div className="flex gap-4">
             <Link
               href="/login"
@@ -118,7 +126,12 @@ export default function Home() {
       <footer className="bg-gray-900 text-gray-400 py-12">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="text-2xl font-bold text-white mb-4 md:mb-0">ミアイ</div>
+            <div className="flex items-center gap-2 mb-4 md:mb-0">
+              <Heart className="w-7 h-7 text-pink-400 fill-pink-400" />
+              <span className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
+                ミアイ
+              </span>
+            </div>
             <div className="flex gap-6">
               <Link href="/terms" className="hover:text-white">利用規約</Link>
               <Link href="/privacy" className="hover:text-white">プライバシーポリシー</Link>
