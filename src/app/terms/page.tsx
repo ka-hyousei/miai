@@ -171,8 +171,8 @@ export default function TermsPage() {
             </section>
 
             <div className="mt-12 pt-8 border-t border-gray-200">
-              <p className="text-gray-500 text-sm">制定日：2024年1月1日</p>
-              <p className="text-gray-500 text-sm">最終更新日：2024年12月1日</p>
+              <p className="text-gray-500 text-sm">制定日：2025年12月16日</p>
+              <p className="text-gray-500 text-sm">最終更新日：2025年12月16日</p>
             </div>
           </div>
         </div>
@@ -195,7 +195,7 @@ export default function TermsPage() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-            <p>&copy; 2024 ミアイ. All rights reserved.</p>
+            <p>&copy; 2025 ミアイ. All rights reserved.</p>
           </div>
         </div>
       </footer>
