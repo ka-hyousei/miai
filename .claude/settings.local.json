@@ -34,7 +34,9 @@
       "Bash(vercel domains:*)",
       "Bash(vercel inspect:*)",
       "Bash(vercel project:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "WebFetch(domain:miai-olive.vercel.app)",
+      "Bash(curl:*)"
     ]
   }
 }
