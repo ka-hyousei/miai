@@ -108,7 +108,7 @@ function PaymentContent() {
           '5. 送金を完了',
           '6. 「支払いを完了しました」ボタンを押す',
         ],
-        paypayId: 'miai-premium', // TODO: 実際のPayPay IDに変更
+        paypayId: 'robertstonejia', // TODO: 実際のPayPay IDに変更
       }
     }
   }
