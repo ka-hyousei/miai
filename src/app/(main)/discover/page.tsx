@@ -150,7 +150,7 @@ export default function DiscoverPage() {
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500" />
       </div>
     )
   }
@@ -158,9 +158,19 @@ export default function DiscoverPage() {
   return (
     <div className="md:ml-64">
       <div className="p-4">
-        {/* Filters */}
-        <div className="bg-white rounded-lg p-4 mb-6 shadow-sm">
-          <h2 className="font-semibold text-gray-900 mb-4">{t('searchConditions')}</h2>
+        {/* Filters - 中国风 */}
+        <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-xl p-4 mb-6 shadow-sm border-2 border-red-200 relative overflow-hidden">
+          {/* 装饰性角落 */}
+          <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-red-400 rounded-tl-lg" />
+          <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-red-400 rounded-tr-lg" />
+          <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-red-400 rounded-bl-lg" />
+          <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-red-400 rounded-br-lg" />
+
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-yellow-600">◈</span>
+            <h2 className="font-semibold text-red-700">{t('searchConditions')}</h2>
+            <span className="text-yellow-600">◈</span>
+          </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Select
               id="gender"
@@ -208,11 +218,11 @@ export default function DiscoverPage() {
             )}
           </div>
           <div className="flex gap-3 mt-4">
-            <Button onClick={handleSearch} className="flex-1">
+            <Button onClick={handleSearch} className="flex-1 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600">
               <Search className="w-4 h-4 mr-2" />
               {t('search')}
             </Button>
-            <Button onClick={handleClear} variant="outline" className="flex-1">
+            <Button onClick={handleClear} variant="outline" className="flex-1 border-red-300 text-red-600 hover:bg-red-50">
               <RotateCcw className="w-4 h-4 mr-2" />
               {t('clear')}
             </Button>
@@ -221,15 +231,16 @@ export default function DiscoverPage() {
 
         {/* Profile Grid */}
         {profiles.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            {t('noMatch')}
+          <div className="text-center py-12">
+            <div className="text-red-300 text-4xl mb-4">🏮</div>
+            <p className="text-gray-500">{t('noMatch')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {profiles.map((profile) => (
               <div
                 key={profile.id}
-                className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+                className="bg-gradient-to-b from-white to-red-50/30 rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all border border-red-100 hover:border-red-300 group"
               >
                 <Link href={`/profile/${profile.id}`}>
                   <div className="aspect-[3/4] bg-gray-200 relative">
@@ -237,16 +248,17 @@ export default function DiscoverPage() {
                       <img
                         src={profile.user.photos[0].url}
                         alt={profile.nickname}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">
                         No Photo
                       </div>
                     )}
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-                      <h3 className="text-white font-semibold">
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-4">
+                      <h3 className="text-white font-semibold flex items-center gap-2">
                         {profile.nickname}, {calculateAge(profile.birthDate)}
+                        <span className="text-yellow-400 text-sm">✿</span>
                       </h3>
                       <div className="flex items-center gap-1 text-white/80 text-sm">
                         <MapPin className="w-3 h-3" />
@@ -258,13 +270,13 @@ export default function DiscoverPage() {
                 <div className="p-3">
                   {profile.occupation && (
                     <div className="flex items-center gap-1 text-gray-600 text-sm mb-2">
-                      <Briefcase className="w-3 h-3" />
+                      <Briefcase className="w-3 h-3 text-red-400" />
                       {profile.occupation}
                     </div>
                   )}
                   {profile.nationality && (
                     <div className="flex items-center gap-1 text-gray-600 text-sm mb-2">
-                      <Globe className="w-3 h-3" />
+                      <Globe className="w-3 h-3 text-red-400" />
                       {profile.nationality}
                     </div>
                   )}
@@ -280,7 +292,7 @@ export default function DiscoverPage() {
                   ) : (
                     <Button
                       onClick={() => handleLike(profile.userId)}
-                      className="w-full"
+                      className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600"
                       size="sm"
                     >
                       <Heart className="w-4 h-4 mr-1" />

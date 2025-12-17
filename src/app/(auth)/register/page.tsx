@@ -187,40 +187,62 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-rose-100 px-4">
-      <div className="absolute top-4 right-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 px-4 relative overflow-hidden">
+      {/* 背景装饰 */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-10 left-10 text-red-200/30 text-6xl">囍</div>
+        <div className="absolute bottom-20 right-10 text-red-200/30 text-6xl">囍</div>
+        <div className="absolute top-1/4 right-1/4 text-yellow-300/20 text-4xl">✿</div>
+        <div className="absolute bottom-1/3 left-1/4 text-yellow-300/20 text-4xl">✿</div>
+      </div>
+
+      <div className="absolute top-4 right-4 z-10">
         <LanguageSwitcher />
       </div>
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+      <div className="w-full max-w-md relative z-10">
+        <div className="bg-gradient-to-b from-white to-red-50/30 rounded-2xl shadow-xl p-8 border-2 border-red-200 relative overflow-hidden">
+          {/* 装饰性角落 */}
+          <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-red-400 rounded-tl-xl" />
+          <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-red-400 rounded-tr-xl" />
+          <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-red-400 rounded-bl-xl" />
+          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-red-400 rounded-br-xl" />
+
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{tHome('title')}</h1>
-            <p className="text-gray-600">{t('registerTitle')}</p>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <span className="text-yellow-500 text-2xl">🏮</span>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-red-600 via-red-500 to-orange-500 bg-clip-text text-transparent">{tHome('title')}</h1>
+              <span className="text-yellow-500 text-2xl">🏮</span>
+            </div>
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-yellow-600">◈</span>
+              <p className="text-gray-600">{t('registerTitle')}</p>
+              <span className="text-yellow-600">◈</span>
+            </div>
           </div>
 
-          {/* Step Indicator */}
+          {/* Step Indicator - 中国风 */}
           <div className="flex items-center justify-center mb-8">
             <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
-              step === 'email' ? 'bg-pink-500 text-white' : 'bg-pink-100 text-pink-500'
+              step === 'email' ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white' : 'bg-red-100 text-red-500'
             }`}>
               1
             </div>
-            <div className={`w-12 h-1 ${step !== 'email' ? 'bg-pink-500' : 'bg-gray-200'}`} />
+            <div className={`w-12 h-1 ${step !== 'email' ? 'bg-gradient-to-r from-red-500 to-orange-500' : 'bg-gray-200'}`} />
             <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
-              step === 'verification' ? 'bg-pink-500 text-white' : step === 'password' ? 'bg-pink-100 text-pink-500' : 'bg-gray-200 text-gray-400'
+              step === 'verification' ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white' : step === 'password' ? 'bg-red-100 text-red-500' : 'bg-gray-200 text-gray-400'
             }`}>
               2
             </div>
-            <div className={`w-12 h-1 ${step === 'password' ? 'bg-pink-500' : 'bg-gray-200'}`} />
+            <div className={`w-12 h-1 ${step === 'password' ? 'bg-gradient-to-r from-red-500 to-orange-500' : 'bg-gray-200'}`} />
             <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
-              step === 'password' ? 'bg-pink-500 text-white' : 'bg-gray-200 text-gray-400'
+              step === 'password' ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white' : 'bg-gray-200 text-gray-400'
             }`}>
               3
             </div>
           </div>
 
           {error && (
-            <div className="bg-red-50 text-red-500 p-3 rounded-lg text-sm mb-6">
+            <div className="bg-red-50 text-red-500 p-3 rounded-lg text-sm mb-6 border border-red-200">
               {error}
             </div>
           )}
@@ -246,7 +268,7 @@ export default function RegisterPage() {
 
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600"
                 size="lg"
                 isLoading={isLoading}
               >
@@ -274,7 +296,7 @@ export default function RegisterPage() {
                       value={digit}
                       onChange={(e) => handleCodeChange(index, e.target.value)}
                       onKeyDown={(e) => handleCodeKeyDown(index, e)}
-                      className="w-12 h-14 text-center text-2xl font-bold border-2 border-gray-300 rounded-lg focus:border-pink-500 focus:outline-none transition-colors"
+                      className="w-12 h-14 text-center text-2xl font-bold border-2 border-red-200 rounded-lg focus:border-red-500 focus:outline-none transition-colors bg-white"
                     />
                   ))}
                 </div>
@@ -284,7 +306,7 @@ export default function RegisterPage() {
                     type="button"
                     onClick={handleResendCode}
                     disabled={countdown > 0 || isLoading}
-                    className={`text-sm ${countdown > 0 ? 'text-gray-400' : 'text-pink-500 hover:text-pink-600'}`}
+                    className={`text-sm ${countdown > 0 ? 'text-gray-400' : 'text-red-500 hover:text-red-600'}`}
                   >
                     {countdown > 0 ? t('resendIn').replace('{seconds}', String(countdown)) : t('resendCode')}
                   </button>
@@ -295,7 +317,7 @@ export default function RegisterPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1"
+                  className="flex-1 border-red-300 text-red-600 hover:bg-red-50"
                   onClick={() => {
                     setStep('email')
                     setVerificationCode(['', '', '', '', '', ''])
@@ -306,7 +328,7 @@ export default function RegisterPage() {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1"
+                  className="flex-1 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600"
                   isLoading={isLoading}
                 >
                   {t('verify')}
@@ -349,7 +371,7 @@ export default function RegisterPage() {
 
               <Button
                 type="submit"
-                className="w-full"
+                className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600"
                 size="lg"
                 isLoading={isLoading}
               >
@@ -361,7 +383,7 @@ export default function RegisterPage() {
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               {t('hasAccount')}{' '}
-              <Link href="/login" className="text-pink-500 hover:text-pink-600 font-medium">
+              <Link href="/login" className="text-red-500 hover:text-red-600 font-medium">
                 {tCommon('login')}
               </Link>
             </p>
@@ -374,12 +396,17 @@ export default function RegisterPage() {
               .split('').filter(c => c !== '').length > 0 && (
               <>
                 {t('agreeTerms').split('{terms}')[0]}
-                <Link href="/terms" className="text-pink-500 hover:underline">{tFooter('terms')}</Link>
+                <Link href="/terms" className="text-red-500 hover:underline">{tFooter('terms')}</Link>
                 {t('agreeTerms').split('{terms}')[1]?.split('{privacy}')[0]}
-                <Link href="/privacy" className="text-pink-500 hover:underline">{tFooter('privacy')}</Link>
+                <Link href="/privacy" className="text-red-500 hover:underline">{tFooter('privacy')}</Link>
                 {t('agreeTerms').split('{privacy}')[1]}
               </>
             )}
+          </div>
+
+          {/* 底部装饰 */}
+          <div className="mt-6 text-center text-red-300 text-xs">
+            <span>— 囍 缘定今生 囍 —</span>
           </div>
         </div>
       </div>

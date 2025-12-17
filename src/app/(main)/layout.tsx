@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
-import { Search, Heart, MessageCircle, User, LogOut, Home } from 'lucide-react'
+import { Search, Heart, MessageCircle, User, LogOut, Home, Sparkles } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
 
 export default function MainLayout({
@@ -70,21 +70,28 @@ export default function MainLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white/95 backdrop-blur-md border-b border-pink-100 sticky top-0 z-50 shadow-sm">
+    <div className="min-h-screen bg-gradient-to-b from-red-50 via-orange-50 to-yellow-50">
+      {/* Header - 中国风 */}
+      <header className="bg-gradient-to-r from-red-50 to-orange-50 backdrop-blur-md border-b-2 border-red-200 sticky top-0 z-50 shadow-sm">
+        {/* 装饰性顶边 */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-400 to-transparent opacity-50" />
+
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <Home className="w-5 h-5 text-pink-400 group-hover:text-pink-500 transition-colors" />
-            <span className="text-base font-medium text-gray-600 group-hover:text-pink-500 transition-colors">
+            <div className="relative">
+              <Home className="w-5 h-5 text-red-500 group-hover:text-red-600 transition-colors" />
+              <Sparkles className="w-3 h-3 text-yellow-500 absolute -top-1 -right-1" />
+            </div>
+            <span className="text-base font-medium text-red-600 group-hover:text-red-700 transition-colors">
               {t('backToHome')}
             </span>
+            <span className="text-yellow-600 text-sm">囍</span>
           </Link>
           <div className="flex items-center gap-2">
             <LanguageSwitcher />
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
-              className="flex items-center gap-2 px-3 py-2 text-gray-500 hover:text-pink-500 hover:bg-pink-50 rounded-lg transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-200"
             >
               <LogOut className="w-5 h-5" />
               <span className="hidden sm:inline text-sm font-medium">{tCommon('logout')}</span>
@@ -98,8 +105,11 @@ export default function MainLayout({
         {children}
       </main>
 
-      {/* Bottom Navigation (Mobile) */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-pink-100 md:hidden shadow-lg">
+      {/* Bottom Navigation (Mobile) - 中国风 */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-red-50 to-orange-50 backdrop-blur-md border-t-2 border-red-200 md:hidden shadow-lg">
+        {/* 装饰性顶边 */}
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-yellow-500 to-transparent opacity-50" />
+
         <div className="flex justify-around py-2 safe-area-bottom">
           {navItems.map((item) => {
             const isActive = pathname === item.href
@@ -109,21 +119,31 @@ export default function MainLayout({
                 href={item.href}
                 className={`flex flex-col items-center py-2 px-4 rounded-xl transition-all ${
                   isActive
-                    ? 'text-pink-500 bg-pink-50'
-                    : 'text-gray-400 hover:text-gray-600'
+                    ? 'text-red-600 bg-red-100/50'
+                    : 'text-gray-500 hover:text-red-500'
                 }`}
               >
                 <item.icon className={`w-6 h-6 ${isActive ? 'scale-110' : ''} transition-transform`} />
-                <span className={`text-xs mt-1 font-medium ${isActive ? 'text-pink-500' : ''}`}>{getNavLabel(item.labelKey)}</span>
+                <span className={`text-xs mt-1 font-medium ${isActive ? 'text-red-600' : ''}`}>{getNavLabel(item.labelKey)}</span>
               </Link>
             )
           })}
         </div>
       </nav>
 
-      {/* Side Navigation (Desktop) */}
-      <nav className="hidden md:block fixed left-0 top-[57px] bottom-0 w-64 bg-white border-r border-pink-100">
+      {/* Side Navigation (Desktop) - 中国风 */}
+      <nav className="hidden md:block fixed left-0 top-[57px] bottom-0 w-64 bg-gradient-to-b from-red-50 to-orange-50 border-r-2 border-red-200">
+        {/* 装饰性边框 */}
+        <div className="absolute top-0 right-0 bottom-0 w-0.5 bg-gradient-to-b from-yellow-400 via-red-300 to-yellow-400 opacity-30" />
+
         <div className="p-4 space-y-1">
+          {/* 装饰性标题 */}
+          <div className="flex items-center justify-center gap-2 pb-4 mb-4 border-b border-red-200">
+            <span className="text-yellow-600">◈</span>
+            <span className="text-red-500 text-sm font-medium">メニュー</span>
+            <span className="text-yellow-600">◈</span>
+          </div>
+
           {navItems.map((item) => {
             const isActive = pathname === item.href
             return (
@@ -132,18 +152,23 @@ export default function MainLayout({
                 href={item.href}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
                   isActive
-                    ? 'bg-gradient-to-r from-pink-50 to-rose-50 text-pink-500 shadow-sm border border-pink-100'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-gradient-to-r from-red-100 to-orange-100 text-red-600 shadow-sm border border-red-200'
+                    : 'text-gray-600 hover:bg-red-50 hover:text-red-500'
                 }`}
               >
-                <item.icon className={`w-5 h-5 ${isActive ? 'text-pink-500' : ''}`} />
+                <item.icon className={`w-5 h-5 ${isActive ? 'text-red-500' : ''}`} />
                 <span className="font-medium">{getNavLabel(item.labelKey)}</span>
                 {isActive && (
-                  <div className="ml-auto w-2 h-2 bg-pink-500 rounded-full" />
+                  <div className="ml-auto text-yellow-600 text-sm">囍</div>
                 )}
               </Link>
             )
           })}
+        </div>
+
+        {/* 底部装饰 */}
+        <div className="absolute bottom-4 left-0 right-0 text-center text-red-300 text-xs">
+          <span>— 囍 缘定今生 囍 —</span>
         </div>
       </nav>
 

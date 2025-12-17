@@ -83,7 +83,7 @@ export default function MyPage() {
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500" />
       </div>
     )
   }
@@ -93,12 +93,23 @@ export default function MyPage() {
   return (
     <div className="md:ml-64">
       <div className="p-4 max-w-2xl mx-auto">
-        {/* Profile Header */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
-          <div className="bg-gradient-to-r from-pink-500 to-rose-500 h-24" />
+        {/* Profile Header - 中国风 */}
+        <div className="bg-gradient-to-b from-white to-red-50/30 rounded-xl shadow-sm overflow-hidden mb-6 border-2 border-red-200 relative">
+          {/* 装饰性角落 */}
+          <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-red-400 rounded-tl-lg z-10" />
+          <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-red-400 rounded-tr-lg z-10" />
+          <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-red-400 rounded-bl-lg z-10" />
+          <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-red-400 rounded-br-lg z-10" />
+
+          <div className="bg-gradient-to-r from-red-500 via-red-600 to-orange-500 h-24 relative">
+            {/* 装饰性图案 */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-20">
+              <span className="text-6xl text-yellow-300">囍</span>
+            </div>
+          </div>
           <div className="px-6 pb-6">
             <div className="flex items-end -mt-12 mb-4">
-              <div className="w-24 h-24 rounded-full border-4 border-white bg-gray-200 overflow-hidden">
+              <div className="w-24 h-24 rounded-full border-4 border-white bg-gray-200 overflow-hidden shadow-lg">
                 {mainPhoto ? (
                   <img
                     src={mainPhoto.url}
@@ -106,14 +117,15 @@ export default function MyPage() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400">
-                    <User className="w-12 h-12" />
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gradient-to-br from-red-100 to-orange-100">
+                    <User className="w-12 h-12 text-red-300" />
                   </div>
                 )}
               </div>
               <div className="ml-4 mb-2">
-                <h1 className="text-xl font-bold text-gray-900">
+                <h1 className="text-xl font-bold text-red-700 flex items-center gap-2">
                   {profile?.nickname || tMessages('user')}
+                  <span className="text-yellow-500 text-sm">✿</span>
                 </h1>
                 {profile && (
                   <p className="text-gray-600">
@@ -127,36 +139,42 @@ export default function MyPage() {
               <div className="space-y-3">
                 {profile.occupation && (
                   <div className="flex items-center gap-2 text-gray-600">
-                    <Briefcase className="w-4 h-4" />
+                    <Briefcase className="w-4 h-4 text-red-400" />
                     <span>{profile.occupation}</span>
                   </div>
                 )}
                 {profile.nationality && (
                   <div className="flex items-center gap-2 text-gray-600">
-                    <Globe className="w-4 h-4" />
+                    <Globe className="w-4 h-4 text-red-400" />
                     <span>{profile.nationality}</span>
                   </div>
                 )}
                 {profile.bio && (
-                  <p className="text-gray-700 mt-4">{profile.bio}</p>
+                  <p className="text-gray-700 mt-4 p-3 bg-red-50/50 rounded-lg border border-red-100">{profile.bio}</p>
                 )}
               </div>
             ) : (
               <div className="text-center py-4">
                 <p className="text-gray-500 mb-4">{t('pleaseSetupProfile')}</p>
                 <Link href="/profile/setup">
-                  <Button>{t('setupProfile')}</Button>
+                  <Button className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600">{t('setupProfile')}</Button>
                 </Link>
               </div>
             )}
           </div>
         </div>
 
-        {/* Menu Items */}
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <Link href="/profile/edit" className="flex items-center gap-4 p-4 hover:bg-gray-50 border-b">
-            <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
-              <User className="w-5 h-5 text-pink-500" />
+        {/* Menu Items - 中国风 */}
+        <div className="bg-gradient-to-b from-white to-red-50/30 rounded-xl shadow-sm overflow-hidden border-2 border-red-200 relative">
+          {/* 装饰性角落 */}
+          <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-red-400 rounded-tl-lg z-10" />
+          <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-red-400 rounded-tr-lg z-10" />
+          <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-red-400 rounded-bl-lg z-10" />
+          <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-red-400 rounded-br-lg z-10" />
+
+          <Link href="/profile/edit" className="flex items-center gap-4 p-4 hover:bg-red-50/50 border-b border-red-100 transition-colors">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-100 to-orange-100 flex items-center justify-center border border-red-200">
+              <User className="w-5 h-5 text-red-500" />
             </div>
             <div>
               <p className="font-medium text-gray-900">{t('editProfile')}</p>
@@ -164,8 +182,8 @@ export default function MyPage() {
             </div>
           </Link>
 
-          <Link href="/photos" className="flex items-center gap-4 p-4 hover:bg-gray-50 border-b">
-            <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+          <Link href="/photos" className="flex items-center gap-4 p-4 hover:bg-red-50/50 border-b border-red-100 transition-colors">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center border border-purple-200">
               <Camera className="w-5 h-5 text-purple-500" />
             </div>
             <div>
@@ -174,8 +192,8 @@ export default function MyPage() {
             </div>
           </Link>
 
-          <Link href="/likes" className="flex items-center gap-4 p-4 hover:bg-gray-50 border-b">
-            <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+          <Link href="/likes" className="flex items-center gap-4 p-4 hover:bg-red-50/50 border-b border-red-100 transition-colors">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-100 to-rose-100 flex items-center justify-center border border-red-200">
               <Heart className="w-5 h-5 text-red-500" />
             </div>
             <div>
@@ -184,8 +202,8 @@ export default function MyPage() {
             </div>
           </Link>
 
-          <Link href="/messages" className="flex items-center gap-4 p-4 hover:bg-gray-50 border-b">
-            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+          <Link href="/messages" className="flex items-center gap-4 p-4 hover:bg-red-50/50 border-b border-red-100 transition-colors">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center border border-blue-200">
               <MessageCircle className="w-5 h-5 text-blue-500" />
             </div>
             <div>
@@ -194,9 +212,9 @@ export default function MyPage() {
             </div>
           </Link>
 
-          <Link href="/premium" className="flex items-center gap-4 p-4 hover:bg-gray-50 border-b">
-            <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
-              <Crown className="w-5 h-5 text-yellow-500" />
+          <Link href="/premium" className="flex items-center gap-4 p-4 hover:bg-red-50/50 border-b border-red-100 transition-colors">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-100 to-orange-100 flex items-center justify-center border border-yellow-200">
+              <Crown className="w-5 h-5 text-yellow-600" />
             </div>
             <div>
               <p className="font-medium text-gray-900">{t('premium')}</p>
@@ -204,8 +222,8 @@ export default function MyPage() {
             </div>
           </Link>
 
-          <Link href="/settings" className="flex items-center gap-4 p-4 hover:bg-gray-50 border-b">
-            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+          <Link href="/settings" className="flex items-center gap-4 p-4 hover:bg-red-50/50 border-b border-red-100 transition-colors">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center border border-gray-200">
               <Settings className="w-5 h-5 text-gray-500" />
             </div>
             <div>
@@ -216,9 +234,9 @@ export default function MyPage() {
 
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center gap-4 p-4 hover:bg-gray-50 text-left"
+            className="w-full flex items-center gap-4 p-4 hover:bg-red-50/50 text-left transition-colors"
           >
-            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center border border-gray-200">
               <LogOut className="w-5 h-5 text-gray-500" />
             </div>
             <div>
