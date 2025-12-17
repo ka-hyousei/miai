@@ -24,7 +24,13 @@
       "Bash(npx prisma:*)",
       "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_6hxcKCtl5MBP@ep-rough-violet-ahzr1tmi-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require\" npx prisma db push:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(npx tsx:*)",
+      "Bash(vercel env add:*)",
+      "Bash(printf:*)",
+      "Bash(vercel logs:*)",
+      "Bash(vercel env ls:*)",
+      "Bash(vercel env pull:*)"
     ]
   }
 }

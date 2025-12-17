@@ -43,10 +43,15 @@ export default function SettingsPage() {
         method: 'DELETE',
       })
       if (response.ok) {
+        alert('退会が完了しました。ご利用ありがとうございました。')
         await signOut({ callbackUrl: '/' })
+      } else {
+        const data = await response.json()
+        alert(`退会処理に失敗しました: ${data.details || data.error || '不明なエラー'}`)
       }
     } catch (error) {
       console.error('Failed to delete account:', error)
+      alert('退会処理に失敗しました。しばらくしてから再度お試しください。')
     } finally {
       setIsLoading(false)
       setShowDeleteModal(false)

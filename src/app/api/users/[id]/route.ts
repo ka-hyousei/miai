@@ -58,9 +58,27 @@ export async function GET(
       },
     })
 
+    // マッチしているかチェック（相互いいね）
+    const mutualLike = await prisma.like.findFirst({
+      where: {
+        fromUserId: profile.userId,
+        toUserId: session.user.id,
+      },
+    })
+    const isMatched = !!existingLike && !!mutualLike
+
+    // 現在のユーザーが有料会員かチェック
+    const currentUserSubscription = await prisma.subscription.findUnique({
+      where: { userId: session.user.id },
+    })
+    const isPremium = currentUserSubscription?.status === 'ACTIVE' &&
+      (currentUserSubscription?.plan === 'PREMIUM' || currentUserSubscription?.plan === 'VIP')
+
     return NextResponse.json({
       profile,
       hasLiked: !!existingLike,
+      isMatched,
+      isPremium,
     })
   } catch (error) {
     console.error('Get user profile error:', error)

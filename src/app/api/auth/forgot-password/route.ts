@@ -39,7 +39,13 @@ export async function POST(request: Request) {
       })
 
       // メール送信
-      await sendPasswordResetEmail(email, token)
+      const result = await sendPasswordResetEmail(email, token)
+      if (!result.success) {
+        console.error('パスワードリセットメール送信失敗:', result.error)
+        // エラーでも同じレスポンスを返す（セキュリティ上）
+      } else {
+        console.log('パスワードリセットメール送信成功:', email)
+      }
     }
 
     // セキュリティのため、ユーザーが存在しなくても同じレスポンスを返す

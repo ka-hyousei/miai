@@ -27,6 +27,7 @@ model User {
   reports       Report[]  @relation("Reporter")
   reportedBy    Report[]  @relation("Reported")
   subscription  Subscription?
+  payments      Payment[]
   accounts      Account[]
   sessions      Session[]
 }
@@ -122,10 +123,17 @@ model Profile {
   nationality     String?  // 国籍
   hometown        String?  // 出身地
 
+  // 連絡先（すべて任意）
+  wechatId        String?  // WeChat ID
+  phoneNumber     String?  // 電話番号
+  contactEmail    String?  // 連絡用メールアドレス
+
   // 設定
   isProfilePublic Boolean  @default(true)
   showVisaType    Boolean  @default(false)
   showYearsInJapan Boolean @default(false)
+  showContact     Boolean  @default(true)   // 連絡先を公開するか（デフォルト公開）
+  contactVisibility ContactVisibility @default(EVERYONE)  // 連絡先の公開対象
   isVerified      Boolean  @default(false)
 
   createdAt       DateTime @default(now())
@@ -209,6 +217,21 @@ model Subscription {
   updatedAt DateTime         @updatedAt
 }
 
+// 支払い履歴
+model Payment {
+  id            String        @id @default(cuid())
+  userId        String
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount        Int           // 金額（円）
+  currency      String        @default("JPY")
+  paymentMethod PaymentMethod
+  plan          SubscriptionPlan
+  status        PaymentStatus @default(PENDING)
+  transactionId String?       // 決済ID
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
 // Enums
 enum Gender {
   MALE
@@ -270,4 +293,23 @@ enum SubscriptionStatus {
   ACTIVE    // 有効
   CANCELLED // キャンセル
   EXPIRED   // 期限切れ
+}
+
+enum ContactVisibility {
+  EVERYONE       // 全員に公開
+  PREMIUM_ONLY   // 有料会員のみ
+  MATCHED_ONLY   // マッチした相手のみ
+}
+
+enum PaymentMethod {
+  WECHAT    // WeChat Pay
+  PAYPAY    // PayPay
+}
+
+enum PaymentStatus {
+  PENDING           // 支払い待ち
+  PENDING_APPROVAL  // 承認待ち
+  COMPLETED         // 完了
+  FAILED            // 失敗
+  CANCELLED         // キャンセル
 }

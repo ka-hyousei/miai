@@ -18,7 +18,10 @@ import {
   Languages,
   Target,
   Shield,
-  Ban
+  Ban,
+  Phone,
+  Mail,
+  MessageSquare
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -39,8 +42,13 @@ interface ProfileData {
   yearsInJapan: number | null
   japaneseLevel: string | null
   futurePlan: string | null
+  wechatId: string | null
+  phoneNumber: string | null
+  contactEmail: string | null
   showVisaType: boolean
   showYearsInJapan: boolean
+  showContact: boolean
+  contactVisibility: string
   user: {
     photos: { id: string; url: string; isMain: boolean }[]
   }
@@ -87,6 +95,8 @@ export default function ProfileDetailPage() {
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0)
   const [isLiking, setIsLiking] = useState(false)
   const [hasLiked, setHasLiked] = useState(false)
+  const [isMatched, setIsMatched] = useState(false)
+  const [isPremium, setIsPremium] = useState(false)
   const [isBlocking, setIsBlocking] = useState(false)
   const [showBlockConfirm, setShowBlockConfirm] = useState(false)
 
@@ -104,6 +114,8 @@ export default function ProfileDetailPage() {
           const data = await response.json()
           setProfile(data.profile)
           setHasLiked(data.hasLiked || false)
+          setIsMatched(data.isMatched || false)
+          setIsPremium(data.isPremium || false)
         } else if (response.status === 404) {
           router.push('/discover')
         }
@@ -296,13 +308,13 @@ export default function ProfileDetailPage() {
                 <span>{profile.hometown}</span>
               </div>
             )}
-            {profile.showVisaType && profile.visaType && (
+            {profile.visaType && (
               <div className="flex items-center gap-3 text-gray-700">
                 <Flag className="w-5 h-5 text-gray-400" />
                 <span>{VISA_TYPE_LABELS[profile.visaType] || profile.visaType}</span>
               </div>
             )}
-            {profile.showYearsInJapan && profile.yearsInJapan !== null && (
+            {profile.yearsInJapan !== null && (
               <div className="flex items-center gap-3 text-gray-700">
                 <Calendar className="w-5 h-5 text-gray-400" />
                 <span>日本在住 {profile.yearsInJapan}年</span>
@@ -321,6 +333,56 @@ export default function ProfileDetailPage() {
               </div>
             )}
           </div>
+
+          {/* Contact Info */}
+          {profile.showContact && (profile.wechatId || profile.phoneNumber || profile.contactEmail) && (() => {
+            // 公開対象のチェック
+            const canViewContact =
+              profile.contactVisibility === 'EVERYONE' ||
+              (profile.contactVisibility === 'PREMIUM_ONLY' && isPremium) ||
+              (profile.contactVisibility === 'MATCHED_ONLY' && isMatched)
+
+            if (canViewContact) {
+              return (
+                <div className="bg-pink-50 rounded-xl p-4">
+                  <h3 className="text-sm font-semibold text-pink-700 mb-3">連絡先</h3>
+                  <div className="space-y-2">
+                    {profile.wechatId && (
+                      <div className="flex items-center gap-3 text-gray-700">
+                        <MessageSquare className="w-5 h-5 text-green-500" />
+                        <span>WeChat: {profile.wechatId}</span>
+                      </div>
+                    )}
+                    {profile.phoneNumber && (
+                      <div className="flex items-center gap-3 text-gray-700">
+                        <Phone className="w-5 h-5 text-blue-500" />
+                        <span>{profile.phoneNumber}</span>
+                      </div>
+                    )}
+                    {profile.contactEmail && (
+                      <div className="flex items-center gap-3 text-gray-700">
+                        <Mail className="w-5 h-5 text-orange-500" />
+                        <span>{profile.contactEmail}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )
+            } else {
+              // 公開対象外の場合はメッセージを表示
+              const message = profile.contactVisibility === 'PREMIUM_ONLY'
+                ? '連絡先は有料会員のみに公開されています'
+                : '連絡先はマッチした相手のみに公開されています'
+              return (
+                <div className="bg-gray-100 rounded-xl p-4">
+                  <div className="flex items-center gap-2 text-gray-500">
+                    <Shield className="w-5 h-5" />
+                    <span className="text-sm">{message}</span>
+                  </div>
+                </div>
+              )
+            }
+          })()}
 
           {/* Action Buttons */}
           <div className="flex gap-3 pt-4">

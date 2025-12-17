@@ -1,7 +1,37 @@
+'use client'
+
+import { useState } from 'react'
+import { useSession, signOut } from 'next-auth/react'
 import Link from "next/link";
-import { Heart, Sparkles } from "lucide-react";
+import { Heart, Sparkles, Trash2 } from "lucide-react";
+import { Button } from '@/components/ui/button'
 
 export default function TermsPage() {
+  const { data: session } = useSession()
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleDeleteAccount = async () => {
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/account', {
+        method: 'DELETE',
+      })
+      if (response.ok) {
+        alert('退会が完了しました。ご利用ありがとうございました。')
+        await signOut({ callbackUrl: '/' })
+      } else {
+        const data = await response.json()
+        alert(`退会処理に失敗しました: ${data.details || data.error || '不明なエラー'}`)
+      }
+    } catch (error) {
+      console.error('Failed to delete account:', error)
+      alert(`退会処理に失敗しました: ${error instanceof Error ? error.message : '不明なエラー'}`)
+    } finally {
+      setIsLoading(false)
+      setShowDeleteModal(false)
+    }
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-100">
       {/* Header */}
@@ -155,7 +185,29 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">第10条（利用規約の変更）</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第10条（退会）</h2>
+              <ol className="list-decimal list-inside text-gray-600 space-y-2">
+                <li>ユーザーは、当サービス所定の手続きにより、いつでも退会することができます。</li>
+                <li>退会した場合、ユーザーのアカウント、プロフィール、写真、メッセージ履歴、いいね履歴等のすべてのデータが削除されます。</li>
+                <li>一度削除されたデータは復元できません。退会前に必要なデータがある場合は、ご自身で保存してください。</li>
+                <li>退会後、同じメールアドレスで再登録することは可能ですが、以前のデータは引き継がれません。</li>
+              </ol>
+              {session && (
+                <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-700 font-medium mb-3">退会をご希望の方</p>
+                  <button
+                    onClick={() => setShowDeleteModal(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    退会手続きへ進む
+                  </button>
+                </div>
+              )}
+            </section>
+
+            <section>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第11条（利用規約の変更）</h2>
               <p className="text-gray-600">
                 当サービスは、必要と判断した場合には、ユーザーに通知することなくいつでも本規約を変更することができるものとします。
                 なお、本規約の変更後、本サービスの利用を開始した場合には、当該ユーザーは変更後の規約に同意したものとみなします。
@@ -163,7 +215,7 @@ export default function TermsPage() {
             </section>
 
             <section>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">第11条（準拠法・裁判管轄）</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">第12条（準拠法・裁判管轄）</h2>
               <p className="text-gray-600">
                 本規約の解釈にあたっては、日本法を準拠法とします。
                 本サービスに関して紛争が生じた場合には、当サービス運営者の本店所在地を管轄する裁判所を専属的合意管轄とします。
@@ -199,6 +251,46 @@ export default function TermsPage() {
           </div>
         </div>
       </footer>
+
+      {/* Delete Account Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-md w-full p-6">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">退会確認</h3>
+            <p className="text-gray-600 mb-4">
+              本当に退会しますか？
+            </p>
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+              <p className="text-red-700 text-sm font-medium mb-2">以下のデータがすべて削除されます：</p>
+              <ul className="text-red-600 text-sm list-disc list-inside space-y-1">
+                <li>アカウント情報</li>
+                <li>プロフィール</li>
+                <li>アップロードした写真</li>
+                <li>メッセージ履歴</li>
+                <li>いいね履歴</li>
+                <li>マッチング情報</li>
+              </ul>
+              <p className="text-red-700 text-sm font-bold mt-3">※この操作は取り消せません</p>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                キャンセル
+              </Button>
+              <Button
+                className="flex-1 bg-red-500 hover:bg-red-600"
+                onClick={handleDeleteAccount}
+                isLoading={isLoading}
+              >
+                退会する
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

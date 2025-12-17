@@ -28,6 +28,7 @@ export default function DiscoverPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const [profiles, setProfiles] = useState<UserProfile[]>([])
+  const [likedUserIds, setLikedUserIds] = useState<Set<string>>(new Set())
   const [isLoading, setIsLoading] = useState(true)
   const [defaultGender, setDefaultGender] = useState<string>('')
   const [filters, setFilters] = useState({
@@ -122,8 +123,8 @@ export default function DiscoverPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ toUserId: userId }),
       })
-      // いいね後にリストから削除
-      setProfiles(profiles.filter((p) => p.userId !== userId))
+      // いいね済みとしてマーク（リストからは削除しない）
+      setLikedUserIds(prev => new Set(prev).add(userId))
     } catch (error) {
       console.error('Failed to like:', error)
     }
@@ -267,14 +268,25 @@ export default function DiscoverPage() {
                       {profile.nationality}
                     </div>
                   )}
-                  <Button
-                    onClick={() => handleLike(profile.userId)}
-                    className="w-full"
-                    size="sm"
-                  >
-                    <Heart className="w-4 h-4 mr-1" />
-                    いいね
-                  </Button>
+                  {likedUserIds.has(profile.userId) ? (
+                    <Button
+                      className="w-full bg-gray-400 hover:bg-gray-400 cursor-default"
+                      size="sm"
+                      disabled
+                    >
+                      <Heart className="w-4 h-4 mr-1 fill-white" />
+                      いいね済み
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => handleLike(profile.userId)}
+                      className="w-full"
+                      size="sm"
+                    >
+                      <Heart className="w-4 h-4 mr-1" />
+                      いいね
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}

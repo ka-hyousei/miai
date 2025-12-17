@@ -15,6 +15,7 @@ import {
   JAPANESE_LEVEL_OPTIONS,
   FUTURE_PLAN_OPTIONS,
   VISA_INFO_DISCLAIMER,
+  CONTACT_VISIBILITY_OPTIONS,
 } from '@/lib/constants'
 
 export default function ProfileEditPage() {
@@ -42,8 +43,13 @@ export default function ProfileEditPage() {
     futurePlan: '',
     nationality: '',
     hometown: '',
+    wechatId: '',
+    phoneNumber: '',
+    contactEmail: '',
     showVisaType: false,
     showYearsInJapan: false,
+    showContact: true,  // デフォルト公開
+    contactVisibility: 'EVERYONE',  // デフォルト全員に公開
   })
 
   useEffect(() => {
@@ -77,8 +83,13 @@ export default function ProfileEditPage() {
               futurePlan: data.profile.futurePlan || '',
               nationality: data.profile.nationality || '',
               hometown: data.profile.hometown || '',
+              wechatId: data.profile.wechatId || '',
+              phoneNumber: data.profile.phoneNumber || '',
+              contactEmail: data.profile.contactEmail || '',
               showVisaType: data.profile.showVisaType || false,
               showYearsInJapan: data.profile.showYearsInJapan || false,
+              showContact: data.profile.showContact !== false,
+              contactVisibility: data.profile.contactVisibility || 'EVERYONE',
             })
           }
         }
@@ -384,6 +395,43 @@ export default function ProfileEditPage() {
             </div>
           </div>
 
+          {/* 連絡先情報 */}
+          <div className="bg-white rounded-xl shadow-sm p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">連絡先情報（任意）</h2>
+            <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg mb-4">
+              連絡先は任意です。入力した場合、「連絡先を公開する」をオンにすると他のユーザーに表示されます。
+            </p>
+            <div className="space-y-4">
+              <Input
+                id="wechatId"
+                name="wechatId"
+                label="WeChat ID"
+                value={formData.wechatId}
+                onChange={handleChange}
+                placeholder="例：wxid_xxxxx"
+              />
+
+              <Input
+                id="phoneNumber"
+                name="phoneNumber"
+                label="電話番号"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                placeholder="例：090-1234-5678"
+              />
+
+              <Input
+                id="contactEmail"
+                name="contactEmail"
+                type="email"
+                label="連絡用メールアドレス"
+                value={formData.contactEmail}
+                onChange={handleChange}
+                placeholder="例：example@email.com"
+              />
+            </div>
+          </div>
+
           {/* 表示設定 */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">表示設定</h2>
@@ -391,23 +439,26 @@ export default function ProfileEditPage() {
               <label className="flex items-center gap-3">
                 <input
                   type="checkbox"
-                  name="showVisaType"
-                  checked={formData.showVisaType}
+                  name="showContact"
+                  checked={formData.showContact}
                   onChange={handleChange}
                   className="w-4 h-4 text-pink-500 rounded focus:ring-pink-500"
                 />
-                <span className="text-sm text-gray-600">在留資格を公開する</span>
+                <span className="text-sm text-gray-600">連絡先を公開する（WeChat・電話番号・メール）</span>
               </label>
-              <label className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  name="showYearsInJapan"
-                  checked={formData.showYearsInJapan}
-                  onChange={handleChange}
-                  className="w-4 h-4 text-pink-500 rounded focus:ring-pink-500"
-                />
-                <span className="text-sm text-gray-600">在日年数を公開する</span>
-              </label>
+
+              {formData.showContact && (
+                <div className="ml-7">
+                  <Select
+                    id="contactVisibility"
+                    name="contactVisibility"
+                    label="公開対象"
+                    value={formData.contactVisibility}
+                    onChange={handleChange}
+                    options={CONTACT_VISIBILITY_OPTIONS}
+                  />
+                </div>
+              )}
             </div>
           </div>
 

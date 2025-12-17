@@ -44,6 +44,12 @@ export const FUTURE_PLAN_OPTIONS = [
 
 export const VISA_INFO_DISCLAIMER = 'これらの情報は双方の生活計画を理解するためのものであり、いかなる在留資格に対する価値判断を意味するものではありません。'
 
+export const CONTACT_VISIBILITY_OPTIONS = [
+  { value: 'EVERYONE', label: '全員に公開' },
+  { value: 'PREMIUM_ONLY', label: '有料会員のみ' },
+  { value: 'MATCHED_ONLY', label: 'マッチした相手のみ' },
+]
+
 export const NATIONALITY_OPTIONS = [
   { value: '日本', label: '日本' },
   { value: '中国', label: '中国' },

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { z } from 'zod'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { Gender, VisaType, JapaneseLevel, FuturePlan } from '@/generated/prisma/client'
+import { Gender, VisaType, JapaneseLevel, FuturePlan, ContactVisibility } from '@/generated/prisma/client'
 
 // 空文字列をundefinedに変換するヘルパー
 const emptyToUndefined = <T extends z.ZodTypeAny>(schema: T) =>
@@ -24,8 +24,13 @@ const profileSchema = z.object({
   futurePlan: emptyToUndefined(z.nativeEnum(FuturePlan).optional()),
   nationality: z.string().max(50).optional(),
   hometown: z.string().max(100).optional(),
+  wechatId: z.string().max(100).optional(),
+  phoneNumber: z.string().max(20).optional(),
+  contactEmail: z.string().email().max(100).optional().or(z.literal('')),
   showVisaType: z.boolean().optional(),
   showYearsInJapan: z.boolean().optional(),
+  showContact: z.boolean().optional(),
+  contactVisibility: emptyToUndefined(z.nativeEnum(ContactVisibility).optional()),
 })
 
 export async function POST(request: NextRequest) {
@@ -67,8 +72,13 @@ export async function POST(request: NextRequest) {
         futurePlan: validatedData.futurePlan || null,
         nationality: validatedData.nationality || null,
         hometown: validatedData.hometown || null,
+        wechatId: validatedData.wechatId || null,
+        phoneNumber: validatedData.phoneNumber || null,
+        contactEmail: validatedData.contactEmail || null,
         showVisaType: validatedData.showVisaType || false,
         showYearsInJapan: validatedData.showYearsInJapan || false,
+        showContact: validatedData.showContact !== false,  // デフォルト公開
+        contactVisibility: validatedData.contactVisibility || 'EVERYONE',
       },
     })
 
@@ -153,8 +163,13 @@ export async function PUT(request: NextRequest) {
         futurePlan: validatedData.futurePlan || null,
         nationality: validatedData.nationality || null,
         hometown: validatedData.hometown || null,
+        wechatId: validatedData.wechatId || null,
+        phoneNumber: validatedData.phoneNumber || null,
+        contactEmail: validatedData.contactEmail || null,
         showVisaType: validatedData.showVisaType || false,
         showYearsInJapan: validatedData.showYearsInJapan || false,
+        showContact: validatedData.showContact !== false,  // デフォルト公開
+        contactVisibility: validatedData.contactVisibility || 'EVERYONE',
       },
     })
 
