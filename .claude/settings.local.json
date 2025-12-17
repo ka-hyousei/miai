@@ -36,7 +36,8 @@
       "Bash(vercel project:*)",
       "Bash(ls:*)",
       "WebFetch(domain:miai-olive.vercel.app)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_6hxcKCtl5MBP@ep-rough-violet-ahzr1tmi-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require\" npx tsx:*)"
     ]
   }
 }

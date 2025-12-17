@@ -54,11 +54,11 @@ export function LanguageSwitcher() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         disabled={isChanging}
-        className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+        className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
         aria-label="Change language"
       >
-        <Globe className="w-4 h-4" />
-        <span>{localeFlags[currentLocale]}</span>
+        <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+        <span className="text-sm sm:text-base">{localeFlags[currentLocale]}</span>
         <span className="hidden sm:inline">{localeNames[currentLocale]}</span>
       </button>
 
