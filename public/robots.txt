@@ -1,0 +1,6 @@
+# robots.txt for miai-olive.vercel.app
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://miai-olive.vercel.app/sitemap.xml

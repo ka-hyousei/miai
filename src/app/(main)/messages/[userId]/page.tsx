@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { ArrowLeft, Send, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -26,6 +27,8 @@ export default function ChatPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const params = useParams()
+  const t = useTranslations('chat')
+  const tMessages = useTranslations('messages')
   const otherUserId = params.userId as string
 
   const [messages, setMessages] = useState<Message[]>([])
@@ -99,11 +102,11 @@ export default function ChatPage() {
         if (response.status === 403 && data.error?.includes('マッチング')) {
           setIsMatched(false)
         }
-        setError(data.error || 'メッセージの送信に失敗しました')
+        setError(data.error || t('sendFailed'))
       }
     } catch (err) {
       console.error('Failed to send message:', err)
-      setError('メッセージの送信に失敗しました')
+      setError(t('sendFailed'))
     } finally {
       setIsSending(false)
     }
@@ -121,11 +124,11 @@ export default function ChatPage() {
     yesterday.setDate(yesterday.getDate() - 1)
 
     if (date.toDateString() === today.toDateString()) {
-      return '今日'
+      return t('today')
     } else if (date.toDateString() === yesterday.toDateString()) {
-      return '昨日'
+      return t('yesterday')
     } else {
-      return date.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric' })
+      return date.toLocaleDateString(undefined, { month: 'long', day: 'numeric' })
     }
   }
 
@@ -172,9 +175,9 @@ export default function ChatPage() {
           </div>
           <div>
             <span className="font-semibold text-gray-900 block">
-              {otherUser?.profile?.nickname || 'ユーザー'}
+              {otherUser?.profile?.nickname || tMessages('user')}
             </span>
-            <span className="text-xs text-green-500">オンライン</span>
+            <span className="text-xs text-green-500">{t('online')}</span>
           </div>
         </Link>
       </div>
@@ -186,8 +189,8 @@ export default function ChatPage() {
             <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-4">
               <Send className="w-8 h-8 text-gray-400" />
             </div>
-            <p className="font-medium">まだメッセージがありません</p>
-            <p className="text-sm mt-1">最初のメッセージを送ってみましょう</p>
+            <p className="font-medium">{t('noMessages')}</p>
+            <p className="text-sm mt-1">{t('sendFirst')}</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -244,10 +247,10 @@ export default function ChatPage() {
       {!isMatched && (
         <div className="bg-yellow-50 border-t border-yellow-200 px-4 py-3 text-center">
           <p className="text-sm text-yellow-800">
-            マッチングしていないためメッセージを送れません。
+            {t('notMatched')}
           </p>
           <p className="text-xs text-yellow-600 mt-1">
-            お互いにいいねをするとメッセージを送れるようになります。
+            {t('notMatchedDesc')}
           </p>
         </div>
       )}
@@ -272,7 +275,7 @@ export default function ChatPage() {
                     handleSend(e)
                   }
                 }}
-                placeholder={isMatched ? "メッセージを入力..." : "マッチングが必要です"}
+                placeholder={isMatched ? t('placeholder') : t('matchRequired')}
                 disabled={!isMatched}
                 rows={1}
                 className="w-full px-4 py-3 bg-gray-100 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all disabled:bg-gray-200 disabled:text-gray-400 text-[15px] leading-relaxed"
@@ -293,7 +296,7 @@ export default function ChatPage() {
           </div>
           {isMatched && (
             <p className="text-[10px] text-gray-400 text-center mt-1">
-              Ctrl + Enter で送信
+              {t('sendWithShortcut')}
             </p>
           )}
         </form>

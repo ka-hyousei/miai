@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import {
   ArrowLeft,
   Heart,
@@ -21,7 +22,10 @@ import {
   Ban,
   Phone,
   Mail,
-  MessageSquare
+  MessageSquare,
+  Ticket,
+  Crown,
+  Eye
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -54,37 +58,39 @@ interface ProfileData {
   }
 }
 
-const GENDER_LABELS: Record<string, string> = {
-  MALE: '男性',
-  FEMALE: '女性',
-  OTHER: 'その他',
-}
-
-const JAPANESE_LEVEL_LABELS: Record<string, string> = {
-  NONE: '話せない',
-  BEGINNER: '初級',
-  INTERMEDIATE: '中級',
-  ADVANCED: '上級',
-  NATIVE: 'ネイティブ',
-}
-
-const FUTURE_PLAN_LABELS: Record<string, string> = {
-  STAY_LONG: '長期滞在予定',
-  STAY_SHORT: '短期滞在予定',
-  UNDECIDED: '未定',
-  RETURN_HOME: '帰国予定',
-}
-
-const VISA_TYPE_LABELS: Record<string, string> = {
-  WORK: '就労ビザ',
-  STUDENT: '留学ビザ',
-  SPOUSE: '配偶者ビザ',
-  PERMANENT: '永住権',
-  WORKING_HOLIDAY: 'ワーキングホリデー',
-  OTHER: 'その他',
-}
-
 export default function ProfileDetailPage() {
+  const t = useTranslations('profileDetail')
+  const tCommon = useTranslations('common')
+
+  const GENDER_LABELS: Record<string, string> = {
+    MALE: t('male'),
+    FEMALE: t('female'),
+    OTHER: t('other'),
+  }
+
+  const JAPANESE_LEVEL_LABELS: Record<string, string> = {
+    NONE: t('japaneseNone'),
+    BEGINNER: t('japaneseBeginner'),
+    INTERMEDIATE: t('japaneseIntermediate'),
+    ADVANCED: t('japaneseAdvanced'),
+    NATIVE: t('japaneseNative'),
+  }
+
+  const FUTURE_PLAN_LABELS: Record<string, string> = {
+    STAY_LONG: t('stayLong'),
+    STAY_SHORT: t('stayShort'),
+    UNDECIDED: t('undecided'),
+    RETURN_HOME: t('returnHome'),
+  }
+
+  const VISA_TYPE_LABELS: Record<string, string> = {
+    WORK: t('visaWork'),
+    STUDENT: t('visaStudent'),
+    SPOUSE: t('visaSpouse'),
+    PERMANENT: t('visaPermanent'),
+    WORKING_HOLIDAY: t('visaWorkingHoliday'),
+    OTHER: t('visaOther'),
+  }
   const { data: session, status } = useSession()
   const router = useRouter()
   const params = useParams()
@@ -97,6 +103,9 @@ export default function ProfileDetailPage() {
   const [hasLiked, setHasLiked] = useState(false)
   const [isMatched, setIsMatched] = useState(false)
   const [isPremium, setIsPremium] = useState(false)
+  const [contactCards, setContactCards] = useState(0)
+  const [hasViewedContact, setHasViewedContact] = useState(false)
+  const [isUsingCard, setIsUsingCard] = useState(false)
   const [isBlocking, setIsBlocking] = useState(false)
   const [showBlockConfirm, setShowBlockConfirm] = useState(false)
 
@@ -116,6 +125,8 @@ export default function ProfileDetailPage() {
           setHasLiked(data.hasLiked || false)
           setIsMatched(data.isMatched || false)
           setIsPremium(data.isPremium || false)
+          setContactCards(data.contactCards || 0)
+          setHasViewedContact(data.hasViewedContact || false)
         } else if (response.status === 404) {
           router.push('/discover')
         }
@@ -155,7 +166,7 @@ export default function ProfileDetailPage() {
         setHasLiked(true)
         const data = await response.json()
         if (data.isMatch) {
-          alert('マッチングしました！メッセージを送ってみましょう。')
+          alert(t('matchAlert'))
         }
       }
     } catch (error) {
@@ -185,6 +196,37 @@ export default function ProfileDetailPage() {
     }
   }
 
+  const handleUseCard = async () => {
+    if (!profile || contactCards <= 0) return
+    setIsUsingCard(true)
+    try {
+      const response = await fetch('/api/contact-views', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ targetUserId: profile.userId }),
+      })
+      if (response.ok) {
+        const data = await response.json()
+        setHasViewedContact(true)
+        if (data.remainingCards !== undefined) {
+          setContactCards(data.remainingCards)
+        }
+      } else {
+        const error = await response.json()
+        if (error.needsCard) {
+          router.push('/premium')
+        } else {
+          alert(error.error || 'エラーが発生しました')
+        }
+      }
+    } catch (error) {
+      console.error('Failed to use card:', error)
+      alert('エラーが発生しました')
+    } finally {
+      setIsUsingCard(false)
+    }
+  }
+
   if (status === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
@@ -196,7 +238,7 @@ export default function ProfileDetailPage() {
   if (!profile) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <p className="text-gray-500">プロフィールが見つかりませんでした</p>
+        <p className="text-gray-500">{t('profileNotFound')}</p>
       </div>
     )
   }
@@ -254,7 +296,7 @@ export default function ProfileDetailPage() {
             </>
           ) : (
             <div className="w-full h-full flex items-center justify-center text-gray-400">
-              No Photo
+              {t('noPhoto')}
             </div>
           )}
         </div>
@@ -317,13 +359,13 @@ export default function ProfileDetailPage() {
             {profile.yearsInJapan !== null && (
               <div className="flex items-center gap-3 text-gray-700">
                 <Calendar className="w-5 h-5 text-gray-400" />
-                <span>日本在住 {profile.yearsInJapan}年</span>
+                <span>{t('yearsInJapan').replace('{years}', String(profile.yearsInJapan))}</span>
               </div>
             )}
             {profile.japaneseLevel && (
               <div className="flex items-center gap-3 text-gray-700">
                 <Languages className="w-5 h-5 text-gray-400" />
-                <span>日本語: {JAPANESE_LEVEL_LABELS[profile.japaneseLevel] || profile.japaneseLevel}</span>
+                <span>{t('japaneseLevel')}: {JAPANESE_LEVEL_LABELS[profile.japaneseLevel] || profile.japaneseLevel}</span>
               </div>
             )}
             {profile.futurePlan && (
@@ -339,13 +381,13 @@ export default function ProfileDetailPage() {
             // 公開対象のチェック
             const canViewContact =
               profile.contactVisibility === 'EVERYONE' ||
-              (profile.contactVisibility === 'PREMIUM_ONLY' && isPremium) ||
+              (profile.contactVisibility === 'PREMIUM_ONLY' && (isPremium || hasViewedContact)) ||
               (profile.contactVisibility === 'MATCHED_ONLY' && isMatched)
 
             if (canViewContact) {
               return (
                 <div className="bg-pink-50 rounded-xl p-4">
-                  <h3 className="text-sm font-semibold text-pink-700 mb-3">連絡先</h3>
+                  <h3 className="text-sm font-semibold text-pink-700 mb-3">{t('contactInfo')}</h3>
                   <div className="space-y-2">
                     {profile.wechatId && (
                       <div className="flex items-center gap-3 text-gray-700">
@@ -368,16 +410,43 @@ export default function ProfileDetailPage() {
                   </div>
                 </div>
               )
+            } else if (profile.contactVisibility === 'PREMIUM_ONLY') {
+              // 有料会員のみの場合：カードを使うか、プレミアムに登録
+              return (
+                <div className="bg-gray-100 rounded-xl p-4">
+                  <div className="flex items-center gap-2 text-gray-700 mb-3">
+                    <Shield className="w-5 h-5 text-gray-400" />
+                    <span className="text-sm font-medium">{t('contactPremiumOnly')}</span>
+                  </div>
+                  <div className="space-y-2">
+                    {contactCards > 0 ? (
+                      <Button
+                        onClick={handleUseCard}
+                        disabled={isUsingCard}
+                        className="w-full bg-blue-500 hover:bg-blue-600"
+                        isLoading={isUsingCard}
+                      >
+                        <Ticket className="w-4 h-4 mr-2" />
+                        {t('useCardToView')} ({t('remainingCards', { count: contactCards })})
+                      </Button>
+                    ) : (
+                      <Link href="/premium" className="block">
+                        <Button className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600">
+                          <Crown className="w-4 h-4 mr-2" />
+                          {t('upgradeToPremium')}
+                        </Button>
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              )
             } else {
-              // 公開対象外の場合はメッセージを表示
-              const message = profile.contactVisibility === 'PREMIUM_ONLY'
-                ? '連絡先は有料会員のみに公開されています'
-                : '連絡先はマッチした相手のみに公開されています'
+              // マッチした相手のみ
               return (
                 <div className="bg-gray-100 rounded-xl p-4">
                   <div className="flex items-center gap-2 text-gray-500">
                     <Shield className="w-5 h-5" />
-                    <span className="text-sm">{message}</span>
+                    <span className="text-sm">{t('contactMatchedOnly')}</span>
                   </div>
                 </div>
               )
@@ -393,12 +462,12 @@ export default function ProfileDetailPage() {
               isLoading={isLiking}
             >
               <Heart className={`w-5 h-5 mr-2 ${hasLiked ? 'fill-current' : ''}`} />
-              {hasLiked ? 'いいね済み' : 'いいね'}
+              {hasLiked ? t('liked') : t('like')}
             </Button>
             <Link href={`/messages/${profile.userId}`} className="flex-1">
               <Button variant="outline" className="w-full">
                 <MessageCircle className="w-5 h-5 mr-2" />
-                メッセージ
+                {t('message')}
               </Button>
             </Link>
           </div>
@@ -410,7 +479,7 @@ export default function ProfileDetailPage() {
               className="flex items-center gap-2 text-gray-500 hover:text-red-500 text-sm"
             >
               <Ban className="w-4 h-4" />
-              このユーザーをブロック
+              {t('blockUser')}
             </button>
           </div>
         </div>
@@ -420,9 +489,9 @@ export default function ProfileDetailPage() {
       {showBlockConfirm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl max-w-sm w-full p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">ブロックしますか？</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">{t('blockConfirmTitle')}</h3>
             <p className="text-gray-600 mb-6">
-              {profile.nickname}さんをブロックすると、お互いに検索結果に表示されなくなり、メッセージの送受信もできなくなります。
+              {t('blockConfirmDesc').replace('{nickname}', profile.nickname)}
             </p>
             <div className="flex gap-3">
               <Button
@@ -430,14 +499,14 @@ export default function ProfileDetailPage() {
                 className="flex-1"
                 onClick={() => setShowBlockConfirm(false)}
               >
-                キャンセル
+                {tCommon('cancel')}
               </Button>
               <Button
                 className="flex-1 bg-red-500 hover:bg-red-600"
                 onClick={handleBlock}
                 isLoading={isBlocking}
               >
-                ブロック
+                {t('block')}
               </Button>
             </div>
           </div>

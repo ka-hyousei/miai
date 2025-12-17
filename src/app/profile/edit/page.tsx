@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
@@ -21,6 +22,9 @@ import {
 export default function ProfileEditPage() {
   const router = useRouter()
   const { data: session, status } = useSession()
+  const t = useTranslations('profile')
+  const tCommon = useTranslations('common')
+
   const [isLoading, setIsLoading] = useState(false)
   const [isFetching, setIsFetching] = useState(true)
   const [error, setError] = useState('')
@@ -48,8 +52,8 @@ export default function ProfileEditPage() {
     contactEmail: '',
     showVisaType: false,
     showYearsInJapan: false,
-    showContact: true,  // デフォルト公開
-    contactVisibility: 'EVERYONE',  // デフォルト全員に公開
+    showContact: true,
+    contactVisibility: 'EVERYONE',
   })
 
   useEffect(() => {
@@ -145,11 +149,11 @@ export default function ProfileEditPage() {
         throw new Error(data.error)
       }
 
-      setSuccess('プロフィールを更新しました')
-      alert('プロフィールを更新しました')
+      setSuccess(t('profileSaved'))
+      alert(t('profileSaved'))
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'プロフィールの更新に失敗しました'
+      const errorMessage = err instanceof Error ? err.message : t('updateFailed')
       setError(errorMessage)
       alert(errorMessage)
     } finally {
@@ -167,17 +171,17 @@ export default function ProfileEditPage() {
 
   const years = Array.from({ length: 60 }, (_, i) => ({
     value: String(new Date().getFullYear() - 18 - i),
-    label: `${new Date().getFullYear() - 18 - i}年`,
+    label: `${new Date().getFullYear() - 18 - i}`,
   }))
 
   const months = Array.from({ length: 12 }, (_, i) => ({
     value: String(i + 1),
-    label: `${i + 1}月`,
+    label: `${i + 1}`,
   }))
 
   const days = Array.from({ length: 31 }, (_, i) => ({
     value: String(i + 1),
-    label: `${i + 1}日`,
+    label: `${i + 1}`,
   }))
 
   const prefectureOptions = PREFECTURES.map((p) => ({ value: p, label: p }))
@@ -190,7 +194,7 @@ export default function ProfileEditPage() {
           <Link href="/mypage" className="p-2 hover:bg-gray-100 rounded-full">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </Link>
-          <h1 className="text-xl font-bold text-gray-900">プロフィール編集</h1>
+          <h1 className="text-xl font-bold text-gray-900">{t('edit')}</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -208,32 +212,32 @@ export default function ProfileEditPage() {
 
           {/* 基本情報 */}
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">基本情報</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('basicInfo')}</h2>
             <div className="space-y-4">
               <Input
                 id="nickname"
                 name="nickname"
-                label="ニックネーム"
+                label={t('nickname')}
                 value={formData.nickname}
                 onChange={handleChange}
-                placeholder="表示名を入力"
+                placeholder={t('nicknamePlaceholder')}
                 required
               />
 
               <Select
                 id="gender"
                 name="gender"
-                label="性別"
+                label={t('gender')}
                 value={formData.gender}
                 onChange={handleChange}
                 options={GENDER_OPTIONS}
-                placeholder="選択してください"
+                placeholder={t('selectPlaceholder')}
                 required
               />
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  生年月日
+                  {t('birthday')}
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   <Select
@@ -242,7 +246,7 @@ export default function ProfileEditPage() {
                     value={formData.birthYear}
                     onChange={handleChange}
                     options={years}
-                    placeholder="年"
+                    placeholder={t('year')}
                     required
                   />
                   <Select
@@ -251,7 +255,7 @@ export default function ProfileEditPage() {
                     value={formData.birthMonth}
                     onChange={handleChange}
                     options={months}
-                    placeholder="月"
+                    placeholder={t('month')}
                     required
                   />
                   <Select
@@ -260,7 +264,7 @@ export default function ProfileEditPage() {
                     value={formData.birthDay}
                     onChange={handleChange}
                     options={days}
-                    placeholder="日"
+                    placeholder={t('day')}
                     required
                   />
                 </div>
@@ -269,39 +273,39 @@ export default function ProfileEditPage() {
               <Select
                 id="prefecture"
                 name="prefecture"
-                label="お住まいの都道府県"
+                label={t('prefecture')}
                 value={formData.prefecture}
                 onChange={handleChange}
                 options={prefectureOptions}
-                placeholder="選択してください"
+                placeholder={t('selectPlaceholder')}
                 required
               />
 
               <Input
                 id="city"
                 name="city"
-                label="市区町村（任意）"
+                label={`${t('city')}（${t('optional')}）`}
                 value={formData.city}
                 onChange={handleChange}
-                placeholder="例：渋谷区"
+                placeholder={t('cityPlaceholder')}
               />
             </div>
           </div>
 
           {/* 自己紹介 */}
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">自己紹介</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('selfIntro')}</h2>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  自己紹介文
+                  {t('introduction')}
                 </label>
                 <textarea
                   id="bio"
                   name="bio"
                   value={formData.bio}
                   onChange={handleChange}
-                  placeholder="趣味や興味、どんな人と出会いたいかなど..."
+                  placeholder={t('bioPlaceholder')}
                   rows={5}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                 />
@@ -311,26 +315,28 @@ export default function ProfileEditPage() {
                 id="height"
                 name="height"
                 type="number"
-                label="身長（cm）（任意）"
+                label={`${t('heightCm')}（${t('optional')}）`}
                 value={formData.height}
                 onChange={handleChange}
-                placeholder="例：170"
+                placeholder={t('heightPlaceholder')}
               />
 
               <Input
                 id="occupation"
                 name="occupation"
-                label="職業（任意）"
+                label={`${t('occupation')}（${t('optional')}）`}
                 value={formData.occupation}
                 onChange={handleChange}
-                placeholder="例：ITエンジニア"
+                placeholder={t('occupationPlaceholder')}
               />
             </div>
           </div>
 
           {/* 在日関連情報 */}
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">在日関連情報（任意）</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+              {t('japanRelated')}（{t('optional')}）
+            </h2>
             <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg mb-4">
               {VISA_INFO_DISCLAIMER}
             </p>
@@ -338,103 +344,105 @@ export default function ProfileEditPage() {
               <Select
                 id="visaType"
                 name="visaType"
-                label="在留資格"
+                label={t('visaType')}
                 value={formData.visaType}
                 onChange={handleChange}
                 options={VISA_TYPE_OPTIONS}
-                placeholder="選択しない"
+                placeholder={t('noSelect')}
               />
 
               <Input
                 id="yearsInJapan"
                 name="yearsInJapan"
                 type="number"
-                label="在日年数"
+                label={t('yearsInJapan')}
                 value={formData.yearsInJapan}
                 onChange={handleChange}
-                placeholder="例：5"
+                placeholder={t('yearsPlaceholder')}
               />
 
               <Select
                 id="japaneseLevel"
                 name="japaneseLevel"
-                label="日本語能力"
+                label={t('japaneseLevel')}
                 value={formData.japaneseLevel}
                 onChange={handleChange}
                 options={JAPANESE_LEVEL_OPTIONS}
-                placeholder="選択しない"
+                placeholder={t('noSelect')}
               />
 
               <Select
                 id="futurePlan"
                 name="futurePlan"
-                label="将来の計画"
+                label={t('futurePlan')}
                 value={formData.futurePlan}
                 onChange={handleChange}
                 options={FUTURE_PLAN_OPTIONS}
-                placeholder="選択しない"
+                placeholder={t('noSelect')}
               />
 
               <Input
                 id="nationality"
                 name="nationality"
-                label="国籍"
+                label={t('nationality')}
                 value={formData.nationality}
                 onChange={handleChange}
-                placeholder="例：中国"
+                placeholder={t('nationalityPlaceholder')}
               />
 
               <Input
                 id="hometown"
                 name="hometown"
-                label="出身地"
+                label={t('hometown')}
                 value={formData.hometown}
                 onChange={handleChange}
-                placeholder="例：上海"
+                placeholder={t('hometownPlaceholder')}
               />
             </div>
           </div>
 
           {/* 連絡先情報 */}
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">連絡先情報（任意）</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+              {t('contactInfo')}（{t('optional')}）
+            </h2>
             <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg mb-4">
-              連絡先は任意です。入力した場合、「連絡先を公開する」をオンにすると他のユーザーに表示されます。
+              {t('contactNote')}
             </p>
             <div className="space-y-4">
               <Input
                 id="wechatId"
                 name="wechatId"
-                label="WeChat ID"
+                label={t('wechatId')}
                 value={formData.wechatId}
                 onChange={handleChange}
-                placeholder="例：wxid_xxxxx"
+                placeholder={t('wechatPlaceholder')}
               />
 
               <Input
                 id="phoneNumber"
                 name="phoneNumber"
-                label="電話番号"
+                label={t('phoneNumber')}
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                placeholder="例：090-1234-5678"
+                placeholder={t('phonePlaceholder')}
               />
 
               <Input
                 id="contactEmail"
                 name="contactEmail"
                 type="email"
-                label="連絡用メールアドレス"
+                label={t('contactEmail')}
                 value={formData.contactEmail}
                 onChange={handleChange}
-                placeholder="例：example@email.com"
+                placeholder={t('emailPlaceholder')}
               />
             </div>
           </div>
 
           {/* 表示設定 */}
           <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">表示設定</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('displaySettings')}</h2>
             <div className="space-y-4">
               <label className="flex items-center gap-3">
                 <input
@@ -444,7 +452,7 @@ export default function ProfileEditPage() {
                   onChange={handleChange}
                   className="w-4 h-4 text-pink-500 rounded focus:ring-pink-500"
                 />
-                <span className="text-sm text-gray-600">連絡先を公開する（WeChat・電話番号・メール）</span>
+                <span className="text-sm text-gray-600">{t('showContact')}</span>
               </label>
 
               {formData.showContact && (
@@ -452,7 +460,7 @@ export default function ProfileEditPage() {
                   <Select
                     id="contactVisibility"
                     name="contactVisibility"
-                    label="公開対象"
+                    label={t('visibilityTarget')}
                     value={formData.contactVisibility}
                     onChange={handleChange}
                     options={CONTACT_VISIBILITY_OPTIONS}
@@ -469,7 +477,7 @@ export default function ProfileEditPage() {
             size="lg"
             isLoading={isLoading}
           >
-            保存する
+            {t('saveProfile')}
           </Button>
         </form>
       </div>

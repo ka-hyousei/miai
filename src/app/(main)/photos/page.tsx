@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Plus, Star, Trash2, Loader2 } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { ArrowLeft, Plus, Star, Trash2, Loader2, CheckCircle, AlertCircle, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface Photo {
@@ -14,9 +15,20 @@ interface Photo {
   order: number
 }
 
+type DialogType = 'confirm' | 'success' | 'error' | null
+
+interface DialogState {
+  type: DialogType
+  title: string
+  message: string
+  onConfirm?: () => void
+}
+
 export default function PhotosPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const t = useTranslations('photos')
+  const tCommon = useTranslations('common')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [photos, setPhotos] = useState<Photo[]>([])
@@ -25,6 +37,36 @@ export default function PhotosPage() {
   const [isUploading, setIsUploading] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [settingMainId, setSettingMainId] = useState<string | null>(null)
+  const [dialog, setDialog] = useState<DialogState>({ type: null, title: '', message: '' })
+
+  const closeDialog = () => {
+    setDialog({ type: null, title: '', message: '' })
+  }
+
+  const showSuccessDialog = (message: string) => {
+    setDialog({
+      type: 'success',
+      title: t('uploadSuccess').includes('アップロード') ? '完了' : '完成',
+      message,
+    })
+  }
+
+  const showErrorDialog = (message: string) => {
+    setDialog({
+      type: 'error',
+      title: tCommon('error'),
+      message,
+    })
+  }
+
+  const showConfirmDialog = (message: string, onConfirm: () => void) => {
+    setDialog({
+      type: 'confirm',
+      title: t('deleteConfirm').includes('削除') ? '確認' : '确认',
+      message,
+      onConfirm,
+    })
+  }
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -59,13 +101,13 @@ export default function PhotosPage() {
 
     // ファイルサイズチェック（10MB）
     if (file.size > 10 * 1024 * 1024) {
-      alert('ファイルサイズは10MB以下にしてください')
+      showErrorDialog(t('fileSizeError'))
       return
     }
 
     // ファイルタイプチェック
     if (!file.type.startsWith('image/')) {
-      alert('画像ファイルを選択してください')
+      showErrorDialog(t('fileTypeError'))
       return
     }
 
@@ -90,13 +132,13 @@ export default function PhotosPage() {
 
       if (response.ok) {
         setPhotos([...photos, data.photo])
-        alert('写真をアップロードしました')
+        showSuccessDialog(t('uploadSuccess'))
       } else {
-        alert(data.error || '写真のアップロードに失敗しました')
+        showErrorDialog(data.error || t('uploadFailed'))
       }
     } catch (error) {
       console.error('Upload error:', error)
-      alert('写真のアップロードに失敗しました')
+      showErrorDialog(t('uploadFailed'))
     } finally {
       setIsUploading(false)
       // ファイル入力をリセット
@@ -106,9 +148,12 @@ export default function PhotosPage() {
     }
   }
 
-  const handleDelete = async (photoId: string) => {
-    if (!confirm('この写真を削除しますか？')) return
+  const handleDeleteClick = (photoId: string) => {
+    showConfirmDialog(t('deleteConfirm'), () => handleDeleteConfirmed(photoId))
+  }
 
+  const handleDeleteConfirmed = async (photoId: string) => {
+    closeDialog()
     setDeletingId(photoId)
 
     try {
@@ -118,14 +163,14 @@ export default function PhotosPage() {
 
       if (response.ok) {
         setPhotos(photos.filter(p => p.id !== photoId))
-        alert('写真を削除しました')
+        showSuccessDialog(t('deleteSuccess'))
       } else {
         const data = await response.json()
-        alert(data.error || '写真の削除に失敗しました')
+        showErrorDialog(data.error || t('deleteFailed'))
       }
     } catch (error) {
       console.error('Delete error:', error)
-      alert('写真の削除に失敗しました')
+      showErrorDialog(t('deleteFailed'))
     } finally {
       setDeletingId(null)
     }
@@ -144,14 +189,14 @@ export default function PhotosPage() {
           ...p,
           isMain: p.id === photoId,
         })))
-        alert('メイン写真を設定しました')
+        showSuccessDialog(t('setMainSuccess'))
       } else {
         const data = await response.json()
-        alert(data.error || 'メイン写真の設定に失敗しました')
+        showErrorDialog(data.error || t('setMainFailed'))
       }
     } catch (error) {
       console.error('Set main error:', error)
-      alert('メイン写真の設定に失敗しました')
+      showErrorDialog(t('setMainFailed'))
     } finally {
       setSettingMainId(null)
     }
@@ -174,8 +219,8 @@ export default function PhotosPage() {
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </Link>
           <div>
-            <h1 className="text-xl font-bold text-gray-900">写真管理</h1>
-            <p className="text-sm text-gray-500">{photos.length} / {maxPhotos} 枚</p>
+            <h1 className="text-xl font-bold text-gray-900">{t('title')}</h1>
+            <p className="text-sm text-gray-500">{t('count').replace('{current}', String(photos.length)).replace('{max}', String(maxPhotos))}</p>
           </div>
         </div>
 
@@ -188,7 +233,7 @@ export default function PhotosPage() {
             >
               <img
                 src={photo.url}
-                alt="プロフィール写真"
+                alt={t('profilePhoto')}
                 className="w-full h-full object-cover"
               />
 
@@ -196,7 +241,7 @@ export default function PhotosPage() {
               {photo.isMain && (
                 <div className="absolute top-2 left-2 bg-pink-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
                   <Star className="w-3 h-3 fill-current" />
-                  メイン
+                  {t('main')}
                 </div>
               )}
 
@@ -219,7 +264,7 @@ export default function PhotosPage() {
                 <Button
                   size="sm"
                   variant="danger"
-                  onClick={() => handleDelete(photo.id)}
+                  onClick={() => handleDeleteClick(photo.id)}
                   disabled={deletingId === photo.id}
                 >
                   {deletingId === photo.id ? (
@@ -244,7 +289,7 @@ export default function PhotosPage() {
               ) : (
                 <>
                   <Plus className="w-8 h-8 mb-2" />
-                  <span className="text-sm">写真を追加</span>
+                  <span className="text-sm">{t('addPhoto')}</span>
                 </>
               )}
             </button>
@@ -262,15 +307,83 @@ export default function PhotosPage() {
 
         {/* Tips */}
         <div className="mt-6 bg-gray-50 rounded-xl p-4">
-          <h3 className="font-medium text-gray-900 mb-2">写真のヒント</h3>
+          <h3 className="font-medium text-gray-900 mb-2">{t('tips')}</h3>
           <ul className="text-sm text-gray-600 space-y-1">
-            <li>・顔がはっきり写っている写真がおすすめです</li>
-            <li>・明るい場所で撮影された写真を選びましょう</li>
-            <li>・メイン写真は検索結果に表示されます</li>
-            <li>・最大{maxPhotos}枚まで登録できます</li>
+            <li>・{t('tip1')}</li>
+            <li>・{t('tip2')}</li>
+            <li>・{t('tip3')}</li>
+            <li>・{t('tip4').replace('{max}', String(maxPhotos))}</li>
           </ul>
         </div>
       </div>
+
+      {/* Dialog Modal */}
+      {dialog.type && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+            {/* Icon */}
+            <div className="flex justify-center mb-4">
+              {dialog.type === 'confirm' && (
+                <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
+                  <AlertCircle className="w-8 h-8 text-yellow-500" />
+                </div>
+              )}
+              {dialog.type === 'success' && (
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-8 h-8 text-green-500" />
+                </div>
+              )}
+              {dialog.type === 'error' && (
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                  <AlertCircle className="w-8 h-8 text-red-500" />
+                </div>
+              )}
+            </div>
+
+            {/* Title */}
+            <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
+              {dialog.title}
+            </h3>
+
+            {/* Message */}
+            <p className="text-gray-600 text-center whitespace-pre-line mb-6">
+              {dialog.message}
+            </p>
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+              {dialog.type === 'confirm' ? (
+                <>
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={closeDialog}
+                  >
+                    {tCommon('cancel')}
+                  </Button>
+                  <Button
+                    className="flex-1 bg-red-500 hover:bg-red-600"
+                    onClick={dialog.onConfirm}
+                  >
+                    {tCommon('delete')}
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  className={`w-full ${
+                    dialog.type === 'success'
+                      ? 'bg-green-500 hover:bg-green-600'
+                      : 'bg-gray-500 hover:bg-gray-600'
+                  }`}
+                  onClick={closeDialog}
+                >
+                  OK
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { User, Settings, Heart, MessageCircle, Shield, LogOut, Camera, MapPin, Briefcase, Globe } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { User, Settings, Heart, MessageCircle, LogOut, Camera, Briefcase, Globe, Crown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface Profile {
@@ -29,6 +30,10 @@ interface Profile {
 export default function MyPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const t = useTranslations('mypage')
+  const tLikes = useTranslations('likes')
+  const tMessages = useTranslations('messages')
+
   const [profile, setProfile] = useState<Profile | null>(null)
   const [photos, setPhotos] = useState<{ url: string; isMain: boolean }[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -108,11 +113,11 @@ export default function MyPage() {
               </div>
               <div className="ml-4 mb-2">
                 <h1 className="text-xl font-bold text-gray-900">
-                  {profile?.nickname || 'ユーザー'}
+                  {profile?.nickname || tMessages('user')}
                 </h1>
                 {profile && (
                   <p className="text-gray-600">
-                    {calculateAge(profile.birthDate)}歳 • {profile.prefecture}
+                    {calculateAge(profile.birthDate)}{t('yearsOld')} • {profile.prefecture}
                   </p>
                 )}
               </div>
@@ -138,9 +143,9 @@ export default function MyPage() {
               </div>
             ) : (
               <div className="text-center py-4">
-                <p className="text-gray-500 mb-4">プロフィールを設定してください</p>
+                <p className="text-gray-500 mb-4">{t('pleaseSetupProfile')}</p>
                 <Link href="/profile/setup">
-                  <Button>プロフィールを設定</Button>
+                  <Button>{t('setupProfile')}</Button>
                 </Link>
               </div>
             )}
@@ -154,8 +159,8 @@ export default function MyPage() {
               <User className="w-5 h-5 text-pink-500" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">プロフィール編集</p>
-              <p className="text-sm text-gray-500">自己紹介を編集</p>
+              <p className="font-medium text-gray-900">{t('editProfile')}</p>
+              <p className="text-sm text-gray-500">{t('editProfileDesc')}</p>
             </div>
           </Link>
 
@@ -164,8 +169,8 @@ export default function MyPage() {
               <Camera className="w-5 h-5 text-purple-500" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">写真管理</p>
-              <p className="text-sm text-gray-500">プロフィール写真を追加・編集</p>
+              <p className="font-medium text-gray-900">{t('photoManagement')}</p>
+              <p className="text-sm text-gray-500">{t('photoManagementDesc')}</p>
             </div>
           </Link>
 
@@ -174,8 +179,8 @@ export default function MyPage() {
               <Heart className="w-5 h-5 text-red-500" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">いいね</p>
-              <p className="text-sm text-gray-500">もらったいいね・送ったいいね</p>
+              <p className="font-medium text-gray-900">{tLikes('title')}</p>
+              <p className="text-sm text-gray-500">{t('likesDesc')}</p>
             </div>
           </Link>
 
@@ -184,8 +189,18 @@ export default function MyPage() {
               <MessageCircle className="w-5 h-5 text-blue-500" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">メッセージ</p>
-              <p className="text-sm text-gray-500">マッチしたお相手とのやりとり</p>
+              <p className="font-medium text-gray-900">{tMessages('title')}</p>
+              <p className="text-sm text-gray-500">{t('messagesDesc')}</p>
+            </div>
+          </Link>
+
+          <Link href="/premium" className="flex items-center gap-4 p-4 hover:bg-gray-50 border-b">
+            <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
+              <Crown className="w-5 h-5 text-yellow-500" />
+            </div>
+            <div>
+              <p className="font-medium text-gray-900">{t('premium')}</p>
+              <p className="text-sm text-gray-500">{t('premiumDesc')}</p>
             </div>
           </Link>
 
@@ -194,8 +209,8 @@ export default function MyPage() {
               <Settings className="w-5 h-5 text-gray-500" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">設定</p>
-              <p className="text-sm text-gray-500">通知・プライバシー設定</p>
+              <p className="font-medium text-gray-900">{t('settings')}</p>
+              <p className="text-sm text-gray-500">{t('settingsDesc')}</p>
             </div>
           </Link>
 
@@ -207,8 +222,8 @@ export default function MyPage() {
               <LogOut className="w-5 h-5 text-gray-500" />
             </div>
             <div>
-              <p className="font-medium text-gray-900">ログアウト</p>
-              <p className="text-sm text-gray-500">アカウントからログアウト</p>
+              <p className="font-medium text-gray-900">{t('logout')}</p>
+              <p className="text-sm text-gray-500">{t('logoutDesc')}</p>
             </div>
           </button>
         </div>

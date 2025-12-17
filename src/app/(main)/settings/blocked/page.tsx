@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { ArrowLeft, User, UserX } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -22,6 +23,8 @@ interface BlockedUser {
 export default function BlockedUsersPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const t = useTranslations('settings')
+  const tMessages = useTranslations('messages')
   const [blockedUsers, setBlockedUsers] = useState<BlockedUser[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [unblockingId, setUnblockingId] = useState<string | null>(null)
@@ -84,13 +87,13 @@ export default function BlockedUsersPage() {
           <Link href="/settings" className="p-2 hover:bg-gray-100 rounded-full">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </Link>
-          <h1 className="text-xl font-bold text-gray-900">ブロックリスト</h1>
+          <h1 className="text-xl font-bold text-gray-900">{t('blockList')}</h1>
         </div>
 
         {blockedUsers.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm p-8 text-center">
             <UserX className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500">ブロックしているユーザーはいません</p>
+            <p className="text-gray-500">{t('noBlockedUsers')}</p>
           </div>
         ) : (
           <div className="bg-white rounded-xl shadow-sm overflow-hidden">
@@ -116,10 +119,10 @@ export default function BlockedUsersPage() {
                       </div>
                       <div>
                         <p className="font-medium text-gray-900">
-                          {block.blockedUser.profile?.nickname || 'ユーザー'}
+                          {block.blockedUser.profile?.nickname || tMessages('user')}
                         </p>
                         <p className="text-sm text-gray-500">
-                          {new Date(block.createdAt).toLocaleDateString('ja-JP')} にブロック
+                          {new Date(block.createdAt).toLocaleDateString()} {t('blockedAt')}
                         </p>
                       </div>
                     </div>
@@ -129,7 +132,7 @@ export default function BlockedUsersPage() {
                       onClick={() => handleUnblock(block.id, block.blockedUser.id)}
                       isLoading={unblockingId === block.id}
                     >
-                      解除
+                      {t('unblock')}
                     </Button>
                   </div>
                 )
@@ -139,7 +142,7 @@ export default function BlockedUsersPage() {
         )}
 
         <p className="text-sm text-gray-500 mt-4 text-center">
-          ブロックを解除すると、相手があなたを検索できるようになります
+          {t('unblockNote')}
         </p>
       </div>
     </div>

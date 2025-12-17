@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Heart, MapPin, Briefcase, Globe, Search, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
@@ -27,6 +28,9 @@ interface UserProfile {
 export default function DiscoverPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const t = useTranslations('discover')
+  const tProfile = useTranslations('profile')
+
   const [profiles, setProfiles] = useState<UserProfile[]>([])
   const [likedUserIds, setLikedUserIds] = useState<Set<string>>(new Set())
   const [isLoading, setIsLoading] = useState(true)
@@ -62,7 +66,6 @@ export default function DiscoverPage() {
       const data = await response.json()
       setProfiles(data.profiles || [])
 
-      // 初回読み込み時にデフォルトの性別フィルタを設定
       if (isInitial && data.defaultGender) {
         setDefaultGender(data.defaultGender)
         setFilters(prev => ({ ...prev, gender: data.defaultGender }))
@@ -76,7 +79,7 @@ export default function DiscoverPage() {
 
   useEffect(() => {
     if (session) {
-      fetchProfiles(true) // 初回読み込み
+      fetchProfiles(true)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session])
@@ -94,7 +97,7 @@ export default function DiscoverPage() {
 
   const handleClear = () => {
     setFilters({
-      gender: defaultGender, // デフォルトで異性を選択
+      gender: defaultGender,
       prefecture: '',
       ageMin: '',
       ageMax: '',
@@ -104,7 +107,6 @@ export default function DiscoverPage() {
     setSearchTrigger(prev => prev + 1)
   }
 
-  // 国籍変更時に在留資格をリセット
   const handleNationalityChange = (value: string) => {
     setFilters({
       ...filters,
@@ -113,7 +115,6 @@ export default function DiscoverPage() {
     })
   }
 
-  // 日本以外の国籍が選択されているかどうか
   const showVisaTypeFilter = filters.nationality && filters.nationality !== '日本'
 
   const handleLike = async (userId: string) => {
@@ -123,7 +124,6 @@ export default function DiscoverPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ toUserId: userId }),
       })
-      // いいね済みとしてマーク（リストからは削除しない）
       setLikedUserIds(prev => new Set(prev).add(userId))
     } catch (error) {
       console.error('Failed to like:', error)
@@ -144,7 +144,7 @@ export default function DiscoverPage() {
   const prefectureOptions = PREFECTURES.map((p) => ({ value: p, label: p }))
   const ageOptions = Array.from({ length: 53 }, (_, i) => ({
     value: String(18 + i),
-    label: `${18 + i}歳`,
+    label: `${18 + i}${t('yearsOld')}`,
   }))
 
   if (status === 'loading' || isLoading) {
@@ -160,42 +160,42 @@ export default function DiscoverPage() {
       <div className="p-4">
         {/* Filters */}
         <div className="bg-white rounded-lg p-4 mb-6 shadow-sm">
-          <h2 className="font-semibold text-gray-900 mb-4">検索条件</h2>
+          <h2 className="font-semibold text-gray-900 mb-4">{t('searchConditions')}</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Select
               id="gender"
               options={GENDER_OPTIONS}
               value={filters.gender}
               onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
-              placeholder="性別"
+              placeholder={tProfile('gender')}
             />
             <Select
               id="prefecture"
               options={prefectureOptions}
               value={filters.prefecture}
               onChange={(e) => setFilters({ ...filters, prefecture: e.target.value })}
-              placeholder="地域"
+              placeholder={t('region')}
             />
             <Select
               id="ageMin"
               options={ageOptions}
               value={filters.ageMin}
               onChange={(e) => setFilters({ ...filters, ageMin: e.target.value })}
-              placeholder="年齢（下限）"
+              placeholder={t('ageMin')}
             />
             <Select
               id="ageMax"
               options={ageOptions}
               value={filters.ageMax}
               onChange={(e) => setFilters({ ...filters, ageMax: e.target.value })}
-              placeholder="年齢（上限）"
+              placeholder={t('ageMax')}
             />
             <Select
               id="nationality"
               options={NATIONALITY_OPTIONS}
               value={filters.nationality}
               onChange={(e) => handleNationalityChange(e.target.value)}
-              placeholder="国籍"
+              placeholder={tProfile('nationality')}
             />
             {showVisaTypeFilter && (
               <Select
@@ -203,18 +203,18 @@ export default function DiscoverPage() {
                 options={VISA_TYPE_OPTIONS}
                 value={filters.visaType}
                 onChange={(e) => setFilters({ ...filters, visaType: e.target.value })}
-                placeholder="在留資格"
+                placeholder={tProfile('visaType')}
               />
             )}
           </div>
           <div className="flex gap-3 mt-4">
             <Button onClick={handleSearch} className="flex-1">
               <Search className="w-4 h-4 mr-2" />
-              検索
+              {t('search')}
             </Button>
             <Button onClick={handleClear} variant="outline" className="flex-1">
               <RotateCcw className="w-4 h-4 mr-2" />
-              クリア
+              {t('clear')}
             </Button>
           </div>
         </div>
@@ -222,7 +222,7 @@ export default function DiscoverPage() {
         {/* Profile Grid */}
         {profiles.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
-            条件に合うユーザーが見つかりませんでした
+            {t('noMatch')}
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -275,7 +275,7 @@ export default function DiscoverPage() {
                       disabled
                     >
                       <Heart className="w-4 h-4 mr-1 fill-white" />
-                      いいね済み
+                      {t('liked')}
                     </Button>
                   ) : (
                     <Button
@@ -284,7 +284,7 @@ export default function DiscoverPage() {
                       size="sm"
                     >
                       <Heart className="w-4 h-4 mr-1" />
-                      いいね
+                      {t('like')}
                     </Button>
                   )}
                 </div>

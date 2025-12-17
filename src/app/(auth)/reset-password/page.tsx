@@ -3,28 +3,30 @@
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { LanguageSwitcher } from '@/components/ui/language-switcher'
 
 function ResetPasswordForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
+  const t = useTranslations('auth')
 
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  // トークンがない場合
   if (!token) {
     return (
       <div className="text-center">
         <div className="bg-red-50 text-red-500 p-4 rounded-lg mb-6">
-          <p>無効なリンクです。パスワードリセットを再度リクエストしてください。</p>
+          <p>{t('invalidLink')}</p>
         </div>
         <Link href="/forgot-password">
-          <Button className="w-full">パスワードリセットをリクエスト</Button>
+          <Button className="w-full">{t('requestPasswordReset')}</Button>
         </Link>
       </div>
     )
@@ -34,14 +36,13 @@ function ResetPasswordForm() {
     e.preventDefault()
     setError('')
 
-    // パスワードの確認
     if (password !== confirmPassword) {
-      setError('パスワードが一致しません')
+      setError(t('passwordMismatch'))
       return
     }
 
     if (password.length < 8) {
-      setError('パスワードは8文字以上で入力してください')
+      setError(t('password8chars'))
       return
     }
 
@@ -59,11 +60,10 @@ function ResetPasswordForm() {
       if (!response.ok) {
         setError(data.error)
       } else {
-        // 成功したらログインページへリダイレクト
         router.push('/login?message=password-reset-success')
       }
     } catch {
-      setError('リクエストに失敗しました。しばらくしてから再度お試しください。')
+      setError(t('requestFailed'))
     } finally {
       setIsLoading(false)
     }
@@ -80,20 +80,20 @@ function ResetPasswordForm() {
       <Input
         id="password"
         type="password"
-        label="新しいパスワード"
+        label={t('newPassword')}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="8文字以上"
+        placeholder={t('passwordPlaceholder')}
         required
       />
 
       <Input
         id="confirmPassword"
         type="password"
-        label="新しいパスワード（確認）"
+        label={t('confirmPassword')}
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
-        placeholder="もう一度入力してください"
+        placeholder={t('enterAgain')}
         required
       />
 
@@ -103,29 +103,36 @@ function ResetPasswordForm() {
         size="lg"
         isLoading={isLoading}
       >
-        パスワードを変更
+        {t('resetButton')}
       </Button>
     </form>
   )
 }
 
 export default function ResetPasswordPage() {
+  const t = useTranslations('auth')
+  const tHome = useTranslations('home')
+  const tCommon = useTranslations('common')
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-rose-100 px-4">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">お見合い</h1>
-            <p className="text-gray-600">新しいパスワードを設定</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{tHome('title')}</h1>
+            <p className="text-gray-600">{t('newPasswordTitle')}</p>
           </div>
 
-          <Suspense fallback={<div className="text-center py-4">読み込み中...</div>}>
+          <Suspense fallback={<div className="text-center py-4">{tCommon('loading')}</div>}>
             <ResetPasswordForm />
           </Suspense>
 
           <div className="mt-6 text-center">
             <Link href="/login" className="text-pink-500 hover:text-pink-600 font-medium">
-              ログインページへ戻る
+              {t('backToLogin')}
             </Link>
           </div>
         </div>

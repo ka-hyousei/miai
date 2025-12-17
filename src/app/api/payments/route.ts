@@ -5,9 +5,16 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
 const createPaymentSchema = z.object({
-  plan: z.enum(['PREMIUM', 'VIP']),
+  plan: z.enum(['PREMIUM', 'VIP', 'CARD']),
   paymentMethod: z.enum(['WECHAT', 'PAYPAY']),
 })
+
+// 料金設定
+const PRICING = {
+  PREMIUM: { JPY: 680, CNY: 30 },
+  CARD: { JPY: 288, CNY: 15 },
+  VIP: { JPY: 6800, CNY: 300 },
+}
 
 // POST - 支払いを作成
 export async function POST(request: NextRequest) {
@@ -24,12 +31,13 @@ export async function POST(request: NextRequest) {
     // 金額を決定
     let amount: number
     let currency: string
+    const pricing = PRICING[validatedData.plan]
 
     if (validatedData.paymentMethod === 'WECHAT') {
-      amount = 50 // 50元
+      amount = pricing.CNY
       currency = 'CNY'
     } else {
-      amount = 980 // 980円
+      amount = pricing.JPY
       currency = 'JPY'
     }
 

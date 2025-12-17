@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Heart, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -28,6 +29,8 @@ interface Like {
 export default function LikesPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const t = useTranslations('likes')
+
   const [activeTab, setActiveTab] = useState<'received' | 'sent'>('received')
   const [receivedLikes, setReceivedLikes] = useState<Like[]>([])
   const [sentLikes, setSentLikes] = useState<Like[]>([])
@@ -49,7 +52,6 @@ export default function LikesPage() {
 
         if (receivedRes.ok) {
           const data = await receivedRes.json()
-          console.log('もらったいいねデータ:', data.likes)
           setReceivedLikes(data.likes || [])
         }
 
@@ -84,8 +86,6 @@ export default function LikesPage() {
     e.preventDefault()
     e.stopPropagation()
 
-    console.log('いいね返しクリック:', { userId, likeId })
-
     try {
       const response = await fetch('/api/likes', {
         method: 'POST',
@@ -95,20 +95,19 @@ export default function LikesPage() {
 
       if (response.ok) {
         const data = await response.json()
-        // いいね返し後、マッチ状態を更新
         setReceivedLikes(receivedLikes.map(like =>
           like.id === likeId ? { ...like, isMatch: true } : like
         ))
         if (data.isMatch) {
-          alert('マッチングしました！メッセージを送ってみましょう。')
+          alert(t('matchSuccess'))
         }
       } else {
         const data = await response.json()
-        alert(data.error || 'いいねに失敗しました')
+        alert(data.error || t('likeFailed'))
       }
     } catch (error) {
       console.error('Failed to like back:', error)
-      alert('いいねに失敗しました')
+      alert(t('likeFailed'))
     }
   }
 
@@ -135,7 +134,7 @@ export default function LikesPage() {
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            もらったいいね ({receivedLikes.length})
+            {t('received')} ({receivedLikes.length})
           </button>
           <button
             onClick={() => setActiveTab('sent')}
@@ -145,7 +144,7 @@ export default function LikesPage() {
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
-            送ったいいね ({sentLikes.length})
+            {t('sent')} ({sentLikes.length})
           </button>
         </div>
 
@@ -153,8 +152,8 @@ export default function LikesPage() {
         {currentLikes.length === 0 ? (
           <div className="text-center py-12 text-gray-500">
             {activeTab === 'received'
-              ? 'まだいいねをもらっていません'
-              : 'まだいいねを送っていません'}
+              ? t('noLikesReceived')
+              : t('noLikesSent')}
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -202,7 +201,7 @@ export default function LikesPage() {
                             className="w-full"
                             size="sm"
                           >
-                            マッチ済み - メッセージへ
+                            {t('matchedGoToMessage')}
                           </Button>
                         </Link>
                       ) : (
@@ -213,7 +212,7 @@ export default function LikesPage() {
                           size="sm"
                         >
                           <Heart className="w-4 h-4 mr-1" />
-                          いいね返し
+                          {t('likeBack')}
                         </Button>
                       )}
                     </div>

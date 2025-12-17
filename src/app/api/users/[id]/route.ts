@@ -67,18 +67,36 @@ export async function GET(
     })
     const isMatched = !!existingLike && !!mutualLike
 
-    // 現在のユーザーが有料会員かチェック
-    const currentUserSubscription = await prisma.subscription.findUnique({
-      where: { userId: session.user.id },
+    // 現在のユーザー情報を取得
+    const currentUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      include: {
+        subscription: true,
+      },
     })
-    const isPremium = currentUserSubscription?.status === 'ACTIVE' &&
-      (currentUserSubscription?.plan === 'PREMIUM' || currentUserSubscription?.plan === 'VIP')
+
+    const now = new Date()
+    const isPremium = currentUser?.subscription?.status === 'ACTIVE' &&
+      currentUser?.subscription?.endDate &&
+      new Date(currentUser.subscription.endDate) > now
+
+    // カードで閲覧済みかチェック
+    const hasViewedContact = await prisma.contactView.findUnique({
+      where: {
+        userId_viewedUserId: {
+          userId: session.user.id,
+          viewedUserId: profile.userId,
+        },
+      },
+    })
 
     return NextResponse.json({
       profile,
       hasLiked: !!existingLike,
       isMatched,
       isPremium,
+      contactCards: currentUser?.contactCards || 0,
+      hasViewedContact: !!hasViewedContact,
     })
   } catch (error) {
     console.error('Get user profile error:', error)

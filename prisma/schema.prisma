@@ -13,6 +13,7 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   password      String?
+  contactCards  Int       @default(0)  // 回数カード残高
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -30,6 +31,7 @@ model User {
   payments      Payment[]
   accounts      Account[]
   sessions      Session[]
+  contactViews  ContactView[]  // カードで解放した連絡先
 }
 
 // NextAuth用アカウント
@@ -228,8 +230,21 @@ model Payment {
   plan          SubscriptionPlan
   status        PaymentStatus @default(PENDING)
   transactionId String?       // 決済ID
+  approvalToken String?       // 管理者承認用トークン
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+}
+
+// 連絡先閲覧履歴（カードで解放した連絡先）
+model ContactView {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  viewedUserId  String   // 閲覧対象のユーザーID
+  createdAt     DateTime @default(now())
+
+  @@unique([userId, viewedUserId])
+  @@index([userId])
 }
 
 // Enums
@@ -287,6 +302,7 @@ enum SubscriptionPlan {
   FREE      // 無料
   PREMIUM   // プレミアム（月額）
   VIP       // VIP（年額）
+  CARD      // 回数カード（3枚）
 }
 
 enum SubscriptionStatus {

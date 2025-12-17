@@ -30,7 +30,11 @@
       "Bash(printf:*)",
       "Bash(vercel logs:*)",
       "Bash(vercel env ls:*)",
-      "Bash(vercel env pull:*)"
+      "Bash(vercel env pull:*)",
+      "Bash(vercel domains:*)",
+      "Bash(vercel inspect:*)",
+      "Bash(vercel project:*)",
+      "Bash(ls:*)"
     ]
   }
 }

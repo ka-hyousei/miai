@@ -3,17 +3,23 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { Crown, Check, Heart, MessageCircle, Eye, Shield } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { Crown, Check, Heart, MessageCircle, Eye, Shield, CreditCard, Ticket, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 type PaymentMethod = 'PAYPAY' | 'WECHAT'
+type PlanType = 'PREMIUM' | 'CARD'
 
 export default function PremiumPage() {
   const router = useRouter()
   const { data: session, status } = useSession()
+  const t = useTranslations('premium')
   const [loading, setLoading] = useState(false)
   const [subscription, setSubscription] = useState<any>(null)
+  const [contactCards, setContactCards] = useState(0)
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<PaymentMethod>('PAYPAY')
+  const [selectedPlan, setSelectedPlan] = useState<PlanType>('PREMIUM')
+  const [errorDialog, setErrorDialog] = useState<string | null>(null)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -24,6 +30,7 @@ export default function PremiumPage() {
   useEffect(() => {
     if (session) {
       fetchSubscription()
+      fetchContactCards()
     }
   }, [session])
 
@@ -39,6 +46,18 @@ export default function PremiumPage() {
     }
   }
 
+  const fetchContactCards = async () => {
+    try {
+      const response = await fetch('/api/contact-views')
+      if (response.ok) {
+        const data = await response.json()
+        setContactCards(data.contactCards || 0)
+      }
+    } catch (error) {
+      console.error('Error fetching contact cards:', error)
+    }
+  }
+
   const handleSubscribe = async () => {
     setLoading(true)
     try {
@@ -46,7 +65,7 @@ export default function PremiumPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          plan: 'PREMIUM',
+          plan: selectedPlan,
           paymentMethod: selectedPaymentMethod,
         }),
       })
@@ -56,24 +75,31 @@ export default function PremiumPage() {
         router.push(`/payment?paymentId=${data.payment.id}&method=${selectedPaymentMethod}`)
       } else {
         const error = await response.json()
-        alert(`エラー: ${error.error}`)
+        setErrorDialog(error.error || t('paymentError'))
       }
     } catch (error) {
       console.error('Error creating payment:', error)
-      alert('支払いの作成に失敗しました')
+      setErrorDialog(t('paymentError'))
     } finally {
       setLoading(false)
     }
   }
 
-  const MONTHLY_FEE_JPY = 980
-  const MONTHLY_FEE_CNY = 50
+  // Pricing
+  const MONTHLY_FEE_JPY = 680
+  const MONTHLY_FEE_CNY = 30
+  const CARD_FEE_JPY = 288
+  const CARD_FEE_CNY = 15
 
-  const getAmount = () => {
-    if (selectedPaymentMethod === 'PAYPAY') {
-      return `¥${MONTHLY_FEE_JPY.toLocaleString()}`
+  const getAmount = (plan: PlanType) => {
+    if (plan === 'PREMIUM') {
+      return selectedPaymentMethod === 'PAYPAY'
+        ? `¥${MONTHLY_FEE_JPY.toLocaleString()}`
+        : `${MONTHLY_FEE_CNY}元`
     } else {
-      return `${MONTHLY_FEE_CNY}元`
+      return selectedPaymentMethod === 'PAYPAY'
+        ? `¥${CARD_FEE_JPY.toLocaleString()}`
+        : `${CARD_FEE_CNY}元`
     }
   }
 
@@ -100,8 +126,8 @@ export default function PremiumPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full mb-4">
             <Crown className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">プレミアム会員</h1>
-          <p className="text-gray-600">もっと出会いのチャンスを広げましょう</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">{t('title')}</h1>
+          <p className="text-gray-600">{t('subtitle')}</p>
         </div>
 
         {/* Current Status */}
@@ -110,9 +136,24 @@ export default function PremiumPage() {
             <div className="flex items-center gap-3">
               <Crown className="w-6 h-6 text-yellow-600" />
               <div>
-                <h3 className="font-bold text-yellow-800">プレミアム会員</h3>
+                <h3 className="font-bold text-yellow-800">{t('premiumPlan')}</h3>
                 <p className="text-sm text-yellow-700">
-                  有効期限: {new Date(subscription.endDate).toLocaleDateString('ja-JP')}
+                  {t('validUntil')}: {new Date(subscription.endDate).toLocaleDateString('ja-JP')}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Card Balance */}
+        {contactCards > 0 && (
+          <div className="bg-gradient-to-r from-blue-100 to-indigo-100 border border-blue-300 rounded-xl p-6 mb-8">
+            <div className="flex items-center gap-3">
+              <Ticket className="w-6 h-6 text-blue-600" />
+              <div>
+                <h3 className="font-bold text-blue-800">{t('cardBalance')}</h3>
+                <p className="text-sm text-blue-700">
+                  {t('remainingCards', { count: contactCards })}
                 </p>
               </div>
             </div>
@@ -121,16 +162,16 @@ export default function PremiumPage() {
 
         {/* Benefits */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">プレミアム特典</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-6">{t('benefits')}</h2>
           <div className="space-y-4">
             <div className="flex items-start gap-4">
               <div className="flex-shrink-0 w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
                 <Eye className="w-5 h-5 text-pink-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">連絡先の閲覧</h3>
+                <h3 className="font-semibold text-gray-900">{t('benefit4')}</h3>
                 <p className="text-sm text-gray-600">
-                  「有料会員のみ」に設定されている連絡先を見ることができます
+                  {t('benefit4Desc')}
                 </p>
               </div>
             </div>
@@ -140,9 +181,9 @@ export default function PremiumPage() {
                 <Heart className="w-5 h-5 text-pink-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">いいね無制限</h3>
+                <h3 className="font-semibold text-gray-900">{t('benefit1')}</h3>
                 <p className="text-sm text-gray-600">
-                  1日のいいね数に制限がなくなります
+                  {t('benefit1Desc')}
                 </p>
               </div>
             </div>
@@ -152,9 +193,9 @@ export default function PremiumPage() {
                 <MessageCircle className="w-5 h-5 text-pink-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">メッセージ既読確認</h3>
+                <h3 className="font-semibold text-gray-900">{t('benefit2')}</h3>
                 <p className="text-sm text-gray-600">
-                  相手がメッセージを読んだかどうか確認できます
+                  {t('benefit2Desc')}
                 </p>
               </div>
             </div>
@@ -164,93 +205,224 @@ export default function PremiumPage() {
                 <Shield className="w-5 h-5 text-pink-500" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">プレミアムバッジ</h3>
+                <h3 className="font-semibold text-gray-900">{t('benefit3')}</h3>
                 <p className="text-sm text-gray-600">
-                  プロフィールにプレミアムバッジが表示されます
+                  {t('benefit3Desc')}
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Pricing */}
+        {/* Pricing Options */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">料金プラン</h2>
-          <div className="text-center py-4 bg-gradient-to-r from-pink-50 to-rose-50 rounded-xl mb-6">
-            <p className="text-4xl font-bold text-pink-500">{getAmount()}</p>
-            <p className="text-gray-600">/ 月</p>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">{t('pricingPlan')}</h2>
+
+          {/* Plan Selection */}
+          <div className="space-y-4 mb-6">
+            {/* Premium Plan */}
+            <label
+              className={`block p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                selectedPlan === 'PREMIUM'
+                  ? 'border-pink-500 bg-pink-50'
+                  : 'border-gray-200 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center">
+                <input
+                  type="radio"
+                  name="plan"
+                  value="PREMIUM"
+                  checked={selectedPlan === 'PREMIUM'}
+                  onChange={() => setSelectedPlan('PREMIUM')}
+                  className="w-5 h-5 text-pink-500"
+                />
+                <div className="ml-4 flex-1">
+                  <div className="flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-yellow-500" />
+                    <p className="font-bold text-gray-900">{t('monthlyPlan')}</p>
+                    <span className="px-2 py-0.5 bg-pink-100 text-pink-700 text-xs rounded-full font-medium">
+                      {t('recommended')}
+                    </span>
+                  </div>
+                  <p className="text-2xl font-bold text-pink-500 mt-1">
+                    {getAmount('PREMIUM')}<span className="text-sm font-normal text-gray-600"> {t('perMonth')}</span>
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">{t('unlimitedViewing')}</p>
+                </div>
+              </div>
+            </label>
+
+            {/* Card Plan */}
+            <label
+              className={`block p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                selectedPlan === 'CARD'
+                  ? 'border-pink-500 bg-pink-50'
+                  : 'border-gray-200 hover:bg-gray-50'
+              }`}
+            >
+              <div className="flex items-center">
+                <input
+                  type="radio"
+                  name="plan"
+                  value="CARD"
+                  checked={selectedPlan === 'CARD'}
+                  onChange={() => setSelectedPlan('CARD')}
+                  className="w-5 h-5 text-pink-500"
+                />
+                <div className="ml-4 flex-1">
+                  <div className="flex items-center gap-2">
+                    <Ticket className="w-5 h-5 text-blue-500" />
+                    <p className="font-bold text-gray-900">{t('cardPlan')}</p>
+                  </div>
+                  <p className="text-2xl font-bold text-blue-500 mt-1">
+                    {getAmount('CARD')}<span className="text-sm font-normal text-gray-600"> / 3{t('cards')}</span>
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">{t('cardPlanDesc')}</p>
+                </div>
+              </div>
+            </label>
           </div>
 
-          <div className="space-y-2 text-sm text-gray-600 mb-6">
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
-              <span>いつでも解約可能</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-500" />
-              <span>即座にプレミアム機能が利用可能</span>
-            </div>
+          {/* Plan Benefits Summary */}
+          <div className="space-y-2 text-sm text-gray-600 mb-6 p-4 bg-gray-50 rounded-lg">
+            {selectedPlan === 'PREMIUM' ? (
+              <>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  <span>{t('unlimitedViewing')}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  <span>{t('cancelAnytime')}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  <span>{t('instantAccess')}</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  <span>{t('cardBenefit1')}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  <span>{t('cardBenefit2')}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-green-500" />
+                  <span>{t('cardBenefit3')}</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
         {/* Payment Method Selection */}
-        {!hasActiveSubscription && (
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">支払い方法を選択</h2>
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          <h2 className="text-xl font-bold text-gray-900 mb-4">{t('selectPayment')}</h2>
 
-            <div className="space-y-3">
-              <label className="flex items-center p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="PAYPAY"
-                  checked={selectedPaymentMethod === 'PAYPAY'}
-                  onChange={(e) => setSelectedPaymentMethod(e.target.value as PaymentMethod)}
-                  className="w-5 h-5 text-pink-500"
-                />
-                <div className="ml-4 flex-1">
-                  <p className="font-semibold text-gray-900">PayPay</p>
-                  <p className="text-sm text-gray-500">¥{MONTHLY_FEE_JPY.toLocaleString()} / 月</p>
-                </div>
-                <span className="text-2xl">💰</span>
-              </label>
+          <div className="space-y-3">
+            <label className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-colors ${
+              selectedPaymentMethod === 'PAYPAY' ? 'border-pink-300 bg-pink-50' : 'hover:bg-gray-50'
+            }`}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="PAYPAY"
+                checked={selectedPaymentMethod === 'PAYPAY'}
+                onChange={(e) => setSelectedPaymentMethod(e.target.value as PaymentMethod)}
+                className="w-5 h-5 text-pink-500"
+              />
+              <div className="ml-4 flex-1">
+                <p className="font-semibold text-gray-900">{t('paypay')}</p>
+                <p className="text-sm text-gray-500">
+                  {selectedPlan === 'PREMIUM'
+                    ? `¥${MONTHLY_FEE_JPY.toLocaleString()} ${t('perMonth')}`
+                    : `¥${CARD_FEE_JPY.toLocaleString()} / 3${t('cards')}`
+                  }
+                </p>
+              </div>
+              <span className="text-2xl">💰</span>
+            </label>
 
-              <label className="flex items-center p-4 border-2 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="WECHAT"
-                  checked={selectedPaymentMethod === 'WECHAT'}
-                  onChange={(e) => setSelectedPaymentMethod(e.target.value as PaymentMethod)}
-                  className="w-5 h-5 text-pink-500"
-                />
-                <div className="ml-4 flex-1">
-                  <p className="font-semibold text-gray-900">WeChat Pay (微信支付)</p>
-                  <p className="text-sm text-gray-500">{MONTHLY_FEE_CNY}元 / 月</p>
-                </div>
-                <span className="text-2xl">💬</span>
-              </label>
-            </div>
+            <label className={`flex items-center p-4 border-2 rounded-xl cursor-pointer transition-colors ${
+              selectedPaymentMethod === 'WECHAT' ? 'border-pink-300 bg-pink-50' : 'hover:bg-gray-50'
+            }`}>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="WECHAT"
+                checked={selectedPaymentMethod === 'WECHAT'}
+                onChange={(e) => setSelectedPaymentMethod(e.target.value as PaymentMethod)}
+                className="w-5 h-5 text-pink-500"
+              />
+              <div className="ml-4 flex-1">
+                <p className="font-semibold text-gray-900">{t('wechatPay')}</p>
+                <p className="text-sm text-gray-500">
+                  {selectedPlan === 'PREMIUM'
+                    ? `${MONTHLY_FEE_CNY}元 ${t('perMonth')}`
+                    : `${CARD_FEE_CNY}元 / 3${t('cards')}`
+                  }
+                </p>
+              </div>
+              <span className="text-2xl">💬</span>
+            </label>
+          </div>
 
-            <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">
-                <strong>注意:</strong> 一度購入されたプランの料金については返金いたしません。
-              </p>
-            </div>
+          <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p className="text-sm text-yellow-800">
+              {t('noRefund')}
+            </p>
+          </div>
 
-            <Button
-              onClick={handleSubscribe}
-              disabled={loading}
-              className="w-full mt-6 bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600"
-              size="lg"
-              isLoading={loading}
-            >
+          <Button
+            onClick={handleSubscribe}
+            disabled={loading}
+            className={`w-full mt-6 ${
+              selectedPlan === 'PREMIUM'
+                ? 'bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600'
+                : 'bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600'
+            }`}
+            size="lg"
+            isLoading={loading}
+          >
+            {selectedPlan === 'PREMIUM' ? (
               <Crown className="w-5 h-5 mr-2" />
-              {getAmount()}/月 でプレミアムに登録
+            ) : (
+              <Ticket className="w-5 h-5 mr-2" />
+            )}
+            {getAmount(selectedPlan)} {selectedPlan === 'PREMIUM' ? t('subscribeButton') : t('buyCardsButton')}
+          </Button>
+        </div>
+      </div>
+
+      {/* Error Dialog */}
+      {errorDialog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                <AlertCircle className="w-8 h-8 text-red-500" />
+              </div>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
+              {t('paymentError')}
+            </h3>
+            <p className="text-gray-600 text-center mb-6">
+              {errorDialog}
+            </p>
+            <Button
+              className="w-full bg-gray-500 hover:bg-gray-600"
+              onClick={() => setErrorDialog(null)}
+            >
+              OK
             </Button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }

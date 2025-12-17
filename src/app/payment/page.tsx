@@ -2,8 +2,18 @@
 
 import { Suspense, useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { ArrowLeft, CheckCircle, Clock, AlertCircle } from 'lucide-react'
+import { ArrowLeft, CheckCircle, Clock, AlertCircle, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+
+// ダイアログの種類
+type DialogType = 'confirm' | 'success' | 'error' | null
+
+interface DialogState {
+  type: DialogType
+  title: string
+  message: string
+  onConfirm?: () => void
+}
 
 function PaymentContent() {
   const router = useRouter()
@@ -14,6 +24,7 @@ function PaymentContent() {
   const [loading, setLoading] = useState(true)
   const [payment, setPayment] = useState<any>(null)
   const [submitting, setSubmitting] = useState(false)
+  const [dialog, setDialog] = useState<DialogState>({ type: null, title: '', message: '' })
 
   useEffect(() => {
     if (paymentId) {
@@ -52,11 +63,21 @@ function PaymentContent() {
     }
   }
 
-  const handleMarkComplete = async () => {
-    if (!confirm('支払いを完了しましたか？\n\n管理者に確認リクエストを送信します。')) {
-      return
-    }
+  const closeDialog = () => {
+    setDialog({ type: null, title: '', message: '' })
+  }
 
+  const showConfirmDialog = () => {
+    setDialog({
+      type: 'confirm',
+      title: '支払い確認',
+      message: '支払いを完了しましたか？\n\n管理者に確認リクエストを送信します。',
+      onConfirm: submitPaymentComplete,
+    })
+  }
+
+  const submitPaymentComplete = async () => {
+    closeDialog()
     setSubmitting(true)
     try {
       const response = await fetch(`/api/payments/${paymentId}/complete`, {
@@ -64,53 +85,80 @@ function PaymentContent() {
       })
 
       if (response.ok) {
-        alert('支払い完了リクエストを送信しました。管理者の承認をお待ちください。')
         setPayment({ ...payment, status: 'PENDING_APPROVAL' })
+        setDialog({
+          type: 'success',
+          title: '送信完了',
+          message: '支払い完了リクエストを送信しました。\n管理者の承認をお待ちください。',
+        })
       } else {
         const error = await response.json()
-        alert(`エラー: ${error.error}`)
+        setDialog({
+          type: 'error',
+          title: 'エラー',
+          message: error.error || '処理に失敗しました',
+        })
       }
     } catch (error) {
       console.error('Error marking payment complete:', error)
-      alert('エラーが発生しました')
+      setDialog({
+        type: 'error',
+        title: 'エラー',
+        message: 'エラーが発生しました。もう一度お試しください。',
+      })
     } finally {
       setSubmitting(false)
     }
   }
 
+  const handleMarkComplete = () => {
+    showConfirmDialog()
+  }
+
   const getPaymentMethodInfo = () => {
+    const isCard = payment?.plan === 'CARD'
+
     if (method === 'WECHAT') {
+      const amount = isCard ? '15元' : '30元'
       return {
         name: 'WeChat Pay (微信支付)',
         icon: '💬',
-        amount: '50元',
+        amount,
         color: 'green',
         instructions: [
           '1. WeChatアプリを開く',
           '2. スキャン機能を選択',
           '3. 上のQRコードをスキャン',
-          '4. 支払い金額（50元）を確認',
+          `4. 支払い金額（${amount}）を確認`,
           '5. 支払いを完了',
           '6. 「支払いを完了しました」ボタンを押す',
         ],
       }
     } else {
+      const amount = isCard ? '¥288' : '¥680'
       return {
         name: 'PayPay',
         icon: '💰',
-        amount: '¥980',
+        amount,
         color: 'red',
         instructions: [
           '1. PayPayアプリを開く',
           '2. 「送る」を選択',
           '3. 下記のPayPay IDを入力',
-          '4. 支払い金額（980円）を入力',
+          `4. 支払い金額（${amount.replace('¥', '')}円）を入力`,
           '5. 送金を完了',
           '6. 「支払いを完了しました」ボタンを押す',
         ],
         paypayId: 'robertstonejia', // TODO: 実際のPayPay IDに変更
       }
     }
+  }
+
+  const getPlanDescription = () => {
+    if (payment?.plan === 'CARD') {
+      return '回数カード（3枚）'
+    }
+    return 'プレミアム会員（1ヶ月）'
   }
 
   const info = getPaymentMethodInfo()
@@ -168,7 +216,9 @@ function PaymentContent() {
                 <CheckCircle className="w-6 h-6 text-green-600" />
                 <div>
                   <p className="font-semibold text-green-800">支払い完了</p>
-                  <p className="text-sm text-green-700">プレミアム会員が有効になりました</p>
+                  <p className="text-sm text-green-700">
+                    {payment.plan === 'CARD' ? 'カードが追加されました' : 'プレミアム会員が有効になりました'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -178,7 +228,7 @@ function PaymentContent() {
           <div className="text-center mb-6">
             <div className="text-5xl mb-2">{info.icon}</div>
             <p className="text-3xl font-bold text-gray-900">{info.amount}</p>
-            <p className="text-gray-600">プレミアム会員（1ヶ月）</p>
+            <p className="text-gray-600">{getPlanDescription()}</p>
           </div>
 
           {/* QR Code or PayPay ID */}
@@ -216,7 +266,7 @@ function PaymentContent() {
                   ※ PayPay ID: {info.paypayId}
                 </p>
                 <p className="text-red-600 font-semibold text-sm">
-                  ※ 金額: ¥980
+                  ※ 金額: {info.amount}
                 </p>
               </div>
             )}
@@ -254,9 +304,77 @@ function PaymentContent() {
         </div>
 
         <p className="text-center text-xs text-gray-500 mt-4">
-          ※ 支払い完了後、管理者が確認してからプレミアム会員が有効になります
+          ※ 支払い完了後、管理者が確認してから{payment?.plan === 'CARD' ? 'カードが追加' : 'プレミアム会員が有効に'}されます
         </p>
       </div>
+
+      {/* Dialog Modal */}
+      {dialog.type && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+            {/* Icon */}
+            <div className="flex justify-center mb-4">
+              {dialog.type === 'confirm' && (
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-8 h-8 text-blue-500" />
+                </div>
+              )}
+              {dialog.type === 'success' && (
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-8 h-8 text-green-500" />
+                </div>
+              )}
+              {dialog.type === 'error' && (
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                  <AlertCircle className="w-8 h-8 text-red-500" />
+                </div>
+              )}
+            </div>
+
+            {/* Title */}
+            <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
+              {dialog.title}
+            </h3>
+
+            {/* Message */}
+            <p className="text-gray-600 text-center whitespace-pre-line mb-6">
+              {dialog.message}
+            </p>
+
+            {/* Buttons */}
+            <div className="flex gap-3">
+              {dialog.type === 'confirm' ? (
+                <>
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={closeDialog}
+                  >
+                    キャンセル
+                  </Button>
+                  <Button
+                    className="flex-1 bg-green-500 hover:bg-green-600"
+                    onClick={dialog.onConfirm}
+                  >
+                    はい、完了しました
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  className={`w-full ${
+                    dialog.type === 'success'
+                      ? 'bg-green-500 hover:bg-green-600'
+                      : 'bg-gray-500 hover:bg-gray-600'
+                  }`}
+                  onClick={closeDialog}
+                >
+                  OK
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -4,10 +4,14 @@ import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { ArrowLeft, Bell, Lock, Eye, Shield, Trash2, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function SettingsPage() {
+  const t = useTranslations('settings')
+  const tCommon = useTranslations('common')
+  const tFooter = useTranslations('footer')
   const { data: session, status } = useSession()
   const router = useRouter()
   const [settings, setSettings] = useState({
@@ -43,15 +47,15 @@ export default function SettingsPage() {
         method: 'DELETE',
       })
       if (response.ok) {
-        alert('退会が完了しました。ご利用ありがとうございました。')
+        alert(t('deleteAccountSuccess'))
         await signOut({ callbackUrl: '/' })
       } else {
         const data = await response.json()
-        alert(`退会処理に失敗しました: ${data.details || data.error || '不明なエラー'}`)
+        alert(`${t('deleteAccountFailed')}: ${data.details || data.error || tCommon('error')}`)
       }
     } catch (error) {
       console.error('Failed to delete account:', error)
-      alert('退会処理に失敗しました。しばらくしてから再度お試しください。')
+      alert(t('deleteAccountFailed'))
     } finally {
       setIsLoading(false)
       setShowDeleteModal(false)
@@ -74,7 +78,7 @@ export default function SettingsPage() {
           <Link href="/mypage" className="p-2 hover:bg-gray-100 rounded-full">
             <ArrowLeft className="w-5 h-5 text-gray-600" />
           </Link>
-          <h1 className="text-xl font-bold text-gray-900">設定</h1>
+          <h1 className="text-xl font-bold text-gray-900">{t('title')}</h1>
         </div>
 
         {/* 通知設定 */}
@@ -82,14 +86,14 @@ export default function SettingsPage() {
           <div className="p-4 border-b">
             <h2 className="font-semibold text-gray-900 flex items-center gap-2">
               <Bell className="w-5 h-5 text-gray-500" />
-              通知設定
+              {t('notificationSettings')}
             </h2>
           </div>
           <div className="divide-y">
             <div className="flex items-center justify-between p-4">
               <div>
-                <p className="font-medium text-gray-900">メール通知</p>
-                <p className="text-sm text-gray-500">いいねやメッセージをメールで受け取る</p>
+                <p className="font-medium text-gray-900">{t('emailNotifications')}</p>
+                <p className="text-sm text-gray-500">{t('emailNotificationsDesc')}</p>
               </div>
               <button
                 onClick={() => handleToggle('emailNotifications')}
@@ -106,8 +110,8 @@ export default function SettingsPage() {
             </div>
             <div className="flex items-center justify-between p-4">
               <div>
-                <p className="font-medium text-gray-900">プッシュ通知</p>
-                <p className="text-sm text-gray-500">アプリからの通知を受け取る</p>
+                <p className="font-medium text-gray-900">{t('pushNotifications')}</p>
+                <p className="text-sm text-gray-500">{t('pushNotificationsDesc')}</p>
               </div>
               <button
                 onClick={() => handleToggle('pushNotifications')}
@@ -130,14 +134,14 @@ export default function SettingsPage() {
           <div className="p-4 border-b">
             <h2 className="font-semibold text-gray-900 flex items-center gap-2">
               <Eye className="w-5 h-5 text-gray-500" />
-              プライバシー設定
+              {t('privacySettings')}
             </h2>
           </div>
           <div className="divide-y">
             <div className="flex items-center justify-between p-4">
               <div>
-                <p className="font-medium text-gray-900">オンライン状態を表示</p>
-                <p className="text-sm text-gray-500">他のユーザーにオンライン状態を見せる</p>
+                <p className="font-medium text-gray-900">{t('showOnlineStatus')}</p>
+                <p className="text-sm text-gray-500">{t('showOnlineStatusDesc')}</p>
               </div>
               <button
                 onClick={() => handleToggle('showOnlineStatus')}
@@ -154,8 +158,8 @@ export default function SettingsPage() {
             </div>
             <div className="flex items-center justify-between p-4">
               <div>
-                <p className="font-medium text-gray-900">プロフィール公開</p>
-                <p className="text-sm text-gray-500">検索結果にプロフィールを表示する</p>
+                <p className="font-medium text-gray-900">{t('profilePublic')}</p>
+                <p className="text-sm text-gray-500">{t('profilePublicDesc')}</p>
               </div>
               <button
                 onClick={() => handleToggle('isProfilePublic')}
@@ -178,7 +182,7 @@ export default function SettingsPage() {
           <div className="p-4 border-b">
             <h2 className="font-semibold text-gray-900 flex items-center gap-2">
               <Shield className="w-5 h-5 text-gray-500" />
-              セキュリティ
+              {t('security')}
             </h2>
           </div>
           <div className="divide-y">
@@ -186,8 +190,8 @@ export default function SettingsPage() {
               <div className="flex items-center gap-3">
                 <Lock className="w-5 h-5 text-gray-400" />
                 <div>
-                  <p className="font-medium text-gray-900">パスワード変更</p>
-                  <p className="text-sm text-gray-500">アカウントのパスワードを変更</p>
+                  <p className="font-medium text-gray-900">{t('changePassword')}</p>
+                  <p className="text-sm text-gray-500">{t('changePasswordDesc')}</p>
                 </div>
               </div>
               <span className="text-gray-400">→</span>
@@ -196,8 +200,8 @@ export default function SettingsPage() {
               <div className="flex items-center gap-3">
                 <Shield className="w-5 h-5 text-gray-400" />
                 <div>
-                  <p className="font-medium text-gray-900">ブロックリスト</p>
-                  <p className="text-sm text-gray-500">ブロックしたユーザーを管理</p>
+                  <p className="font-medium text-gray-900">{t('blockList')}</p>
+                  <p className="text-sm text-gray-500">{t('blockListDesc')}</p>
                 </div>
               </div>
               <span className="text-gray-400">→</span>
@@ -208,7 +212,7 @@ export default function SettingsPage() {
         {/* アカウント */}
         <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-4">
           <div className="p-4 border-b">
-            <h2 className="font-semibold text-gray-900">アカウント</h2>
+            <h2 className="font-semibold text-gray-900">{t('account')}</h2>
           </div>
           <div className="divide-y">
             <button
@@ -217,8 +221,8 @@ export default function SettingsPage() {
             >
               <LogOut className="w-5 h-5 text-gray-400" />
               <div>
-                <p className="font-medium text-gray-900">ログアウト</p>
-                <p className="text-sm text-gray-500">アカウントからログアウト</p>
+                <p className="font-medium text-gray-900">{tCommon('logout')}</p>
+                <p className="text-sm text-gray-500">{t('logoutDesc')}</p>
               </div>
             </button>
             <button
@@ -227,8 +231,8 @@ export default function SettingsPage() {
             >
               <Trash2 className="w-5 h-5 text-red-400" />
               <div>
-                <p className="font-medium text-red-600">アカウント削除</p>
-                <p className="text-sm text-gray-500">アカウントを完全に削除</p>
+                <p className="font-medium text-red-600">{t('deleteAccountTitle')}</p>
+                <p className="text-sm text-gray-500">{t('deleteAccountDesc')}</p>
               </div>
             </button>
           </div>
@@ -236,10 +240,10 @@ export default function SettingsPage() {
 
         {/* アプリ情報 */}
         <div className="text-center text-sm text-gray-500 mt-8">
-          <p>お見合い v1.0.0</p>
+          <p>{t('appVersion')}</p>
           <div className="flex justify-center gap-4 mt-2">
-            <Link href="/terms" className="hover:text-gray-700">利用規約</Link>
-            <Link href="/privacy" className="hover:text-gray-700">プライバシーポリシー</Link>
+            <Link href="/terms" className="hover:text-gray-700">{tFooter('terms')}</Link>
+            <Link href="/privacy" className="hover:text-gray-700">{tFooter('privacy')}</Link>
           </div>
         </div>
       </div>
@@ -248,9 +252,9 @@ export default function SettingsPage() {
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl max-w-md w-full p-6">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">アカウント削除</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">{t('deleteAccountTitle')}</h3>
             <p className="text-gray-600 mb-6">
-              アカウントを削除すると、すべてのデータが完全に削除され、復元できなくなります。本当に削除しますか？
+              {t('deleteAccountConfirm')}
             </p>
             <div className="flex gap-3">
               <Button
@@ -258,14 +262,14 @@ export default function SettingsPage() {
                 className="flex-1"
                 onClick={() => setShowDeleteModal(false)}
               >
-                キャンセル
+                {tCommon('cancel')}
               </Button>
               <Button
                 className="flex-1 bg-red-500 hover:bg-red-600"
                 onClick={handleDeleteAccount}
                 isLoading={isLoading}
               >
-                削除する
+                {tCommon('delete')}
               </Button>
             </div>
           </div>

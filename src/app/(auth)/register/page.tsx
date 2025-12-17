@@ -4,13 +4,20 @@ import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { signIn } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { LanguageSwitcher } from '@/components/ui/language-switcher'
 
 type Step = 'email' | 'verification' | 'password'
 
 export default function RegisterPage() {
   const router = useRouter()
+  const t = useTranslations('auth')
+  const tHome = useTranslations('home')
+  const tCommon = useTranslations('common')
+  const tFooter = useTranslations('footer')
+
   const [step, setStep] = useState<Step>('email')
   const [email, setEmail] = useState('')
   const [verificationCode, setVerificationCode] = useState(['', '', '', '', '', ''])
@@ -22,7 +29,6 @@ export default function RegisterPage() {
 
   const codeInputRefs = useRef<(HTMLInputElement | null)[]>([])
 
-  // カウントダウンタイマー
   useEffect(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
@@ -30,7 +36,6 @@ export default function RegisterPage() {
     }
   }, [countdown])
 
-  // メールアドレス送信（認証コード送信）
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -50,36 +55,32 @@ export default function RegisterPage() {
       }
 
       setStep('verification')
-      setCountdown(60) // 60秒間再送信不可
+      setCountdown(60)
     } catch (err) {
-      setError(err instanceof Error ? err.message : '送信に失敗しました')
+      setError(err instanceof Error ? err.message : t('sendFailed'))
     } finally {
       setIsLoading(false)
     }
   }
 
-  // 認証コード入力処理
   const handleCodeChange = (index: number, value: string) => {
-    if (!/^\d*$/.test(value)) return // 数字のみ
+    if (!/^\d*$/.test(value)) return
 
     const newCode = [...verificationCode]
-    newCode[index] = value.slice(-1) // 最後の1文字のみ
+    newCode[index] = value.slice(-1)
     setVerificationCode(newCode)
 
-    // 次の入力欄へ自動フォーカス
     if (value && index < 5) {
       codeInputRefs.current[index + 1]?.focus()
     }
   }
 
-  // バックスペースで前の入力欄に戻る
   const handleCodeKeyDown = (index: number, e: React.KeyboardEvent) => {
     if (e.key === 'Backspace' && !verificationCode[index] && index > 0) {
       codeInputRefs.current[index - 1]?.focus()
     }
   }
 
-  // ペースト処理
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault()
     const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6)
@@ -88,7 +89,6 @@ export default function RegisterPage() {
     }
   }
 
-  // 認証コード検証
   const handleVerifyCode = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -96,7 +96,7 @@ export default function RegisterPage() {
 
     const code = verificationCode.join('')
     if (code.length !== 6) {
-      setError('6桁の認証コードを入力してください')
+      setError(t('enterCode'))
       setIsLoading(false)
       return
     }
@@ -116,13 +116,12 @@ export default function RegisterPage() {
 
       setStep('password')
     } catch (err) {
-      setError(err instanceof Error ? err.message : '認証に失敗しました')
+      setError(err instanceof Error ? err.message : t('verifyFailed'))
     } finally {
       setIsLoading(false)
     }
   }
 
-  // 認証コード再送信
   const handleResendCode = async () => {
     if (countdown > 0) return
 
@@ -145,13 +144,12 @@ export default function RegisterPage() {
       setVerificationCode(['', '', '', '', '', ''])
       setCountdown(60)
     } catch (err) {
-      setError(err instanceof Error ? err.message : '再送信に失敗しました')
+      setError(err instanceof Error ? err.message : t('resendFailed'))
     } finally {
       setIsLoading(false)
     }
   }
 
-  // 登録処理
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -170,7 +168,6 @@ export default function RegisterPage() {
         throw new Error(data.error)
       }
 
-      // 登録成功後、自動ログイン
       const result = await signIn('credentials', {
         email,
         password,
@@ -181,10 +178,9 @@ export default function RegisterPage() {
         throw new Error(result.error)
       }
 
-      // プロフィール設定ページへ
       router.push('/profile/setup')
     } catch (err) {
-      setError(err instanceof Error ? err.message : '登録に失敗しました')
+      setError(err instanceof Error ? err.message : t('registerError'))
     } finally {
       setIsLoading(false)
     }
@@ -192,14 +188,17 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 to-rose-100 px-4">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">お見合い</h1>
-            <p className="text-gray-600">新規登録</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">{tHome('title')}</h1>
+            <p className="text-gray-600">{t('registerTitle')}</p>
           </div>
 
-          {/* ステップインジケーター */}
+          {/* Step Indicator */}
           <div className="flex items-center justify-center mb-8">
             <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
               step === 'email' ? 'bg-pink-500 text-white' : 'bg-pink-100 text-pink-500'
@@ -226,18 +225,18 @@ export default function RegisterPage() {
             </div>
           )}
 
-          {/* ステップ1: メールアドレス入力 */}
+          {/* Step 1: Email */}
           {step === 'email' && (
             <form onSubmit={handleSendCode} className="space-y-6">
               <div>
                 <p className="text-sm text-gray-600 mb-4">
-                  メールアドレスを入力してください。認証コードをお送りします。
+                  {t('enterEmail')}
                 </p>
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  label="メールアドレス"
+                  label={t('email')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="example@email.com"
@@ -251,17 +250,17 @@ export default function RegisterPage() {
                 size="lg"
                 isLoading={isLoading}
               >
-                認証コードを送信
+                {t('sendCode')}
               </Button>
             </form>
           )}
 
-          {/* ステップ2: 認証コード入力 */}
+          {/* Step 2: Verification */}
           {step === 'verification' && (
             <form onSubmit={handleVerifyCode} className="space-y-6">
               <div>
                 <p className="text-sm text-gray-600 mb-4">
-                  <span className="font-medium">{email}</span> に送信された6桁の認証コードを入力してください。
+                  <span className="font-medium">{email}</span> {t('codeSentTo')}
                 </p>
 
                 <div className="flex justify-center gap-2" onPaste={handlePaste}>
@@ -287,7 +286,7 @@ export default function RegisterPage() {
                     disabled={countdown > 0 || isLoading}
                     className={`text-sm ${countdown > 0 ? 'text-gray-400' : 'text-pink-500 hover:text-pink-600'}`}
                   >
-                    {countdown > 0 ? `再送信まで ${countdown}秒` : '認証コードを再送信'}
+                    {countdown > 0 ? t('resendIn').replace('{seconds}', String(countdown)) : t('resendCode')}
                   </button>
                 </div>
               </div>
@@ -303,35 +302,35 @@ export default function RegisterPage() {
                     setError('')
                   }}
                 >
-                  戻る
+                  {tCommon('back')}
                 </Button>
                 <Button
                   type="submit"
                   className="flex-1"
                   isLoading={isLoading}
                 >
-                  確認
+                  {t('verify')}
                 </Button>
               </div>
             </form>
           )}
 
-          {/* ステップ3: パスワード設定 */}
+          {/* Step 3: Password */}
           {step === 'password' && (
             <form onSubmit={handleRegister} className="space-y-6">
               <div>
                 <p className="text-sm text-gray-600 mb-4">
-                  パスワードを設定してください。
+                  {t('setPassword')}
                 </p>
                 <div className="space-y-4">
                   <Input
                     id="password"
                     name="password"
                     type="password"
-                    label="パスワード"
+                    label={t('password')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="8文字以上（英字・数字を含む）"
+                    placeholder={t('passwordPlaceholder')}
                     required
                   />
 
@@ -339,10 +338,10 @@ export default function RegisterPage() {
                     id="confirmPassword"
                     name="confirmPassword"
                     type="password"
-                    label="パスワード（確認）"
+                    label={t('confirmPassword')}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="パスワードを再入力"
+                    placeholder={t('confirmPasswordPlaceholder')}
                     required
                   />
                 </div>
@@ -354,26 +353,33 @@ export default function RegisterPage() {
                 size="lg"
                 isLoading={isLoading}
               >
-                登録する
+                {t('registerButton')}
               </Button>
             </form>
           )}
 
           <div className="mt-6 text-center">
             <p className="text-gray-600">
-              既にアカウントをお持ちの方は{' '}
+              {t('hasAccount')}{' '}
               <Link href="/login" className="text-pink-500 hover:text-pink-600 font-medium">
-                ログイン
+                {tCommon('login')}
               </Link>
             </p>
           </div>
 
           <div className="mt-6 text-xs text-gray-500 text-center">
-            登録することで、
-            <Link href="/terms" className="text-pink-500 hover:underline">利用規約</Link>
-            と
-            <Link href="/privacy" className="text-pink-500 hover:underline">プライバシーポリシー</Link>
-            に同意したものとみなされます。
+            {t('agreeTerms')
+              .replace('{terms}', '')
+              .replace('{privacy}', '')
+              .split('').filter(c => c !== '').length > 0 && (
+              <>
+                {t('agreeTerms').split('{terms}')[0]}
+                <Link href="/terms" className="text-pink-500 hover:underline">{tFooter('terms')}</Link>
+                {t('agreeTerms').split('{terms}')[1]?.split('{privacy}')[0]}
+                <Link href="/privacy" className="text-pink-500 hover:underline">{tFooter('privacy')}</Link>
+                {t('agreeTerms').split('{privacy}')[1]}
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -1,139 +1,89 @@
 import Link from "next/link";
-import { Heart, Users, MessageCircle, Sparkles } from "lucide-react";
+import { Heart } from "lucide-react";
 import { getTranslations } from 'next-intl/server';
-import { LanguageSwitcherServer } from '@/components/ui/language-switcher-server';
+import { HomeHeader } from '@/components/home/HomeHeader';
+import { HomeHero } from '@/components/home/HomeHero';
+import { HomeFeatures } from '@/components/home/HomeFeatures';
+
+// 桃花花瓣装饰组件
+function PeachBlossom({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" className={className} fill="currentColor">
+      <path d="M50 10 C60 25, 75 30, 85 50 C75 55, 65 70, 50 90 C35 70, 25 55, 15 50 C25 30, 40 25, 50 10" />
+    </svg>
+  );
+}
+
+// 中国结装饰
+function ChineseKnot({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 100 100" className={className} fill="none" stroke="currentColor" strokeWidth="2">
+      <circle cx="50" cy="50" r="20" />
+      <circle cx="50" cy="50" r="30" />
+      <path d="M50 20 L50 0 M50 80 L50 100 M20 50 L0 50 M80 50 L100 50" />
+      <path d="M35 35 L15 15 M65 35 L85 15 M35 65 L15 85 M65 65 L85 85" />
+    </svg>
+  );
+}
 
 export default async function Home() {
   const t = await getTranslations('home');
-  const tCommon = await getTranslations('common');
   const tFooter = await getTranslations('footer');
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-100">
-      {/* Hero Section */}
-      <header className="relative">
-        <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="relative">
-              <Heart className="w-8 h-8 text-pink-500 fill-pink-500 group-hover:scale-110 transition-transform" />
-              <Sparkles className="w-4 h-4 text-yellow-400 absolute -top-1 -right-1" />
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 bg-clip-text text-transparent">
-              {t('title')}
-            </span>
-          </Link>
-          <div className="flex gap-4 items-center">
-            <LanguageSwitcherServer />
-            <Link
-              href="/login"
-              className="px-4 py-2 text-pink-500 hover:text-pink-600 font-medium"
-            >
-              {tCommon('login')}
-            </Link>
-            <Link
-              href="/register"
-              className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 font-medium"
-            >
-              {tCommon('register')}
-            </Link>
-          </div>
-        </nav>
+    <div className="min-h-screen bg-gradient-to-b from-red-50 via-pink-50 to-orange-50 flex flex-col relative overflow-hidden">
+      {/* 背景装饰 - 浮动的桃花 */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <PeachBlossom className="absolute top-20 left-10 w-8 h-8 text-pink-300/40 animate-pulse" />
+        <PeachBlossom className="absolute top-40 right-20 w-6 h-6 text-rose-300/30 animate-pulse delay-100" />
+        <PeachBlossom className="absolute top-60 left-1/4 w-10 h-10 text-pink-200/40 animate-pulse delay-200" />
+        <PeachBlossom className="absolute bottom-40 right-1/3 w-7 h-7 text-red-200/30 animate-pulse delay-300" />
+        <PeachBlossom className="absolute bottom-20 left-20 w-5 h-5 text-pink-300/40 animate-pulse delay-400" />
+        <PeachBlossom className="absolute top-1/3 right-10 w-9 h-9 text-rose-200/30 animate-pulse delay-500" />
 
-        <div className="max-w-6xl mx-auto px-6 py-20 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            {t('subtitle')}
-          </h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            {t('description')}
-          </p>
-          <Link
-            href="/register"
-            className="inline-block px-8 py-4 bg-pink-500 text-white text-lg font-medium rounded-full hover:bg-pink-600 transition-colors shadow-lg hover:shadow-xl"
-          >
-            {t('startButton')}
-          </Link>
-        </div>
+        {/* 装饰性的圆形 */}
+        <div className="absolute top-10 right-1/4 w-32 h-32 bg-gradient-to-br from-red-200/20 to-orange-200/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-1/4 w-40 h-40 bg-gradient-to-br from-pink-200/20 to-rose-200/20 rounded-full blur-3xl" />
+      </div>
+
+      {/* Hero Section */}
+      <header className="relative z-10">
+        <HomeHeader />
+        <HomeHero />
       </header>
 
-      {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <h3 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            {t('featuresTitle')}
-          </h3>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="w-8 h-8 text-pink-500" />
-              </div>
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                {t('feature1Title')}
-              </h4>
-              <p className="text-gray-600">
-                {t('feature1Desc')}
-              </p>
-            </div>
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Heart className="w-8 h-8 text-pink-500" />
-              </div>
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                {t('feature2Title')}
-              </h4>
-              <p className="text-gray-600">
-                {t('feature2Desc')}
-              </p>
-            </div>
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="w-8 h-8 text-pink-500" />
-              </div>
-              <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                {t('feature3Title')}
-              </h4>
-              <p className="text-gray-600">
-                {t('feature3Desc')}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Features and CTA - only shown to non-logged-in users */}
+      <div className="relative z-10">
+        <HomeFeatures />
+      </div>
 
-      {/* CTA Section */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h3 className="text-3xl font-bold text-gray-900 mb-6">
-            {t('ctaTitle')}
-          </h3>
-          <p className="text-xl text-gray-600 mb-8">
-            {t('ctaDesc')}
-          </p>
-          <Link
-            href="/register"
-            className="inline-block px-8 py-4 bg-pink-500 text-white text-lg font-medium rounded-full hover:bg-pink-600 transition-colors shadow-lg hover:shadow-xl"
-          >
-            {t('startButton')}
-          </Link>
-        </div>
-      </section>
+      {/* Spacer to push footer to bottom */}
+      <div className="flex-grow" />
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
+      {/* Footer - 中国风 */}
+      <footer className="relative z-10 bg-gradient-to-r from-red-50 to-orange-50 border-t-2 border-red-100 py-8">
+        {/* 装饰性边框 */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-400 to-transparent opacity-30" />
+
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center gap-2 mb-4 md:mb-0">
-              <Heart className="w-7 h-7 text-pink-400 fill-pink-400" />
-              <span className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
+            <div className="flex items-center gap-3 mb-4 md:mb-0">
+              <div className="relative">
+                <Heart className="w-7 h-7 text-red-500 fill-red-500" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full opacity-80" />
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-red-600 via-red-500 to-orange-500 bg-clip-text text-transparent">
                 {t('title')}
               </span>
+              <span className="text-yellow-600 text-lg">囍</span>
             </div>
-            <div className="flex gap-6">
-              <Link href="/terms" className="hover:text-white">{tFooter('terms')}</Link>
-              <Link href="/privacy" className="hover:text-white">{tFooter('privacy')}</Link>
-              <Link href="/contact" className="hover:text-white">{tFooter('contact')}</Link>
+            <div className="flex gap-6 text-gray-600">
+              <Link href="/terms" className="hover:text-red-500 transition-colors">{tFooter('terms')}</Link>
+              <Link href="/privacy" className="hover:text-red-500 transition-colors">{tFooter('privacy')}</Link>
+              <Link href="/contact" className="hover:text-red-500 transition-colors">{tFooter('contact')}</Link>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center">
+          <div className="mt-6 pt-6 border-t border-red-100 text-center text-gray-500 text-sm">
             <p>{t('copyright')}</p>
           </div>
         </div>

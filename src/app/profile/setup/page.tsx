@@ -3,9 +3,11 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
+import { LanguageSwitcher } from '@/components/ui/language-switcher'
 import {
   PREFECTURES,
   GENDER_OPTIONS,
@@ -19,12 +21,14 @@ import {
 export default function ProfileSetupPage() {
   const router = useRouter()
   const { data: session, status } = useSession()
+  const t = useTranslations('profile')
+  const tCommon = useTranslations('common')
+
   const [step, setStep] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
   const [formData, setFormData] = useState({
-    // 基本情報
     nickname: '',
     gender: '',
     birthYear: '',
@@ -32,18 +36,15 @@ export default function ProfileSetupPage() {
     birthDay: '',
     prefecture: '',
     city: '',
-    // 自己紹介
     bio: '',
     height: '',
     occupation: '',
-    // 在日関連（任意）
     visaType: '',
     yearsInJapan: '',
     japaneseLevel: '',
     futurePlan: '',
     nationality: '',
     hometown: '',
-    // 表示設定
     showVisaType: false,
     showYearsInJapan: false,
   })
@@ -89,7 +90,7 @@ export default function ProfileSetupPage() {
       router.push('/discover')
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'プロフィールの保存に失敗しました')
+      setError(err instanceof Error ? err.message : t('saveFailed'))
     } finally {
       setIsLoading(false)
     }
@@ -108,59 +109,47 @@ export default function ProfileSetupPage() {
     return null
   }
 
+  const totalSteps = formData.nationality === '日本' ? 2 : 3
+
   const years = Array.from({ length: 60 }, (_, i) => ({
     value: String(new Date().getFullYear() - 18 - i),
-    label: `${new Date().getFullYear() - 18 - i}年`,
+    label: `${new Date().getFullYear() - 18 - i}`,
   }))
 
   const months = Array.from({ length: 12 }, (_, i) => ({
     value: String(i + 1),
-    label: `${i + 1}月`,
+    label: `${i + 1}`,
   }))
 
   const days = Array.from({ length: 31 }, (_, i) => ({
     value: String(i + 1),
-    label: `${i + 1}日`,
+    label: `${i + 1}`,
   }))
 
   const prefectureOptions = PREFECTURES.map((p) => ({ value: p, label: p }))
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-100 py-8 px-4">
+      <div className="absolute top-4 right-4">
+        <LanguageSwitcher />
+      </div>
       <div className="max-w-lg mx-auto">
         <div className="bg-white rounded-2xl shadow-xl p-8">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">プロフィール設定</h1>
-            {/* 日本国籍の場合は2ステップ、それ以外は3ステップ */}
-            {formData.nationality === '日本' ? (
-              <>
-                <p className="text-gray-600">ステップ {step} / 2</p>
-                <div className="flex gap-2 mt-4 justify-center">
-                  {[1, 2].map((s) => (
-                    <div
-                      key={s}
-                      className={`w-16 h-1 rounded-full ${
-                        s <= step ? 'bg-pink-500' : 'bg-gray-200'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="text-gray-600">ステップ {step} / 3</p>
-                <div className="flex gap-2 mt-4 justify-center">
-                  {[1, 2, 3].map((s) => (
-                    <div
-                      key={s}
-                      className={`w-16 h-1 rounded-full ${
-                        s <= step ? 'bg-pink-500' : 'bg-gray-200'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </>
-            )}
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('setup')}</h1>
+            <p className="text-gray-600">
+              {t('step').replace('{current}', String(step)).replace('{total}', String(totalSteps))}
+            </p>
+            <div className="flex gap-2 mt-4 justify-center">
+              {Array.from({ length: totalSteps }, (_, i) => (
+                <div
+                  key={i}
+                  className={`w-16 h-1 rounded-full ${
+                    i + 1 <= step ? 'bg-pink-500' : 'bg-gray-200'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
 
           {error && (
@@ -171,32 +160,32 @@ export default function ProfileSetupPage() {
 
           {step === 1 && (
             <div className="space-y-6">
-              <h2 className="text-lg font-semibold text-gray-900">基本情報</h2>
+              <h2 className="text-lg font-semibold text-gray-900">{t('basicInfo')}</h2>
 
               <Input
                 id="nickname"
                 name="nickname"
-                label="ニックネーム"
+                label={t('nickname')}
                 value={formData.nickname}
                 onChange={handleChange}
-                placeholder="表示名を入力"
+                placeholder={t('nicknamePlaceholder')}
                 required
               />
 
               <Select
                 id="gender"
                 name="gender"
-                label="性別"
+                label={t('gender')}
                 value={formData.gender}
                 onChange={handleChange}
                 options={GENDER_OPTIONS}
-                placeholder="選択してください"
+                placeholder={t('selectPlaceholder')}
                 required
               />
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  生年月日
+                  {t('birthday')}
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   <Select
@@ -205,7 +194,7 @@ export default function ProfileSetupPage() {
                     value={formData.birthYear}
                     onChange={handleChange}
                     options={years}
-                    placeholder="年"
+                    placeholder={t('year')}
                     required
                   />
                   <Select
@@ -214,7 +203,7 @@ export default function ProfileSetupPage() {
                     value={formData.birthMonth}
                     onChange={handleChange}
                     options={months}
-                    placeholder="月"
+                    placeholder={t('month')}
                     required
                   />
                   <Select
@@ -223,7 +212,7 @@ export default function ProfileSetupPage() {
                     value={formData.birthDay}
                     onChange={handleChange}
                     options={days}
-                    placeholder="日"
+                    placeholder={t('day')}
                     required
                   />
                 </div>
@@ -232,43 +221,36 @@ export default function ProfileSetupPage() {
               <Select
                 id="prefecture"
                 name="prefecture"
-                label="お住まいの都道府県"
+                label={t('prefecture')}
                 value={formData.prefecture}
                 onChange={handleChange}
                 options={prefectureOptions}
-                placeholder="選択してください"
+                placeholder={t('selectPlaceholder')}
                 required
               />
 
               <Input
                 id="city"
                 name="city"
-                label="市区町村（任意）"
+                label={`${t('city')}（${t('optional')}）`}
                 value={formData.city}
                 onChange={handleChange}
-                placeholder="例：渋谷区"
+                placeholder={t('cityPlaceholder')}
               />
 
               <Select
                 id="nationality"
                 name="nationality"
-                label="国籍"
+                label={t('nationality')}
                 value={formData.nationality}
                 onChange={handleChange}
                 options={NATIONALITY_OPTIONS}
-                placeholder="選択してください"
+                placeholder={t('selectPlaceholder')}
                 required
               />
 
               <Button
-                onClick={() => {
-                  // 日本以外の国籍の場合はステップ3へ、日本の場合はステップ2へ
-                  if (formData.nationality && formData.nationality !== '日本') {
-                    setStep(2)
-                  } else {
-                    setStep(2)
-                  }
-                }}
+                onClick={() => setStep(2)}
                 className="w-full"
                 size="lg"
                 disabled={
@@ -281,25 +263,25 @@ export default function ProfileSetupPage() {
                   !formData.nationality
                 }
               >
-                次へ
+                {tCommon('next')}
               </Button>
             </div>
           )}
 
           {step === 2 && (
             <div className="space-y-6">
-              <h2 className="text-lg font-semibold text-gray-900">自己紹介</h2>
+              <h2 className="text-lg font-semibold text-gray-900">{t('selfIntro')}</h2>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  自己紹介文
+                  {t('introduction')}
                 </label>
                 <textarea
                   id="bio"
                   name="bio"
                   value={formData.bio}
                   onChange={handleChange}
-                  placeholder="趣味や興味、どんな人と出会いたいかなど..."
+                  placeholder={t('bioPlaceholder')}
                   rows={5}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                 />
@@ -309,19 +291,19 @@ export default function ProfileSetupPage() {
                 id="height"
                 name="height"
                 type="number"
-                label="身長（cm）（任意）"
+                label={`${t('heightCm')}（${t('optional')}）`}
                 value={formData.height}
                 onChange={handleChange}
-                placeholder="例：170"
+                placeholder={t('heightPlaceholder')}
               />
 
               <Input
                 id="occupation"
                 name="occupation"
-                label="職業（任意）"
+                label={`${t('occupation')}（${t('optional')}）`}
                 value={formData.occupation}
                 onChange={handleChange}
-                placeholder="例：ITエンジニア"
+                placeholder={t('occupationPlaceholder')}
               />
 
               <div className="flex gap-4">
@@ -331,7 +313,7 @@ export default function ProfileSetupPage() {
                   className="flex-1"
                   size="lg"
                 >
-                  戻る
+                  {tCommon('back')}
                 </Button>
                 {formData.nationality === '日本' ? (
                   <Button
@@ -340,7 +322,7 @@ export default function ProfileSetupPage() {
                     size="lg"
                     isLoading={isLoading}
                   >
-                    完了
+                    {t('complete')}
                   </Button>
                 ) : (
                   <Button
@@ -348,7 +330,7 @@ export default function ProfileSetupPage() {
                     className="flex-1"
                     size="lg"
                   >
-                    次へ
+                    {tCommon('next')}
                   </Button>
                 )}
               </div>
@@ -359,7 +341,7 @@ export default function ProfileSetupPage() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-lg font-semibold text-gray-900 mb-2">
-                  在日関連情報（任意）
+                  {t('japanRelated')}（{t('optional')}）
                 </h2>
                 <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
                   {VISA_INFO_DISCLAIMER}
@@ -369,54 +351,54 @@ export default function ProfileSetupPage() {
               <Select
                 id="visaType"
                 name="visaType"
-                label="在留資格"
+                label={t('visaType')}
                 value={formData.visaType}
                 onChange={handleChange}
                 options={VISA_TYPE_OPTIONS}
-                placeholder="選択しない"
+                placeholder={t('noSelect')}
               />
 
               <Input
                 id="yearsInJapan"
                 name="yearsInJapan"
                 type="number"
-                label="在日年数"
+                label={t('yearsInJapan')}
                 value={formData.yearsInJapan}
                 onChange={handleChange}
-                placeholder="例：5"
+                placeholder={t('yearsPlaceholder')}
               />
 
               <Select
                 id="japaneseLevel"
                 name="japaneseLevel"
-                label="日本語能力"
+                label={t('japaneseLevel')}
                 value={formData.japaneseLevel}
                 onChange={handleChange}
                 options={JAPANESE_LEVEL_OPTIONS}
-                placeholder="選択しない"
+                placeholder={t('noSelect')}
               />
 
               <Select
                 id="futurePlan"
                 name="futurePlan"
-                label="将来の計画"
+                label={t('futurePlan')}
                 value={formData.futurePlan}
                 onChange={handleChange}
                 options={FUTURE_PLAN_OPTIONS}
-                placeholder="選択しない"
+                placeholder={t('noSelect')}
               />
 
               <Input
                 id="hometown"
                 name="hometown"
-                label="出身地"
+                label={t('hometown')}
                 value={formData.hometown}
                 onChange={handleChange}
-                placeholder="例：上海"
+                placeholder={t('hometownPlaceholder')}
               />
 
               <div className="border-t pt-6 space-y-4">
-                <h3 className="text-sm font-medium text-gray-700">表示設定</h3>
+                <h3 className="text-sm font-medium text-gray-700">{t('displaySettings')}</h3>
                 <label className="flex items-center gap-3">
                   <input
                     type="checkbox"
@@ -425,7 +407,7 @@ export default function ProfileSetupPage() {
                     onChange={handleChange}
                     className="w-4 h-4 text-pink-500 rounded focus:ring-pink-500"
                   />
-                  <span className="text-sm text-gray-600">在留資格を公開する</span>
+                  <span className="text-sm text-gray-600">{t('showVisaType')}</span>
                 </label>
                 <label className="flex items-center gap-3">
                   <input
@@ -435,7 +417,7 @@ export default function ProfileSetupPage() {
                     onChange={handleChange}
                     className="w-4 h-4 text-pink-500 rounded focus:ring-pink-500"
                   />
-                  <span className="text-sm text-gray-600">在日年数を公開する</span>
+                  <span className="text-sm text-gray-600">{t('showYearsInJapan')}</span>
                 </label>
               </div>
 
@@ -446,7 +428,7 @@ export default function ProfileSetupPage() {
                   className="flex-1"
                   size="lg"
                 >
-                  戻る
+                  {tCommon('back')}
                 </Button>
                 <Button
                   onClick={handleSubmit}
@@ -454,7 +436,7 @@ export default function ProfileSetupPage() {
                   size="lg"
                   isLoading={isLoading}
                 >
-                  完了
+                  {t('complete')}
                 </Button>
               </div>
             </div>
