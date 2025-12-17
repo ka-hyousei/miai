@@ -94,14 +94,14 @@ export default function MyPage() {
     <div className="md:ml-64">
       <div className="p-4 max-w-2xl mx-auto">
         {/* Profile Header - 中国风 */}
-        <div className="bg-gradient-to-b from-white to-red-50/30 rounded-xl shadow-sm overflow-hidden mb-6 border-2 border-red-200 relative">
+        <div className="bg-gradient-to-b from-white to-red-50/30 rounded-xl shadow-sm mb-6 border-2 border-red-200 relative">
           {/* 装饰性角落 */}
           <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-red-400 rounded-tl-lg z-10" />
           <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-red-400 rounded-tr-lg z-10" />
           <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-red-400 rounded-bl-lg z-10" />
           <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-red-400 rounded-br-lg z-10" />
 
-          <div className="bg-gradient-to-r from-red-500 via-red-600 to-orange-500 h-24 relative">
+          <div className="bg-gradient-to-r from-red-500 via-red-600 to-orange-500 h-24 relative rounded-t-lg">
             {/* 装饰性图案 */}
             <div className="absolute inset-0 flex items-center justify-center opacity-20">
               <span className="text-6xl text-yellow-300">囍</span>
@@ -109,7 +109,7 @@ export default function MyPage() {
           </div>
           <div className="px-6 pb-6">
             <div className="flex items-end -mt-12 mb-4 relative z-20">
-              <div className="w-24 h-24 rounded-full border-4 border-white bg-gray-200 overflow-hidden shadow-lg">
+              <div className="w-24 h-24 rounded-full border-4 border-white bg-gray-200 shadow-lg overflow-hidden">
                 {mainPhoto ? (
                   <img
                     src={mainPhoto.url}
