@@ -12,8 +12,8 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "お見合い - 国籍を超えた出会いをお届けするマッチングサービス",
-  description: "国籍を超えた真剣な出会いをお届けいたします。日本の方も海外の方も大歓迎です。",
+  title: "お見合い - 在日外国人のマッチングサービス",
+  description: "外国人同士・国際カップルの出会いをサポート。Dating service for foreigners in Japan.",
 };
 
 export default async function RootLayout({

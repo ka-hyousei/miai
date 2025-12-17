@@ -1,0 +1,152 @@
+{
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류가 발생했습니다",
+    "save": "저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "편집",
+    "back": "뒤로",
+    "next": "다음",
+    "submit": "제출",
+    "search": "검색",
+    "login": "로그인",
+    "logout": "로그아웃",
+    "register": "회원가입"
+  },
+  "nav": {
+    "discover": "탐색",
+    "likes": "좋아요",
+    "messages": "메시지",
+    "mypage": "마이페이지"
+  },
+  "home": {
+    "title": "お見合い",
+    "subtitle": "일본 거주 외국인을 위한 매칭 서비스",
+    "description": "외국인 간 및 국제 커플의 만남을 지원합니다",
+    "startButton": "무료로 시작하기",
+    "loginButton": "로그인"
+  },
+  "auth": {
+    "email": "이메일 주소",
+    "password": "비밀번호",
+    "confirmPassword": "비밀번호 확인",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "noAccount": "계정이 없으신가요?",
+    "hasAccount": "이미 계정이 있으신가요?",
+    "loginTitle": "로그인",
+    "registerTitle": "회원가입",
+    "loginButton": "로그인",
+    "registerButton": "가입하기",
+    "loginError": "이메일 또는 비밀번호가 올바르지 않습니다",
+    "registerError": "가입에 실패했습니다",
+    "emailRequired": "이메일 주소를 입력해주세요",
+    "passwordRequired": "비밀번호를 입력해주세요",
+    "passwordMismatch": "비밀번호가 일치하지 않습니다",
+    "verificationCode": "인증 코드",
+    "sendCode": "인증 코드 전송",
+    "codeSent": "인증 코드가 전송되었습니다"
+  },
+  "profile": {
+    "setup": "프로필 설정",
+    "edit": "프로필 편집",
+    "nickname": "닉네임",
+    "birthday": "생년월일",
+    "gender": "성별",
+    "male": "남성",
+    "female": "여성",
+    "location": "거주지",
+    "hometown": "고향",
+    "occupation": "직업",
+    "height": "키",
+    "introduction": "자기소개",
+    "japaneseLevel": "일본어 실력",
+    "visaType": "비자 종류",
+    "yearsInJapan": "일본 거주 연수",
+    "futurePlan": "미래 계획",
+    "photos": "사진",
+    "addPhoto": "사진 추가",
+    "mainPhoto": "대표 사진",
+    "contact": "연락처",
+    "wechatId": "WeChat ID",
+    "phoneNumber": "전화번호",
+    "contactEmail": "이메일 주소",
+    "contactVisibility": "연락처 공개 범위",
+    "visibilityEveryone": "전체 공개",
+    "visibilityPremiumOnly": "유료 회원만",
+    "visibilityMatchedOnly": "매칭된 상대만"
+  },
+  "discover": {
+    "title": "탐색",
+    "noUsers": "표시할 사용자가 없습니다",
+    "filters": "필터",
+    "age": "나이",
+    "liked": "좋아요 완료",
+    "likeSent": "좋아요를 보냈습니다"
+  },
+  "likes": {
+    "title": "좋아요",
+    "received": "받은 좋아요",
+    "sent": "보낸 좋아요",
+    "matched": "매칭",
+    "noLikes": "아직 좋아요가 없습니다",
+    "newMatch": "매칭되었습니다!"
+  },
+  "messages": {
+    "title": "메시지",
+    "noMessages": "메시지가 없습니다",
+    "placeholder": "메시지를 입력하세요...",
+    "send": "전송"
+  },
+  "mypage": {
+    "title": "마이페이지",
+    "settings": "설정",
+    "premium": "프리미엄 회원",
+    "terms": "이용약관",
+    "privacy": "개인정보처리방침",
+    "contact": "문의하기",
+    "logout": "로그아웃",
+    "withdraw": "회원탈퇴"
+  },
+  "premium": {
+    "title": "프리미엄 회원",
+    "subtitle": "더 많은 만남을 위해",
+    "currentPlan": "현재 플랜",
+    "freePlan": "무료 회원",
+    "premiumPlan": "프리미엄",
+    "vipPlan": "VIP",
+    "price": "¥980/월",
+    "priceYuan": "50위안/월",
+    "benefits": "프리미엄 혜택",
+    "benefit1": "무제한 좋아요",
+    "benefit2": "메시지 읽음 확인",
+    "benefit3": "프로필 우선 표시",
+    "benefit4": "연락처 열람",
+    "selectPayment": "결제 방법 선택",
+    "wechatPay": "WeChat Pay",
+    "paypay": "PayPay",
+    "subscribe": "지금 신청하기"
+  },
+  "payment": {
+    "title": "결제",
+    "pending": "결제 대기 중",
+    "pendingApproval": "승인 대기 중",
+    "completed": "결제 완료",
+    "instructions": "결제 안내",
+    "markComplete": "결제를 완료했습니다",
+    "waitingApproval": "관리자가 결제를 확인하고 있습니다"
+  },
+  "settings": {
+    "title": "설정",
+    "language": "언어",
+    "notifications": "알림",
+    "blockedUsers": "차단한 사용자",
+    "deleteAccount": "계정 삭제"
+  },
+  "footer": {
+    "terms": "이용약관",
+    "privacy": "개인정보처리방침",
+    "contact": "문의하기",
+    "company": "운영사"
+  }
+}
