@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useSession } from 'next-auth/react'
-import { Heart, Sparkles, User } from 'lucide-react'
+import { useSession, signOut } from 'next-auth/react'
+import { Heart, Sparkles, User, LogOut } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
 
@@ -61,25 +61,35 @@ export function HomeHeader() {
           <div className="w-20 h-10 bg-gray-200 animate-pulse rounded-lg" />
         ) : session ? (
           // ログイン済み
-          <Link
-            href="/mypage"
-            className="flex items-center gap-2 px-3 py-1.5 bg-white border-2 border-pink-200 rounded-full hover:border-pink-400 hover:bg-pink-50 transition-all group"
-          >
-            {profile?.mainPhoto ? (
-              <img
-                src={profile.mainPhoto}
-                alt={profile.nickname || ''}
-                className="w-8 h-8 rounded-full object-cover border-2 border-pink-300"
-              />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-100 to-rose-100 flex items-center justify-center border-2 border-pink-200">
-                <User className="w-4 h-4 text-pink-400" />
-              </div>
-            )}
-            <span className="text-sm font-medium text-gray-700 group-hover:text-pink-600 hidden sm:inline pr-1">
-              {profile?.nickname || tNav('mypage')}
-            </span>
-          </Link>
+          <>
+            <Link
+              href="/mypage"
+              className="flex items-center gap-2 px-3 py-1.5 bg-white border-2 border-pink-200 rounded-full hover:border-pink-400 hover:bg-pink-50 transition-all group"
+            >
+              {profile?.mainPhoto ? (
+                <img
+                  src={profile.mainPhoto}
+                  alt={profile.nickname || ''}
+                  className="w-8 h-8 rounded-full object-cover border-2 border-pink-300"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-pink-100 to-rose-100 flex items-center justify-center border-2 border-pink-200">
+                  <User className="w-4 h-4 text-pink-400" />
+                </div>
+              )}
+              <span className="text-sm font-medium text-gray-700 group-hover:text-pink-600 hidden sm:inline pr-1">
+                {profile?.nickname || tNav('mypage')}
+              </span>
+            </Link>
+            <button
+              onClick={() => signOut({ callbackUrl: '/' })}
+              className="flex items-center gap-1.5 px-3 py-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+              title={tCommon('logout')}
+            >
+              <LogOut className="w-5 h-5" />
+              <span className="hidden sm:inline text-sm font-medium">{tCommon('logout')}</span>
+            </button>
+          </>
         ) : (
           // 未ログイン
           <>

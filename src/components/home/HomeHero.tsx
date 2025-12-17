@@ -1,14 +1,13 @@
 'use client'
 
-import { useSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { Search, LogOut } from 'lucide-react'
+import { Search } from 'lucide-react'
 
 export function HomeHero() {
   const { data: session, status } = useSession()
   const t = useTranslations('home')
-  const tCommon = useTranslations('common')
 
   if (status === 'loading') {
     return (
@@ -36,22 +35,13 @@ export function HomeHero() {
         <p className="text-xl text-gray-600 mb-10">
           {t('loggedInSubtitle')}
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link
-            href="/discover"
-            className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white text-lg font-medium rounded-full hover:from-red-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl border-2 border-yellow-400/30"
-          >
-            <Search className="w-5 h-5" />
-            {t('startDiscover')}
-          </Link>
-          <button
-            onClick={() => signOut({ callbackUrl: '/' })}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-white text-gray-600 text-lg font-medium rounded-full hover:bg-gray-50 transition-all shadow-md hover:shadow-lg border-2 border-gray-200"
-          >
-            <LogOut className="w-5 h-5" />
-            {tCommon('logout')}
-          </button>
-        </div>
+        <Link
+          href="/discover"
+          className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white text-lg font-medium rounded-full hover:from-red-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl border-2 border-yellow-400/30"
+        >
+          <Search className="w-5 h-5" />
+          {t('startDiscover')}
+        </Link>
       </div>
     )
   }
