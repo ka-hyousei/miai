@@ -108,7 +108,7 @@ export default function MyPage() {
             </div>
           </div>
           <div className="px-6 pb-6">
-            <div className="flex items-end -mt-12 mb-4">
+            <div className="flex items-end -mt-12 mb-4 relative z-20">
               <div className="w-24 h-24 rounded-full border-4 border-white bg-gray-200 overflow-hidden shadow-lg">
                 {mainPhoto ? (
                   <img
