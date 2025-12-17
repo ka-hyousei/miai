@@ -1,0 +1,152 @@
+{
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "back": "戻る",
+    "next": "次へ",
+    "submit": "送信",
+    "search": "検索",
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "register": "新規登録"
+  },
+  "nav": {
+    "discover": "探す",
+    "likes": "いいね",
+    "messages": "メッセージ",
+    "mypage": "マイページ"
+  },
+  "home": {
+    "title": "ミアイ",
+    "subtitle": "在日華人向けマッチングアプリ",
+    "description": "日本で暮らす中国人のための真剣な出会いを応援",
+    "startButton": "無料で始める",
+    "loginButton": "ログイン"
+  },
+  "auth": {
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "confirmPassword": "パスワード確認",
+    "forgotPassword": "パスワードをお忘れの方",
+    "noAccount": "アカウントをお持ちでない方",
+    "hasAccount": "すでにアカウントをお持ちの方",
+    "loginTitle": "ログイン",
+    "registerTitle": "新規登録",
+    "loginButton": "ログイン",
+    "registerButton": "登録する",
+    "loginError": "メールアドレスまたはパスワードが間違っています",
+    "registerError": "登録に失敗しました",
+    "emailRequired": "メールアドレスを入力してください",
+    "passwordRequired": "パスワードを入力してください",
+    "passwordMismatch": "パスワードが一致しません",
+    "verificationCode": "認証コード",
+    "sendCode": "認証コードを送信",
+    "codeSent": "認証コードを送信しました"
+  },
+  "profile": {
+    "setup": "プロフィール設定",
+    "edit": "プロフィール編集",
+    "nickname": "ニックネーム",
+    "birthday": "生年月日",
+    "gender": "性別",
+    "male": "男性",
+    "female": "女性",
+    "location": "居住地",
+    "hometown": "出身地",
+    "occupation": "職業",
+    "height": "身長",
+    "introduction": "自己紹介",
+    "japaneseLevel": "日本語レベル",
+    "visaType": "在留資格",
+    "yearsInJapan": "在日年数",
+    "futurePlan": "将来の計画",
+    "photos": "写真",
+    "addPhoto": "写真を追加",
+    "mainPhoto": "メイン写真",
+    "contact": "連絡先",
+    "wechatId": "WeChat ID",
+    "phoneNumber": "電話番号",
+    "contactEmail": "メールアドレス",
+    "contactVisibility": "連絡先の公開範囲",
+    "visibilityEveryone": "全員に公開",
+    "visibilityPremiumOnly": "有料会員のみ",
+    "visibilityMatchedOnly": "マッチした相手のみ"
+  },
+  "discover": {
+    "title": "探す",
+    "noUsers": "表示できるユーザーがいません",
+    "filters": "フィルター",
+    "age": "年齢",
+    "liked": "いいね済み",
+    "likeSent": "いいねを送りました"
+  },
+  "likes": {
+    "title": "いいね",
+    "received": "もらったいいね",
+    "sent": "送ったいいね",
+    "matched": "マッチング",
+    "noLikes": "まだいいねがありません",
+    "newMatch": "マッチしました！"
+  },
+  "messages": {
+    "title": "メッセージ",
+    "noMessages": "メッセージはありません",
+    "placeholder": "メッセージを入力...",
+    "send": "送信"
+  },
+  "mypage": {
+    "title": "マイページ",
+    "settings": "設定",
+    "premium": "プレミアム会員",
+    "terms": "利用規約",
+    "privacy": "プライバシーポリシー",
+    "contact": "お問い合わせ",
+    "logout": "ログアウト",
+    "withdraw": "退会する"
+  },
+  "premium": {
+    "title": "プレミアム会員",
+    "subtitle": "より多くの出会いを",
+    "currentPlan": "現在のプラン",
+    "freePlan": "無料会員",
+    "premiumPlan": "プレミアム会員",
+    "vipPlan": "VIP会員",
+    "price": "¥980/月",
+    "priceYuan": "50元/月",
+    "benefits": "プレミアム特典",
+    "benefit1": "いいね無制限",
+    "benefit2": "メッセージ既読確認",
+    "benefit3": "プロフィール優先表示",
+    "benefit4": "連絡先の閲覧",
+    "selectPayment": "支払い方法を選択",
+    "wechatPay": "WeChat Pay（微信支付）",
+    "paypay": "PayPay",
+    "subscribe": "申し込む"
+  },
+  "payment": {
+    "title": "お支払い",
+    "pending": "支払い待ち",
+    "pendingApproval": "承認待ち",
+    "completed": "支払い完了",
+    "instructions": "支払い手順",
+    "markComplete": "支払いを完了しました",
+    "waitingApproval": "管理者が支払いを確認しています"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "言語",
+    "notifications": "通知",
+    "blockedUsers": "ブロックしたユーザー",
+    "deleteAccount": "アカウント削除"
+  },
+  "footer": {
+    "terms": "利用規約",
+    "privacy": "プライバシーポリシー",
+    "contact": "お問い合わせ",
+    "company": "運営会社"
+  }
+}

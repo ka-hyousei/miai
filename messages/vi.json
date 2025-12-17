@@ -1,0 +1,152 @@
+{
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Đã xảy ra lỗi",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "submit": "Gửi",
+    "search": "Tìm kiếm",
+    "login": "Đăng nhập",
+    "logout": "Đăng xuất",
+    "register": "Đăng ký"
+  },
+  "nav": {
+    "discover": "Khám phá",
+    "likes": "Thích",
+    "messages": "Tin nhắn",
+    "mypage": "Trang cá nhân"
+  },
+  "home": {
+    "title": "ミアイ",
+    "subtitle": "Ứng dụng hẹn hò cho người Việt tại Nhật",
+    "description": "Hỗ trợ những cuộc gặp gỡ chân thành cho người Việt sống tại Nhật Bản",
+    "startButton": "Bắt đầu miễn phí",
+    "loginButton": "Đăng nhập"
+  },
+  "auth": {
+    "email": "Địa chỉ email",
+    "password": "Mật khẩu",
+    "confirmPassword": "Xác nhận mật khẩu",
+    "forgotPassword": "Quên mật khẩu?",
+    "noAccount": "Chưa có tài khoản?",
+    "hasAccount": "Đã có tài khoản?",
+    "loginTitle": "Đăng nhập",
+    "registerTitle": "Đăng ký",
+    "loginButton": "Đăng nhập",
+    "registerButton": "Đăng ký",
+    "loginError": "Email hoặc mật khẩu không đúng",
+    "registerError": "Đăng ký thất bại",
+    "emailRequired": "Vui lòng nhập địa chỉ email",
+    "passwordRequired": "Vui lòng nhập mật khẩu",
+    "passwordMismatch": "Mật khẩu không khớp",
+    "verificationCode": "Mã xác nhận",
+    "sendCode": "Gửi mã xác nhận",
+    "codeSent": "Đã gửi mã xác nhận"
+  },
+  "profile": {
+    "setup": "Thiết lập hồ sơ",
+    "edit": "Chỉnh sửa hồ sơ",
+    "nickname": "Biệt danh",
+    "birthday": "Ngày sinh",
+    "gender": "Giới tính",
+    "male": "Nam",
+    "female": "Nữ",
+    "location": "Nơi ở",
+    "hometown": "Quê quán",
+    "occupation": "Nghề nghiệp",
+    "height": "Chiều cao",
+    "introduction": "Giới thiệu bản thân",
+    "japaneseLevel": "Trình độ tiếng Nhật",
+    "visaType": "Loại visa",
+    "yearsInJapan": "Số năm ở Nhật",
+    "futurePlan": "Kế hoạch tương lai",
+    "photos": "Ảnh",
+    "addPhoto": "Thêm ảnh",
+    "mainPhoto": "Ảnh chính",
+    "contact": "Liên hệ",
+    "wechatId": "WeChat ID",
+    "phoneNumber": "Số điện thoại",
+    "contactEmail": "Email liên hệ",
+    "contactVisibility": "Phạm vi hiển thị liên hệ",
+    "visibilityEveryone": "Hiển thị với tất cả",
+    "visibilityPremiumOnly": "Chỉ thành viên trả phí",
+    "visibilityMatchedOnly": "Chỉ người đã ghép đôi"
+  },
+  "discover": {
+    "title": "Khám phá",
+    "noUsers": "Không có người dùng để hiển thị",
+    "filters": "Bộ lọc",
+    "age": "Tuổi",
+    "liked": "Đã thích",
+    "likeSent": "Đã gửi thích"
+  },
+  "likes": {
+    "title": "Thích",
+    "received": "Lượt thích nhận được",
+    "sent": "Lượt thích đã gửi",
+    "matched": "Ghép đôi",
+    "noLikes": "Chưa có lượt thích nào",
+    "newMatch": "Ghép đôi thành công!"
+  },
+  "messages": {
+    "title": "Tin nhắn",
+    "noMessages": "Không có tin nhắn",
+    "placeholder": "Nhập tin nhắn...",
+    "send": "Gửi"
+  },
+  "mypage": {
+    "title": "Trang cá nhân",
+    "settings": "Cài đặt",
+    "premium": "Thành viên Premium",
+    "terms": "Điều khoản sử dụng",
+    "privacy": "Chính sách bảo mật",
+    "contact": "Liên hệ",
+    "logout": "Đăng xuất",
+    "withdraw": "Xóa tài khoản"
+  },
+  "premium": {
+    "title": "Thành viên Premium",
+    "subtitle": "Gặp gỡ nhiều hơn",
+    "currentPlan": "Gói hiện tại",
+    "freePlan": "Miễn phí",
+    "premiumPlan": "Premium",
+    "vipPlan": "VIP",
+    "price": "¥980/tháng",
+    "priceYuan": "50 CNY/tháng",
+    "benefits": "Quyền lợi Premium",
+    "benefit1": "Thích không giới hạn",
+    "benefit2": "Xác nhận đã đọc tin nhắn",
+    "benefit3": "Ưu tiên hiển thị hồ sơ",
+    "benefit4": "Xem thông tin liên hệ",
+    "selectPayment": "Chọn phương thức thanh toán",
+    "wechatPay": "WeChat Pay",
+    "paypay": "PayPay",
+    "subscribe": "Đăng ký ngay"
+  },
+  "payment": {
+    "title": "Thanh toán",
+    "pending": "Chờ thanh toán",
+    "pendingApproval": "Chờ duyệt",
+    "completed": "Thanh toán hoàn tất",
+    "instructions": "Hướng dẫn thanh toán",
+    "markComplete": "Tôi đã thanh toán xong",
+    "waitingApproval": "Quản trị viên đang xác nhận thanh toán của bạn"
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "language": "Ngôn ngữ",
+    "notifications": "Thông báo",
+    "blockedUsers": "Người dùng đã chặn",
+    "deleteAccount": "Xóa tài khoản"
+  },
+  "footer": {
+    "terms": "Điều khoản sử dụng",
+    "privacy": "Chính sách bảo mật",
+    "contact": "Liên hệ",
+    "company": "Công ty điều hành"
+  }
+}

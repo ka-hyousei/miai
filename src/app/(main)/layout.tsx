@@ -3,7 +3,9 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
-import { Home, Search, Heart, MessageCircle, User, LogOut } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { Search, Heart, MessageCircle, User, LogOut } from 'lucide-react'
+import { LanguageSwitcher } from '@/components/ui/language-switcher'
 
 export default function MainLayout({
   children,
@@ -12,12 +14,14 @@ export default function MainLayout({
 }) {
   const pathname = usePathname()
   const { data: session } = useSession()
+  const t = useTranslations('nav')
+  const tCommon = useTranslations('common')
 
   const navItems = [
-    { href: '/discover', icon: Search, label: '探す' },
-    { href: '/likes', icon: Heart, label: 'いいね' },
-    { href: '/messages', icon: MessageCircle, label: 'メッセージ' },
-    { href: '/mypage', icon: User, label: 'マイページ' },
+    { href: '/discover', icon: Search, labelKey: 'discover' as const },
+    { href: '/likes', icon: Heart, labelKey: 'likes' as const },
+    { href: '/messages', icon: MessageCircle, labelKey: 'messages' as const },
+    { href: '/mypage', icon: User, labelKey: 'mypage' as const },
   ]
 
   if (!session) {
@@ -32,13 +36,16 @@ export default function MainLayout({
           <Link href="/" className="text-xl font-bold text-pink-500">
             お見合い
           </Link>
-          <button
-            onClick={() => signOut({ callbackUrl: '/' })}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
-          >
-            <LogOut className="w-5 h-5" />
-            <span className="hidden sm:inline">ログアウト</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher />
+            <button
+              onClick={() => signOut({ callbackUrl: '/' })}
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+            >
+              <LogOut className="w-5 h-5" />
+              <span className="hidden sm:inline">{tCommon('logout')}</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -61,7 +68,7 @@ export default function MainLayout({
                 }`}
               >
                 <item.icon className="w-6 h-6" />
-                <span className="text-xs mt-1">{item.label}</span>
+                <span className="text-xs mt-1">{t(item.labelKey)}</span>
               </Link>
             )
           })}
@@ -84,7 +91,7 @@ export default function MainLayout({
                 }`}
               >
                 <item.icon className="w-5 h-5" />
-                <span>{item.label}</span>
+                <span>{t(item.labelKey)}</span>
               </Link>
             )
           })}

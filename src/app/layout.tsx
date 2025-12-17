@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 import "./globals.css";
 import { SessionProvider } from "@/components/providers/session-provider";
 
@@ -14,15 +16,20 @@ export const metadata: Metadata = {
   description: "国籍を超えた真剣な出会いをお届けいたします。日本の方も海外の方も大歓迎です。",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="ja">
+    <html lang={locale}>
       <body className={`${notoSansJP.variable} font-sans antialiased`}>
-        <SessionProvider>{children}</SessionProvider>
+        <NextIntlClientProvider messages={messages}>
+          <SessionProvider>{children}</SessionProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

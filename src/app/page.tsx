@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { Heart, Users, MessageCircle, Sparkles } from "lucide-react";
+import { getTranslations } from 'next-intl/server';
+import { LanguageSwitcherServer } from '@/components/ui/language-switcher-server';
 
-export default function Home() {
+export default async function Home() {
+  const t = await getTranslations('home');
+  const tCommon = await getTranslations('common');
+  const tFooter = await getTranslations('footer');
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-rose-100">
       {/* Hero Section */}
@@ -16,34 +22,35 @@ export default function Home() {
               お見合い
             </span>
           </Link>
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
+            <LanguageSwitcherServer />
             <Link
               href="/login"
               className="px-4 py-2 text-pink-500 hover:text-pink-600 font-medium"
             >
-              ログイン
+              {tCommon('login')}
             </Link>
             <Link
               href="/register"
               className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 font-medium"
             >
-              新規登録
+              {tCommon('register')}
             </Link>
           </div>
         </nav>
 
         <div className="max-w-6xl mx-auto px-6 py-20 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            日本で出会う、<br className="md:hidden" />新しいご縁
+            {t('subtitle')}
           </h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            国籍を超えた真剣な出会いをお届けいたします。日本の方も海外の方も大歓迎です。
+            {t('description')}
           </p>
           <Link
             href="/register"
             className="inline-block px-8 py-4 bg-pink-500 text-white text-lg font-medium rounded-full hover:bg-pink-600 transition-colors shadow-lg hover:shadow-xl"
           >
-            無料で始める
+            {t('startButton')}
           </Link>
         </div>
       </header>
@@ -77,7 +84,7 @@ export default function Home() {
                 将来を見据えた真剣なパートナー探しをサポートいたします
               </p>
             </div>
-                        <div className="text-center p-6">
+            <div className="text-center p-6">
               <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MessageCircle className="w-8 h-8 text-pink-500" />
               </div>
@@ -105,7 +112,7 @@ export default function Home() {
             href="/register"
             className="inline-block px-8 py-4 bg-pink-500 text-white text-lg font-medium rounded-full hover:bg-pink-600 transition-colors shadow-lg hover:shadow-xl"
           >
-            無料で始める
+            {t('startButton')}
           </Link>
         </div>
       </section>
@@ -121,9 +128,9 @@ export default function Home() {
               </span>
             </div>
             <div className="flex gap-6">
-              <Link href="/terms" className="hover:text-white">利用規約</Link>
-              <Link href="/privacy" className="hover:text-white">プライバシーポリシー</Link>
-              <Link href="/contact" className="hover:text-white">お問い合わせ</Link>
+              <Link href="/terms" className="hover:text-white">{tFooter('terms')}</Link>
+              <Link href="/privacy" className="hover:text-white">{tFooter('privacy')}</Link>
+              <Link href="/contact" className="hover:text-white">{tFooter('contact')}</Link>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center">

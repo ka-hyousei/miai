@@ -1,0 +1,152 @@
+{
+  "common": {
+    "loading": "加载中...",
+    "error": "发生错误",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "back": "返回",
+    "next": "下一步",
+    "submit": "提交",
+    "search": "搜索",
+    "login": "登录",
+    "logout": "退出登录",
+    "register": "注册"
+  },
+  "nav": {
+    "discover": "发现",
+    "likes": "喜欢",
+    "messages": "消息",
+    "mypage": "我的"
+  },
+  "home": {
+    "title": "ミアイ",
+    "subtitle": "在日华人交友平台",
+    "description": "为在日华人提供真诚的相遇机会",
+    "startButton": "免费开始",
+    "loginButton": "登录"
+  },
+  "auth": {
+    "email": "邮箱地址",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "forgotPassword": "忘记密码？",
+    "noAccount": "还没有账号？",
+    "hasAccount": "已有账号？",
+    "loginTitle": "登录",
+    "registerTitle": "注册",
+    "loginButton": "登录",
+    "registerButton": "注册",
+    "loginError": "邮箱或密码错误",
+    "registerError": "注册失败",
+    "emailRequired": "请输入邮箱地址",
+    "passwordRequired": "请输入密码",
+    "passwordMismatch": "两次输入的密码不一致",
+    "verificationCode": "验证码",
+    "sendCode": "发送验证码",
+    "codeSent": "验证码已发送"
+  },
+  "profile": {
+    "setup": "设置个人资料",
+    "edit": "编辑个人资料",
+    "nickname": "昵称",
+    "birthday": "生日",
+    "gender": "性别",
+    "male": "男",
+    "female": "女",
+    "location": "居住地",
+    "hometown": "家乡",
+    "occupation": "职业",
+    "height": "身高",
+    "introduction": "自我介绍",
+    "japaneseLevel": "日语水平",
+    "visaType": "签证类型",
+    "yearsInJapan": "在日年数",
+    "futurePlan": "未来计划",
+    "photos": "照片",
+    "addPhoto": "添加照片",
+    "mainPhoto": "主照片",
+    "contact": "联系方式",
+    "wechatId": "微信号",
+    "phoneNumber": "电话号码",
+    "contactEmail": "邮箱地址",
+    "contactVisibility": "联系方式公开范围",
+    "visibilityEveryone": "向所有人公开",
+    "visibilityPremiumOnly": "仅对付费会员公开",
+    "visibilityMatchedOnly": "仅对匹配对象公开"
+  },
+  "discover": {
+    "title": "发现",
+    "noUsers": "没有可显示的用户",
+    "filters": "筛选",
+    "age": "年龄",
+    "liked": "已喜欢",
+    "likeSent": "已发送喜欢"
+  },
+  "likes": {
+    "title": "喜欢",
+    "received": "收到的喜欢",
+    "sent": "发出的喜欢",
+    "matched": "匹配",
+    "noLikes": "还没有喜欢",
+    "newMatch": "匹配成功！"
+  },
+  "messages": {
+    "title": "消息",
+    "noMessages": "没有消息",
+    "placeholder": "输入消息...",
+    "send": "发送"
+  },
+  "mypage": {
+    "title": "我的",
+    "settings": "设置",
+    "premium": "高级会员",
+    "terms": "使用条款",
+    "privacy": "隐私政策",
+    "contact": "联系我们",
+    "logout": "退出登录",
+    "withdraw": "注销账号"
+  },
+  "premium": {
+    "title": "高级会员",
+    "subtitle": "遇见更多可能",
+    "currentPlan": "当前方案",
+    "freePlan": "免费会员",
+    "premiumPlan": "高级会员",
+    "vipPlan": "VIP会员",
+    "price": "¥980/月",
+    "priceYuan": "50元/月",
+    "benefits": "高级会员特权",
+    "benefit1": "无限喜欢",
+    "benefit2": "消息已读确认",
+    "benefit3": "个人资料优先展示",
+    "benefit4": "查看联系方式",
+    "selectPayment": "选择支付方式",
+    "wechatPay": "微信支付",
+    "paypay": "PayPay",
+    "subscribe": "立即开通"
+  },
+  "payment": {
+    "title": "支付",
+    "pending": "等待支付",
+    "pendingApproval": "等待审核",
+    "completed": "支付完成",
+    "instructions": "支付步骤",
+    "markComplete": "我已完成支付",
+    "waitingApproval": "管理员正在确认您的支付"
+  },
+  "settings": {
+    "title": "设置",
+    "language": "语言",
+    "notifications": "通知",
+    "blockedUsers": "已屏蔽用户",
+    "deleteAccount": "删除账号"
+  },
+  "footer": {
+    "terms": "使用条款",
+    "privacy": "隐私政策",
+    "contact": "联系我们",
+    "company": "运营公司"
+  }
+}
