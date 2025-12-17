@@ -25,7 +25,17 @@
     "subtitle": "Dating Service for Foreigners in Japan",
     "description": "Supporting connections between foreigners and international couples",
     "startButton": "Start Free",
-    "loginButton": "Login"
+    "loginButton": "Login",
+    "featuresTitle": "Our Features",
+    "feature1Title": "Diverse Connections",
+    "feature1Desc": "We support wonderful encounters across nationalities and cultures",
+    "feature2Title": "Serious Dating",
+    "feature2Desc": "We support finding a serious partner for your future",
+    "feature3Title": "Thoughtful Matching",
+    "feature3Desc": "Start messaging after both of you like each other",
+    "ctaTitle": "Your destiny might be waiting for you",
+    "ctaDesc": "Sign up for free now and find new connections",
+    "copyright": "© 2025 Omiai. All rights reserved."
   },
   "auth": {
     "email": "Email Address",

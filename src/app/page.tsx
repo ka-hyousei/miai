@@ -19,7 +19,7 @@ export default async function Home() {
               <Sparkles className="w-4 h-4 text-yellow-400 absolute -top-1 -right-1" />
             </div>
             <span className="text-2xl font-bold bg-gradient-to-r from-pink-500 via-rose-500 to-pink-600 bg-clip-text text-transparent">
-              お見合い
+              {t('title')}
             </span>
           </Link>
           <div className="flex gap-4 items-center">
@@ -59,7 +59,7 @@ export default async function Home() {
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <h3 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            お見合いの特徴
+            {t('featuresTitle')}
           </h3>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center p-6">
@@ -67,10 +67,10 @@ export default async function Home() {
                 <Users className="w-8 h-8 text-pink-500" />
               </div>
               <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                多様な出会い
+                {t('feature1Title')}
               </h4>
               <p className="text-gray-600">
-                国籍や文化を超えた素敵な出会いをサポートいたします
+                {t('feature1Desc')}
               </p>
             </div>
             <div className="text-center p-6">
@@ -78,10 +78,10 @@ export default async function Home() {
                 <Heart className="w-8 h-8 text-pink-500" />
               </div>
               <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                真剣な出会い
+                {t('feature2Title')}
               </h4>
               <p className="text-gray-600">
-                将来を見据えた真剣なパートナー探しをサポートいたします
+                {t('feature2Desc')}
               </p>
             </div>
             <div className="text-center p-6">
@@ -89,10 +89,10 @@ export default async function Home() {
                 <MessageCircle className="w-8 h-8 text-pink-500" />
               </div>
               <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                丁寧なマッチング
+                {t('feature3Title')}
               </h4>
               <p className="text-gray-600">
-                お互いの「いいね」でマッチング後にメッセージを開始できます
+                {t('feature3Desc')}
               </p>
             </div>
           </div>
@@ -103,10 +103,10 @@ export default async function Home() {
       <section className="py-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h3 className="text-3xl font-bold text-gray-900 mb-6">
-            あなたの運命の方がお待ちかもしれません
+            {t('ctaTitle')}
           </h3>
           <p className="text-xl text-gray-600 mb-8">
-            今すぐ無料登録して、新しい出会いを見つけてみませんか
+            {t('ctaDesc')}
           </p>
           <Link
             href="/register"
@@ -124,7 +124,7 @@ export default async function Home() {
             <div className="flex items-center gap-2 mb-4 md:mb-0">
               <Heart className="w-7 h-7 text-pink-400 fill-pink-400" />
               <span className="text-2xl font-bold bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent">
-                お見合い
+                {t('title')}
               </span>
             </div>
             <div className="flex gap-6">
@@ -134,7 +134,7 @@ export default async function Home() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-            <p>&copy; 2025 お見合い. All rights reserved.</p>
+            <p>{t('copyright')}</p>
           </div>
         </div>
       </footer>

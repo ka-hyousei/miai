@@ -25,7 +25,17 @@
     "subtitle": "在日外国人のマッチングサービス",
     "description": "外国人同士・国際カップルの出会いをサポート",
     "startButton": "無料で始める",
-    "loginButton": "ログイン"
+    "loginButton": "ログイン",
+    "featuresTitle": "お見合いの特徴",
+    "feature1Title": "多様な出会い",
+    "feature1Desc": "国籍や文化を超えた素敵な出会いをサポートいたします",
+    "feature2Title": "真剣な出会い",
+    "feature2Desc": "将来を見据えた真剣なパートナー探しをサポートいたします",
+    "feature3Title": "丁寧なマッチング",
+    "feature3Desc": "お互いの「いいね」でマッチング後にメッセージを開始できます",
+    "ctaTitle": "あなたの運命の方がお待ちかもしれません",
+    "ctaDesc": "今すぐ無料登録して、新しい出会いを見つけてみませんか",
+    "copyright": "© 2025 お見合い. All rights reserved."
   },
   "auth": {
     "email": "メールアドレス",

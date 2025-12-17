@@ -25,7 +25,17 @@
     "subtitle": "Dịch vụ hẹn hò cho người nước ngoài tại Nhật",
     "description": "Hỗ trợ gặp gỡ giữa người nước ngoài và các cặp đôi quốc tế",
     "startButton": "Bắt đầu miễn phí",
-    "loginButton": "Đăng nhập"
+    "loginButton": "Đăng nhập",
+    "featuresTitle": "Điểm nổi bật",
+    "feature1Title": "Gặp gỡ đa dạng",
+    "feature1Desc": "Hỗ trợ những cuộc gặp gỡ tuyệt vời vượt qua quốc tịch và văn hóa",
+    "feature2Title": "Hẹn hò nghiêm túc",
+    "feature2Desc": "Hỗ trợ tìm kiếm bạn đời nghiêm túc cho tương lai",
+    "feature3Title": "Ghép đôi chu đáo",
+    "feature3Desc": "Bắt đầu nhắn tin sau khi cả hai cùng thích nhau",
+    "ctaTitle": "Có thể định mệnh của bạn đang chờ đợi",
+    "ctaDesc": "Đăng ký miễn phí ngay để tìm kiếm cuộc gặp gỡ mới",
+    "copyright": "© 2025 お見合い. Đã đăng ký bản quyền."
   },
   "auth": {
     "email": "Địa chỉ email",

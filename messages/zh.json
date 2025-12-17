@@ -25,7 +25,17 @@
     "subtitle": "在日外国人交友平台",
     "description": "支持外国人之间及国际情侣的相遇",
     "startButton": "免费开始",
-    "loginButton": "登录"
+    "loginButton": "登录",
+    "featuresTitle": "平台特色",
+    "feature1Title": "多元相遇",
+    "feature1Desc": "支持跨越国籍和文化的美好相遇",
+    "feature2Title": "认真交友",
+    "feature2Desc": "为寻找长期伴侣提供真诚支持",
+    "feature3Title": "精准匹配",
+    "feature3Desc": "双方互相喜欢后即可开始聊天",
+    "ctaTitle": "也许你的命中注定正在等你",
+    "ctaDesc": "立即免费注册，开启新的相遇",
+    "copyright": "© 2025 お見合い. 保留所有权利。"
   },
   "auth": {
     "email": "邮箱地址",
