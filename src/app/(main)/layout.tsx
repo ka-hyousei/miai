@@ -16,6 +16,7 @@ export default function MainLayout({
   const { data: session } = useSession()
   const t = useTranslations('nav')
   const tCommon = useTranslations('common')
+  const tHome = useTranslations('home')
 
   const navItems = [
     { href: '/discover', icon: Search, labelKey: 'discover' as const },
@@ -34,7 +35,7 @@ export default function MainLayout({
       <header className="bg-white border-b sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link href="/" className="text-xl font-bold text-pink-500">
-            お見合い
+            {tHome('title')}
           </Link>
           <div className="flex items-center gap-3">
             <LanguageSwitcher />

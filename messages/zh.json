@@ -21,7 +21,7 @@
     "mypage": "我的"
   },
   "home": {
-    "title": "お見合い",
+    "title": "相亲",
     "subtitle": "在日外国人交友平台",
     "description": "支持外国人之间及国际情侣的相遇",
     "startButton": "免费开始",
@@ -35,7 +35,7 @@
     "feature3Desc": "双方互相喜欢后即可开始聊天",
     "ctaTitle": "也许你的命中注定正在等你",
     "ctaDesc": "立即免费注册，开启新的相遇",
-    "copyright": "© 2025 お見合い. 保留所有权利。"
+    "copyright": "© 2025 相亲. 保留所有权利。"
   },
   "auth": {
     "email": "邮箱地址",

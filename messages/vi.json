@@ -21,7 +21,7 @@
     "mypage": "Trang cá nhân"
   },
   "home": {
-    "title": "お見合い",
+    "title": "Omiai",
     "subtitle": "Dịch vụ hẹn hò cho người nước ngoài tại Nhật",
     "description": "Hỗ trợ gặp gỡ giữa người nước ngoài và các cặp đôi quốc tế",
     "startButton": "Bắt đầu miễn phí",
@@ -35,7 +35,7 @@
     "feature3Desc": "Bắt đầu nhắn tin sau khi cả hai cùng thích nhau",
     "ctaTitle": "Có thể định mệnh của bạn đang chờ đợi",
     "ctaDesc": "Đăng ký miễn phí ngay để tìm kiếm cuộc gặp gỡ mới",
-    "copyright": "© 2025 お見合い. Đã đăng ký bản quyền."
+    "copyright": "© 2025 Omiai. Đã đăng ký bản quyền."
   },
   "auth": {
     "email": "Địa chỉ email",
