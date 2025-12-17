@@ -108,21 +108,26 @@ export default function MyPage() {
             </div>
           </div>
           <div className="px-6 pb-6">
-            <div className="flex items-end -mt-12 mb-4 relative z-20">
-              <div className="w-24 h-24 rounded-full border-4 border-white bg-gray-200 shadow-lg overflow-hidden">
-                {mainPhoto ? (
-                  <img
-                    src={mainPhoto.url}
-                    alt={profile?.nickname}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gradient-to-br from-red-100 to-orange-100">
-                    <User className="w-12 h-12 text-red-300" />
-                  </div>
-                )}
+            {/* 写真とニックネーム */}
+            <div className="flex items-start gap-4 mb-4">
+              {/* 写真 - 上に突き出す */}
+              <div className="-mt-12 relative z-20 shrink-0">
+                <div className="w-24 h-24 rounded-full border-4 border-white bg-gray-200 shadow-lg overflow-hidden">
+                  {mainPhoto ? (
+                    <img
+                      src={mainPhoto.url}
+                      alt={profile?.nickname}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-gray-400 bg-gradient-to-br from-red-100 to-orange-100">
+                      <User className="w-12 h-12 text-red-300" />
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="ml-4 mb-2">
+              {/* ニックネーム - 通常位置 */}
+              <div className="pt-2">
                 <h1 className="text-xl font-bold text-red-700 flex items-center gap-2">
                   {profile?.nickname || tMessages('user')}
                   <span className="text-yellow-500 text-sm">✿</span>
