@@ -160,7 +160,7 @@ export default function ChatPage() {
   const mainPhoto = otherUser?.photos.find(p => p.isMain) || otherUser?.photos[0]
 
   return (
-    <div className="md:ml-64 h-[100dvh] flex flex-col bg-gray-50 overflow-hidden">
+    <div className="fixed inset-0 top-[57px] bottom-[72px] md:left-64 md:bottom-0 flex flex-col bg-gray-50 overflow-hidden z-40">
       {/* Header - 固定 */}
       <div className="flex-shrink-0 bg-white border-b px-4 py-3 flex items-center gap-3 shadow-sm z-10">
         <Link href="/messages" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
