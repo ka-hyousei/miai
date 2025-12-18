@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,6 +19,14 @@ import {
   CONTACT_VISIBILITY_OPTIONS,
 } from '@/lib/constants'
 
+type DialogType = 'success' | 'error' | null
+
+interface DialogState {
+  type: DialogType
+  title: string
+  message: string
+}
+
 export default function ProfileEditPage() {
   const router = useRouter()
   const { data: session, status } = useSession()
@@ -29,6 +37,27 @@ export default function ProfileEditPage() {
   const [isFetching, setIsFetching] = useState(true)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const [dialog, setDialog] = useState<DialogState>({ type: null, title: '', message: '' })
+
+  const closeDialog = () => {
+    setDialog({ type: null, title: '', message: '' })
+  }
+
+  const showSuccessDialog = (message: string) => {
+    setDialog({
+      type: 'success',
+      title: t('profileSaved'),
+      message,
+    })
+  }
+
+  const showErrorDialog = (message: string) => {
+    setDialog({
+      type: 'error',
+      title: tCommon('error'),
+      message,
+    })
+  }
 
   const [formData, setFormData] = useState({
     nickname: '',
@@ -150,12 +179,12 @@ export default function ProfileEditPage() {
       }
 
       setSuccess(t('profileSaved'))
-      alert(t('profileSaved'))
+      showSuccessDialog(t('profileSaved'))
       setTimeout(() => setSuccess(''), 3000)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : t('updateFailed')
       setError(errorMessage)
-      alert(errorMessage)
+      showErrorDialog(errorMessage)
     } finally {
       setIsLoading(false)
     }
@@ -481,6 +510,49 @@ export default function ProfileEditPage() {
           </Button>
         </form>
       </div>
+
+      {/* Dialog Modal */}
+      {dialog.type && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl animate-in fade-in zoom-in duration-200">
+            {/* Icon */}
+            <div className="flex justify-center mb-4">
+              {dialog.type === 'success' && (
+                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                  <CheckCircle className="w-8 h-8 text-green-500" />
+                </div>
+              )}
+              {dialog.type === 'error' && (
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                  <AlertCircle className="w-8 h-8 text-red-500" />
+                </div>
+              )}
+            </div>
+
+            {/* Title */}
+            <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
+              {dialog.title}
+            </h3>
+
+            {/* Message */}
+            <p className="text-gray-600 text-center whitespace-pre-line mb-6">
+              {dialog.message}
+            </p>
+
+            {/* Button */}
+            <Button
+              className={`w-full ${
+                dialog.type === 'success'
+                  ? 'bg-green-500 hover:bg-green-600'
+                  : 'bg-gray-500 hover:bg-gray-600'
+              }`}
+              onClick={closeDialog}
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
