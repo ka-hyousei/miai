@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
+import { sendNewUserNotificationEmail } from '@/lib/mail'
 
 const registerSchema = z.object({
   email: z.string().email('有効なメールアドレスを入力してください'),
@@ -65,6 +66,11 @@ export async function POST(request: NextRequest) {
       })
 
       return newUser
+    })
+
+    // 管理者に新規ユーザー登録通知メールを送信（失敗しても登録は成功とする）
+    sendNewUserNotificationEmail(validatedData.email).catch((err) => {
+      console.error('管理者通知メール送信エラー:', err)
     })
 
     return NextResponse.json(

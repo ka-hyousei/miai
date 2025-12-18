@@ -125,6 +125,77 @@ export async function sendVerificationCodeEmail(email: string, code: string) {
   })
 }
 
+// 管理者への新規ユーザー登録通知
+export async function sendNewUserNotificationEmail(userEmail: string) {
+  const adminEmail = 'kahyousei@gmail.com'
+  const registrationTime = new Date().toLocaleString('ja-JP', {
+    timeZone: 'Asia/Tokyo',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #ec4899; margin: 0; }
+        .content { background: #f9fafb; padding: 30px; border-radius: 10px; }
+        .info-box {
+          background: #fff;
+          border: 2px solid #ec4899;
+          border-radius: 10px;
+          padding: 20px;
+          margin: 20px 0;
+        }
+        .info-item { margin: 10px 0; }
+        .label { font-weight: bold; color: #666; }
+        .value { color: #333; }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>お見合い - 管理者通知</h1>
+        </div>
+        <div class="content">
+          <h2>🎉 新規ユーザー登録</h2>
+          <p>新しいユーザーがお見合いに登録しました。</p>
+          <div class="info-box">
+            <div class="info-item">
+              <span class="label">メールアドレス：</span>
+              <span class="value">${userEmail}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">登録日時：</span>
+              <span class="value">${registrationTime}</span>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <p>© お見合い - 管理者通知システム</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `
+
+  return sendEmail({
+    to: adminEmail,
+    subject: '【お見合い】新規ユーザー登録通知',
+    html,
+  })
+}
+
 export async function sendPasswordResetEmail(email: string, token: string) {
   const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
   const resetUrl = `${baseUrl}/reset-password?token=${token}`
