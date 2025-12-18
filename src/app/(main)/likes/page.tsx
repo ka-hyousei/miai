@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { Heart, MapPin } from 'lucide-react'
+import { Heart, MapPin, CheckCircle, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface LikeUser {
@@ -27,15 +27,45 @@ interface Like {
   isMatch?: boolean
 }
 
+type DialogType = 'success' | 'error' | null
+
+interface DialogState {
+  type: DialogType
+  title: string
+  message: string
+}
+
 export default function LikesPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const t = useTranslations('likes')
+  const tCommon = useTranslations('common')
 
   const [activeTab, setActiveTab] = useState<'received' | 'sent'>('received')
   const [receivedLikes, setReceivedLikes] = useState<Like[]>([])
   const [sentLikes, setSentLikes] = useState<Like[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [dialog, setDialog] = useState<DialogState>({ type: null, title: '', message: '' })
+
+  const closeDialog = () => {
+    setDialog({ type: null, title: '', message: '' })
+  }
+
+  const showSuccessDialog = (title: string, message: string) => {
+    setDialog({
+      type: 'success',
+      title,
+      message,
+    })
+  }
+
+  const showErrorDialog = (message: string) => {
+    setDialog({
+      type: 'error',
+      title: tCommon('error'),
+      message,
+    })
+  }
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -100,15 +130,15 @@ export default function LikesPage() {
           like.id === likeId ? { ...like, isMatch: true } : like
         ))
         if (data.isMatch) {
-          alert(t('matchSuccess'))
+          showSuccessDialog(t('newMatch'), t('matchSuccess'))
         }
       } else {
         const data = await response.json()
-        alert(data.error || t('likeFailed'))
+        showErrorDialog(data.error || t('likeFailed'))
       }
     } catch (error) {
       console.error('Failed to like back:', error)
-      alert(t('likeFailed'))
+      showErrorDialog(t('likeFailed'))
     }
   }
 
@@ -242,6 +272,55 @@ export default function LikesPage() {
           </div>
         )}
       </div>
+
+      {/* Dialog Modal - 中国风 */}
+      {dialog.type && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-b from-white to-red-50/50 rounded-2xl max-w-sm w-full p-6 shadow-xl animate-in fade-in zoom-in duration-200 border-2 border-red-200 relative">
+            {/* 装饰性角落 */}
+            <div className="absolute top-0 left-0 w-6 h-6 border-t-2 border-l-2 border-red-400 rounded-tl-xl" />
+            <div className="absolute top-0 right-0 w-6 h-6 border-t-2 border-r-2 border-red-400 rounded-tr-xl" />
+            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-2 border-l-2 border-red-400 rounded-bl-xl" />
+            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-2 border-r-2 border-red-400 rounded-br-xl" />
+
+            {/* Icon */}
+            <div className="flex justify-center mb-4">
+              {dialog.type === 'success' && (
+                <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-emerald-100 rounded-full flex items-center justify-center border-2 border-green-200">
+                  <CheckCircle className="w-8 h-8 text-green-500" />
+                </div>
+              )}
+              {dialog.type === 'error' && (
+                <div className="w-16 h-16 bg-gradient-to-br from-red-100 to-rose-100 rounded-full flex items-center justify-center border-2 border-red-200">
+                  <AlertCircle className="w-8 h-8 text-red-500" />
+                </div>
+              )}
+            </div>
+
+            {/* Title */}
+            <h3 className="text-xl font-bold text-gray-900 text-center mb-2">
+              {dialog.title}
+            </h3>
+
+            {/* Message */}
+            <p className="text-gray-600 text-center whitespace-pre-line mb-6">
+              {dialog.message}
+            </p>
+
+            {/* Button */}
+            <Button
+              className={`w-full ${
+                dialog.type === 'success'
+                  ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600'
+                  : 'bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700'
+              }`}
+              onClick={closeDialog}
+            >
+              OK
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
