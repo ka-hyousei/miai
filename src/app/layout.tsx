@@ -14,6 +14,9 @@ const notoSansJP = Noto_Sans_JP({
 export const metadata: Metadata = {
   title: "出会い - Love in Japan",
   description: "日本の出会い・マッチングサービス。外国人も日本人も歓迎。日本寻找真爱，面向所有在日单身人士的交友平台。",
+  icons: {
+    icon: "/favicon.ico?v=2",
+  },
   keywords: ["マッチングアプリ", "出会い", "国際結婚", "相亲", "交友", "dating", "Love in Japan", "international couples"],
   authors: [{ name: "出会い" }],
   openGraph: {
