@@ -66,6 +66,11 @@ export default function DiscoverPage() {
       const data = await response.json()
       setProfiles(data.profiles || [])
 
+      // 已点赞的用户ID列表
+      if (data.likedUserIds) {
+        setLikedUserIds(new Set(data.likedUserIds))
+      }
+
       if (isInitial && data.defaultGender) {
         setDefaultGender(data.defaultGender)
         setFilters(prev => ({ ...prev, gender: data.defaultGender }))

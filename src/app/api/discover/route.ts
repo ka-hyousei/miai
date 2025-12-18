@@ -103,10 +103,21 @@ export async function GET(request: NextRequest) {
       take: 50,
     })
 
+    // 自分がいいねしたユーザーIDを取得
+    const likedUsers = await prisma.like.findMany({
+      where: {
+        fromUserId: session.user.id,
+      },
+      select: {
+        toUserId: true,
+      },
+    })
+    const likedUserIds = likedUsers.map(like => like.toUserId)
+
     // デフォルトの性別フィルタ（異性）を返す
     const defaultGender = currentUserProfile?.gender === 'MALE' ? 'FEMALE' : 'MALE'
 
-    return NextResponse.json({ profiles, defaultGender })
+    return NextResponse.json({ profiles, defaultGender, likedUserIds })
   } catch (error) {
     console.error('Discover error:', error)
     return NextResponse.json(
