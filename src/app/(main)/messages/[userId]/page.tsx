@@ -160,9 +160,9 @@ export default function ChatPage() {
   const mainPhoto = otherUser?.photos.find(p => p.isMain) || otherUser?.photos[0]
 
   return (
-    <div className="md:ml-64 h-[100dvh] flex flex-col bg-gray-50">
+    <div className="md:ml-64 h-[100dvh] flex flex-col bg-gray-50 overflow-hidden">
       {/* Header - 固定 */}
-      <div className="sticky top-0 z-10 bg-white border-b px-4 py-3 flex items-center gap-3 shadow-sm">
+      <div className="flex-shrink-0 bg-white border-b px-4 py-3 flex items-center gap-3 shadow-sm z-10">
         <Link href="/messages" className="p-2 hover:bg-gray-100 rounded-full transition-colors">
           <ArrowLeft className="w-5 h-5 text-gray-600" />
         </Link>
@@ -189,8 +189,8 @@ export default function ChatPage() {
         </Link>
       </div>
 
-      {/* Messages - スクロール可能 */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
+      {/* Messages - スクロール可能（このエリア内でのみスクロール） */}
+      <div className="flex-1 overflow-y-auto px-4 py-4 min-h-0">
         {messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-gray-500">
             <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mb-4">
@@ -245,14 +245,14 @@ export default function ChatPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="bg-red-50 border-t border-red-200 px-4 py-2 text-center text-sm text-red-600">
+        <div className="flex-shrink-0 bg-red-50 border-t border-red-200 px-4 py-2 text-center text-sm text-red-600">
           {error}
         </div>
       )}
 
       {/* Not Matched Warning */}
       {!isMatched && hasSentFirstMessage && (
-        <div className="bg-yellow-50 border-t border-yellow-200 px-4 py-3 text-center">
+        <div className="flex-shrink-0 bg-yellow-50 border-t border-yellow-200 px-4 py-3 text-center">
           <p className="text-sm text-yellow-800">
             {t('waitingForMatch')}
           </p>
@@ -264,7 +264,7 @@ export default function ChatPage() {
 
       {/* First Message Hint */}
       {!isMatched && !hasSentFirstMessage && (
-        <div className="bg-blue-50 border-t border-blue-200 px-4 py-3 text-center">
+        <div className="flex-shrink-0 bg-blue-50 border-t border-blue-200 px-4 py-3 text-center">
           <p className="text-sm text-blue-800">
             {t('canSendFirstMessage')}
           </p>
@@ -275,7 +275,7 @@ export default function ChatPage() {
       )}
 
       {/* Message Input - 固定フッター */}
-      <div className="sticky bottom-0 bg-white border-t safe-area-bottom">
+      <div className="flex-shrink-0 bg-white border-t safe-area-bottom">
         <form onSubmit={handleSend} className="p-3">
           <div className="flex items-end gap-2 max-w-3xl mx-auto">
             <div className="flex-1 relative">
