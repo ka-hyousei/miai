@@ -233,24 +233,30 @@ export default function PrivacyPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12 relative z-10">
+      {/* Footer - 中国风 */}
+      <footer className="relative z-10 bg-gradient-to-r from-red-50 to-orange-50 border-t-2 border-red-100 py-8">
+        {/* 装飾性边框 */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-red-400 to-transparent opacity-30" />
+
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center gap-2 mb-4 md:mb-0">
-              <Heart className="w-7 h-7 text-red-400 fill-red-400" />
-              <span className="text-2xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+            <div className="flex items-center gap-3 mb-4 md:mb-0">
+              <div className="relative">
+                <Heart className="w-7 h-7 text-red-500 fill-red-500" />
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full opacity-80" />
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-red-600 via-red-500 to-orange-500 bg-clip-text text-transparent">
                 {tHome('title')}
               </span>
-              <span className="text-yellow-500">囍</span>
+              <span className="text-yellow-600 text-lg">囍</span>
             </div>
-            <div className="flex gap-6">
-              <Link href="/terms" className="hover:text-white">{tFooter('terms')}</Link>
-              <Link href="/privacy" className="hover:text-white text-white">{tFooter('privacy')}</Link>
-              <Link href="/contact" className="hover:text-white">{tFooter('contact')}</Link>
+            <div className="flex gap-6 text-gray-600">
+              <Link href="/terms" className="hover:text-red-500 transition-colors">{tFooter('terms')}</Link>
+              <Link href="/privacy" className="hover:text-red-500 transition-colors">{tFooter('privacy')}</Link>
+              <Link href="/contact" className="hover:text-red-500 transition-colors">{tFooter('contact')}</Link>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center">
+          <div className="mt-6 pt-6 border-t border-red-100 text-center text-gray-500 text-sm">
             <p>{tHome('copyright')}</p>
           </div>
         </div>
