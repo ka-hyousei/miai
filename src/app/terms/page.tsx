@@ -2,14 +2,16 @@
 
 import { useState } from 'react'
 import { useSession, signOut } from 'next-auth/react'
-import Link from "next/link";
+import Link from "next/link"
+import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { Heart, Sparkles, Trash2 } from "lucide-react";
+import { Heart, Sparkles, Trash2, ArrowLeft } from "lucide-react";
 import { Button } from '@/components/ui/button'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
 
 export default function TermsPage() {
   const { data: session } = useSession()
+  const router = useRouter()
   const t = useTranslations('terms')
   const tHome = useTranslations('home')
   const tCommon = useTranslations('common')
@@ -51,7 +53,14 @@ export default function TermsPage() {
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-sm shadow-sm border-b-2 border-red-100 sticky top-0 z-20">
         <nav className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
-          <Link href="/" className="flex items-center gap-2 group">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => router.back()}
+              className="p-2 hover:bg-red-50 rounded-full border border-red-200 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5 text-red-600" />
+            </button>
+            <Link href="/" className="flex items-center gap-2 group">
             <div className="relative">
               <Heart className="w-8 h-8 text-red-500 fill-red-500 group-hover:scale-110 transition-transform" />
               <Sparkles className="w-4 h-4 text-yellow-400 absolute -top-1 -right-1" />
@@ -61,6 +70,7 @@ export default function TermsPage() {
             </span>
             <span className="text-xl text-yellow-500 font-bold">囍</span>
           </Link>
+          </div>
           <div className="flex gap-3 items-center">
             <LanguageSwitcher />
             <Link
