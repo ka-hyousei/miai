@@ -324,7 +324,13 @@
     "sendFailed": "Failed to send message",
     "notMatched": "Cannot send messages without matching.",
     "notMatchedDesc": "You can send messages after both of you like each other.",
-    "sendWithShortcut": "Ctrl + Enter to send"
+    "sendWithShortcut": "Ctrl + Enter to send",
+    "waitingForMatch": "Message sent - Waiting for response",
+    "waitingForMatchDesc": "You can continue chatting once they like you back or reply.",
+    "waitingForMatchPlaceholder": "Waiting for their like...",
+    "canSendFirstMessage": "You can send the first message",
+    "canSendFirstMessageDesc": "Say hello first. You can continue chatting once they like you back or reply.",
+    "sendFirstMessagePlaceholder": "Send a greeting..."
   },
   "profileDetail": {
     "profileNotFound": "Profile not found",
@@ -359,7 +365,10 @@
     "visaSpouse": "Spouse Visa",
     "visaPermanent": "Permanent Resident",
     "visaWorkingHoliday": "Working Holiday",
-    "visaOther": "Other"
+    "visaOther": "Other",
+    "visaDependent": "Dependent Visa",
+    "visaDesignated": "Designated Activities",
+    "private": "Private"
   },
   "footer": {
     "terms": "Terms of Service",

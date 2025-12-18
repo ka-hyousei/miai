@@ -344,7 +344,13 @@
     "sendFailed": "消息发送失败",
     "notMatched": "未匹配，无法发送消息。",
     "notMatchedDesc": "双方互相喜欢后才能发送消息。",
-    "sendWithShortcut": "Ctrl + Enter 发送"
+    "sendWithShortcut": "Ctrl + Enter 发送",
+    "waitingForMatch": "消息已发送 - 等待回应",
+    "waitingForMatchDesc": "对方点赞或回复消息后可以继续聊天。",
+    "waitingForMatchPlaceholder": "等待对方回应...",
+    "canSendFirstMessage": "可以发送第一条消息",
+    "canSendFirstMessageDesc": "先打个招呼吧。对方点赞或回复消息后可以继续聊天。",
+    "sendFirstMessagePlaceholder": "发送第一条消息..."
   },
   "profileDetail": {
     "profileNotFound": "未找到个人资料",
@@ -380,6 +386,9 @@
     "visaPermanent": "永住权",
     "visaWorkingHoliday": "打工度假",
     "visaOther": "其他",
+    "visaDependent": "家属签证",
+    "visaDesignated": "特定活动",
+    "private": "不公开",
     "useCardToView": "使用卡片查看",
     "remainingCards": "剩余 {count} 张",
     "upgradeToPremium": "升级为高级会员"

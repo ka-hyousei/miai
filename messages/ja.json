@@ -344,7 +344,13 @@
     "sendFailed": "メッセージの送信に失敗しました",
     "notMatched": "マッチングしていないためメッセージを送れません。",
     "notMatchedDesc": "お互いにいいねをするとメッセージを送れるようになります。",
-    "sendWithShortcut": "Ctrl + Enter で送信"
+    "sendWithShortcut": "Ctrl + Enter で送信",
+    "waitingForMatch": "メッセージ送信済み - 返信待ち",
+    "waitingForMatchDesc": "相手があなたにいいね、または返信するとチャットを続けられます。",
+    "waitingForMatchPlaceholder": "相手のいいねを待っています...",
+    "canSendFirstMessage": "最初の1通を送れます",
+    "canSendFirstMessageDesc": "まずは挨拶を送ってみましょう。相手があなたにいいね、または返信するとチャットを続けられます。",
+    "sendFirstMessagePlaceholder": "挨拶を送ってみましょう..."
   },
   "profileDetail": {
     "profileNotFound": "プロフィールが見つかりませんでした",
@@ -380,6 +386,9 @@
     "visaPermanent": "永住権",
     "visaWorkingHoliday": "ワーキングホリデー",
     "visaOther": "その他",
+    "visaDependent": "家族滞在",
+    "visaDesignated": "特定活動",
+    "private": "非公開",
     "useCardToView": "カードを使って閲覧",
     "remainingCards": "残り {count} 枚",
     "upgradeToPremium": "プレミアム会員になる"

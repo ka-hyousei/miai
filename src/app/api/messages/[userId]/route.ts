@@ -59,6 +59,45 @@ export async function GET(
       orderBy: { createdAt: 'asc' },
     })
 
+    // マッチング状態を確認
+    // マッチング条件：
+    // 1. 双方がいいねしている（従来のマッチング）
+    // 2. 相手がいいねしている（相手が友達申請を承認）
+    // 3. 双方がメッセージを送っている（相手が返信で友達申請を承認）
+    const [likeFromMe, likeFromThem] = await Promise.all([
+      prisma.like.findUnique({
+        where: {
+          fromUserId_toUserId: {
+            fromUserId: session.user.id,
+            toUserId: otherUserId,
+          },
+        },
+      }),
+      prisma.like.findUnique({
+        where: {
+          fromUserId_toUserId: {
+            fromUserId: otherUserId,
+            toUserId: session.user.id,
+          },
+        },
+      }),
+    ])
+
+    const hasMessageFromMe = messages.some(m => m.fromUserId === session.user.id)
+    const hasMessageFromThem = messages.some(m => m.fromUserId === otherUserId)
+
+    // マッチング判定：
+    // - 双方がいいね済み
+    // - 相手がいいね済み（自分がメッセージを送っていた場合、相手のいいね=承認）
+    // - 双方がメッセージを送信済み（相手の返信=承認）
+    const isMatched =
+      (!!likeFromMe && !!likeFromThem) ||  // 双方いいね
+      (hasMessageFromMe && !!likeFromThem) ||  // 自分がメッセージ送信 + 相手がいいね
+      (hasMessageFromMe && hasMessageFromThem)  // 双方メッセージ送信
+
+    // 未マッチの場合、自分が既に初回メッセージを送ったかチェック
+    const hasSentFirstMessage = !isMatched && hasMessageFromMe
+
     // 未読メッセージを既読にする
     await prisma.message.updateMany({
       where: {
@@ -69,7 +108,7 @@ export async function GET(
       data: { isRead: true },
     })
 
-    return NextResponse.json({ messages, otherUser })
+    return NextResponse.json({ messages, otherUser, isMatched, hasSentFirstMessage })
   } catch (error) {
     console.error('Get messages error:', error)
     return NextResponse.json(
@@ -111,7 +150,25 @@ export async function POST(
       return NextResponse.json({ error: 'このユーザーにメッセージを送れません' }, { status: 403 })
     }
 
-    // マッチングしているかチェック（両方がいいねしている）
+    // 既存メッセージを取得
+    const existingMessages = await prisma.message.findMany({
+      where: {
+        OR: [
+          { fromUserId: session.user.id, toUserId: otherUserId },
+          { fromUserId: otherUserId, toUserId: session.user.id },
+        ],
+      },
+      select: { fromUserId: true },
+    })
+
+    const hasMessageFromMe = existingMessages.some(m => m.fromUserId === session.user.id)
+    const hasMessageFromThem = existingMessages.some(m => m.fromUserId === otherUserId)
+
+    // マッチングしているかチェック
+    // マッチング条件：
+    // 1. 双方がいいねしている（従来のマッチング）
+    // 2. 相手がいいねしている（相手が友達申請を承認）
+    // 3. 双方がメッセージを送っている（相手が返信で友達申請を承認）
     const [likeFromMe, likeFromThem] = await Promise.all([
       prisma.like.findUnique({
         where: {
@@ -131,11 +188,15 @@ export async function POST(
       }),
     ])
 
-    const isMatched = !!likeFromMe && !!likeFromThem
+    const isMatched =
+      (!!likeFromMe && !!likeFromThem) ||  // 双方いいね
+      (hasMessageFromMe && !!likeFromThem) ||  // 自分がメッセージ送信 + 相手がいいね
+      (hasMessageFromMe && hasMessageFromThem)  // 双方メッセージ送信
 
-    if (!isMatched) {
+    // 未マッチの場合、最初の1通のみ送信可能
+    if (!isMatched && hasMessageFromMe) {
       return NextResponse.json(
-        { error: 'マッチングしていないユーザーにはメッセージを送れません' },
+        { error: 'マッチングするまで追加のメッセージは送れません。相手があなたにいいね、または返信するとチャットできます。' },
         { status: 403 }
       )
     }

@@ -324,7 +324,13 @@
     "sendFailed": "Gửi tin nhắn thất bại",
     "notMatched": "Không thể gửi tin nhắn khi chưa ghép đôi.",
     "notMatchedDesc": "Bạn có thể gửi tin nhắn sau khi cả hai cùng thích nhau.",
-    "sendWithShortcut": "Ctrl + Enter để gửi"
+    "sendWithShortcut": "Ctrl + Enter để gửi",
+    "waitingForMatch": "Đã gửi tin nhắn - Đang chờ phản hồi",
+    "waitingForMatchDesc": "Bạn có thể tiếp tục trò chuyện khi họ thích bạn hoặc trả lời.",
+    "waitingForMatchPlaceholder": "Đang chờ lượt thích của họ...",
+    "canSendFirstMessage": "Bạn có thể gửi tin nhắn đầu tiên",
+    "canSendFirstMessageDesc": "Hãy gửi lời chào trước. Bạn có thể tiếp tục trò chuyện khi họ thích bạn hoặc trả lời.",
+    "sendFirstMessagePlaceholder": "Gửi lời chào..."
   },
   "profileDetail": {
     "profileNotFound": "Không tìm thấy hồ sơ",
@@ -359,7 +365,10 @@
     "visaSpouse": "Visa vợ/chồng",
     "visaPermanent": "Thường trú",
     "visaWorkingHoliday": "Working Holiday",
-    "visaOther": "Khác"
+    "visaOther": "Khác",
+    "visaDependent": "Visa người phụ thuộc",
+    "visaDesignated": "Hoạt động đặc định",
+    "private": "Riêng tư"
   },
   "footer": {
     "terms": "Điều khoản sử dụng",

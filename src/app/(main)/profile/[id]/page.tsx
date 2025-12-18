@@ -69,27 +69,31 @@ export default function ProfileDetailPage() {
   }
 
   const JAPANESE_LEVEL_LABELS: Record<string, string> = {
-    NONE: t('japaneseNone'),
-    BEGINNER: t('japaneseBeginner'),
-    INTERMEDIATE: t('japaneseIntermediate'),
-    ADVANCED: t('japaneseAdvanced'),
     NATIVE: t('japaneseNative'),
+    N1: 'JLPT N1',
+    N2: 'JLPT N2',
+    N3: 'JLPT N3',
+    N4: 'JLPT N4',
+    N5: 'JLPT N5',
+    BEGINNER: t('japaneseBeginner'),
   }
 
   const FUTURE_PLAN_LABELS: Record<string, string> = {
-    STAY_LONG: t('stayLong'),
-    STAY_SHORT: t('stayShort'),
-    UNDECIDED: t('undecided'),
+    STAY_LONG_TERM: t('stayLong'),
     RETURN_HOME: t('returnHome'),
+    UNDECIDED: t('undecided'),
+    PRIVATE: t('private'),
   }
 
   const VISA_TYPE_LABELS: Record<string, string> = {
-    WORK: t('visaWork'),
-    STUDENT: t('visaStudent'),
-    SPOUSE: t('visaSpouse'),
-    PERMANENT: t('visaPermanent'),
-    WORKING_HOLIDAY: t('visaWorkingHoliday'),
+    PERMANENT_RESIDENT: t('visaPermanent'),
+    WORK_VISA: t('visaWork'),
+    SPOUSE_VISA: t('visaSpouse'),
+    STUDENT_VISA: t('visaStudent'),
+    DEPENDENT_VISA: t('visaDependent'),
+    DESIGNATED_ACTIVITIES: t('visaDesignated'),
     OTHER: t('visaOther'),
+    PRIVATE: t('private'),
   }
   const { data: session, status } = useSession()
   const router = useRouter()

@@ -38,6 +38,7 @@ export default function ChatPage() {
   const [isSending, setIsSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isMatched, setIsMatched] = useState(true)
+  const [hasSentFirstMessage, setHasSentFirstMessage] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -62,6 +63,8 @@ export default function ChatPage() {
           const data = await response.json()
           setMessages(data.messages || [])
           setOtherUser(data.otherUser || null)
+          setIsMatched(data.isMatched ?? true)
+          setHasSentFirstMessage(data.hasSentFirstMessage ?? false)
         } else if (response.status === 403) {
           router.push('/messages')
         }
@@ -98,9 +101,13 @@ export default function ChatPage() {
       if (response.ok) {
         setMessages([...messages, data.message])
         setNewMessage('')
+        // 未マッチの場合、初回メッセージ送信後は送信済みに更新
+        if (!isMatched) {
+          setHasSentFirstMessage(true)
+        }
       } else {
         if (response.status === 403 && data.error?.includes('マッチング')) {
-          setIsMatched(false)
+          setHasSentFirstMessage(true)
         }
         setError(data.error || t('sendFailed'))
       }
@@ -244,13 +251,25 @@ export default function ChatPage() {
       )}
 
       {/* Not Matched Warning */}
-      {!isMatched && (
+      {!isMatched && hasSentFirstMessage && (
         <div className="bg-yellow-50 border-t border-yellow-200 px-4 py-3 text-center">
           <p className="text-sm text-yellow-800">
-            {t('notMatched')}
+            {t('waitingForMatch')}
           </p>
           <p className="text-xs text-yellow-600 mt-1">
-            {t('notMatchedDesc')}
+            {t('waitingForMatchDesc')}
+          </p>
+        </div>
+      )}
+
+      {/* First Message Hint */}
+      {!isMatched && !hasSentFirstMessage && (
+        <div className="bg-blue-50 border-t border-blue-200 px-4 py-3 text-center">
+          <p className="text-sm text-blue-800">
+            {t('canSendFirstMessage')}
+          </p>
+          <p className="text-xs text-blue-600 mt-1">
+            {t('canSendFirstMessageDesc')}
           </p>
         </div>
       )}
@@ -275,8 +294,14 @@ export default function ChatPage() {
                     handleSend(e)
                   }
                 }}
-                placeholder={isMatched ? t('placeholder') : t('matchRequired')}
-                disabled={!isMatched}
+                placeholder={
+                  isMatched
+                    ? t('placeholder')
+                    : hasSentFirstMessage
+                      ? t('waitingForMatchPlaceholder')
+                      : t('sendFirstMessagePlaceholder')
+                }
+                disabled={!isMatched && hasSentFirstMessage}
                 rows={1}
                 className="w-full px-4 py-3 bg-gray-100 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-pink-500 focus:bg-white transition-all disabled:bg-gray-200 disabled:text-gray-400 text-[15px] leading-relaxed"
                 style={{ minHeight: '48px', maxHeight: '120px' }}
@@ -284,7 +309,7 @@ export default function ChatPage() {
             </div>
             <button
               type="submit"
-              disabled={!newMessage.trim() || isSending || !isMatched}
+              disabled={!newMessage.trim() || isSending || (!isMatched && hasSentFirstMessage)}
               className="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-full flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg transition-all active:scale-95"
             >
               {isSending ? (

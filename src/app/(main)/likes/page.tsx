@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 interface LikeUser {
   id: string
   profile: {
+    id: string
     nickname: string
     birthDate: string
     prefecture: string
@@ -185,7 +186,7 @@ export default function LikesPage() {
                   key={like.id}
                   className="bg-gradient-to-b from-white to-red-50/30 rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all border border-red-100 hover:border-red-300 group"
                 >
-                  <Link href={`/profile/${user.id}`}>
+                  <Link href={`/profile/${user.profile.id}`}>
                     <div className="aspect-[3/4] bg-gray-200 relative">
                       {mainPhoto ? (
                         <img
