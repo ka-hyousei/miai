@@ -12,22 +12,22 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "ミアイ - 在日外国人のマッチングサービス | 相亲平台",
-  description: "在日外国人向けマッチングアプリ。外国人同士・国際カップルの出会いをサポート。在日外国人交友平台，支持外国人之间及国际情侣的相遇。",
-  keywords: ["マッチングアプリ", "在日外国人", "国際結婚", "相亲", "交友", "dating", "foreigners in Japan", "international couples"],
-  authors: [{ name: "ミアイ" }],
+  title: "出会い - Love in Japan",
+  description: "日本の出会い・マッチングサービス。外国人も日本人も歓迎。日本寻找真爱，面向所有在日单身人士的交友平台。",
+  keywords: ["マッチングアプリ", "出会い", "国際結婚", "相亲", "交友", "dating", "Love in Japan", "international couples"],
+  authors: [{ name: "出会い" }],
   openGraph: {
-    title: "ミアイ - 在日外国人のマッチングサービス",
-    description: "在日外国人向けマッチングアプリ。外国人同士・国際カップルの出会いをサポート。",
+    title: "出会い - Love in Japan",
+    description: "日本の出会い・マッチングサービス。外国人も日本人も歓迎。",
     url: "https://miai-olive.vercel.app",
-    siteName: "ミアイ",
+    siteName: "出会い",
     locale: "ja_JP",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ミアイ - 在日外国人のマッチングサービス",
-    description: "在日外国人向けマッチングアプリ。外国人同士・国際カップルの出会いをサポート。",
+    title: "出会い - Love in Japan",
+    description: "日本の出会い・マッチングサービス。外国人も日本人も歓迎。",
   },
   robots: {
     index: true,
