@@ -28,11 +28,12 @@ interface UserProfile {
 }
 
 const DISTANCE_OPTIONS = [
+  { value: '0.1', label: '100m' },
+  { value: '1', label: '1km' },
   { value: '5', label: '5km' },
   { value: '10', label: '10km' },
   { value: '20', label: '20km' },
   { value: '50', label: '50km' },
-  { value: '100', label: '100km' },
 ]
 
 const NEARBY_GENDER_OPTIONS = [
@@ -58,7 +59,7 @@ export default function NearbyPage() {
   const [defaultGender, setDefaultGender] = useState<string>('')
   const [filters, setFilters] = useState({
     gender: '',
-    distance: '50',
+    distance: '5',
   })
 
   useEffect(() => {
