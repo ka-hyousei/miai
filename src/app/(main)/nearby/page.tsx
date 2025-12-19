@@ -8,7 +8,6 @@ import { useTranslations } from 'next-intl'
 import { Heart, MapPin, Briefcase, Globe, Navigation, RefreshCw, Settings, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
-import { GENDER_OPTIONS } from '@/lib/constants'
 
 interface UserProfile {
   id: string
@@ -33,6 +32,12 @@ const DISTANCE_OPTIONS = [
   { value: '20', label: '20km' },
   { value: '50', label: '50km' },
   { value: '100', label: '100km' },
+]
+
+const NEARBY_GENDER_OPTIONS = [
+  { value: '', label: '全員' },
+  { value: 'MALE', label: '男性' },
+  { value: 'FEMALE', label: '女性' },
 ]
 
 export default function NearbyPage() {
@@ -333,7 +338,7 @@ export default function NearbyPage() {
           <div className="grid grid-cols-2 gap-4">
             <Select
               id="gender"
-              options={GENDER_OPTIONS}
+              options={NEARBY_GENDER_OPTIONS}
               value={filters.gender}
               onChange={(e) => setFilters({ ...filters, gender: e.target.value })}
               placeholder={tProfile('gender')}

@@ -75,11 +75,8 @@ export async function GET(request: NextRequest) {
     const genderParam = searchParams.get('gender') as Gender | null
     const maxDistance = parseInt(searchParams.get('distance') || '50') // 默认50公里范围
 
-    // 性别过滤：默认显示异性
-    let gender: Gender | null = genderParam
-    if (!gender && currentUserProfile?.gender) {
-      gender = currentUserProfile.gender === 'MALE' ? 'FEMALE' : 'MALE'
-    }
+    // 性别过滤：如果未指定则显示全部
+    const gender: Gender | null = genderParam
 
     // 获取屏蔽列表
     const blockedUserIds = await prisma.block.findMany({
@@ -159,8 +156,8 @@ export async function GET(request: NextRequest) {
     })
     const likedUserIds = likedUsers.map((like) => like.toUserId)
 
-    // 默认性别
-    const defaultGender = currentUserProfile?.gender === 'MALE' ? 'FEMALE' : 'MALE'
+    // 默认性别（空字符串表示全部）
+    const defaultGender = ''
 
     return NextResponse.json({
       profiles: profilesWithDistance,
