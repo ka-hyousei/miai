@@ -58,17 +58,17 @@ export async function GET(request: NextRequest) {
     // 检查用户是否开启了附近的人功能
     if (!currentUserProfile.showNearby) {
       return NextResponse.json({
-        error: '附近の人機能が有効になっていません',
+        profiles: [],
         needsEnable: true
-      }, { status: 400 })
+      })
     }
 
     // 检查用户是否有位置信息
     if (!currentUserProfile.latitude || !currentUserProfile.longitude) {
       return NextResponse.json({
-        error: '位置情報が設定されていません',
+        profiles: [],
         needsLocation: true
-      }, { status: 400 })
+      })
     }
 
     const searchParams = request.nextUrl.searchParams

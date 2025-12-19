@@ -76,13 +76,19 @@ export default function NearbyPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        if (data.needsEnable) {
-          setNeedsEnable(true)
-        } else if (data.needsLocation) {
-          setNeedsLocation(true)
-        } else {
-          setError(data.error)
-        }
+        setError(data.error || '附近の人の取得に失敗しました')
+        return
+      }
+
+      // 機能が有効になっていない場合
+      if (data.needsEnable) {
+        setNeedsEnable(true)
+        return
+      }
+
+      // 位置情報が設定されていない場合
+      if (data.needsLocation) {
+        setNeedsLocation(true)
         return
       }
 
@@ -309,7 +315,7 @@ export default function NearbyPage() {
                   <RefreshCw className="w-4 h-4" />
                 )}
               </Button>
-              <Link href="/mypage/settings">
+              <Link href="/settings">
                 <Button variant="outline" size="sm" className="border-red-300 text-red-600 hover:bg-red-50">
                   <Settings className="w-4 h-4" />
                 </Button>
