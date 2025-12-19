@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { Heart, Users, MessageCircle } from 'lucide-react'
+import { Heart, Users, MessageCircle, Navigation } from 'lucide-react'
 
 export function HomeFeatures() {
   const { data: session, status } = useSession()
@@ -34,7 +34,7 @@ export function HomeFeatures() {
             </h3>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center p-6 bg-gradient-to-b from-red-50/50 to-transparent rounded-2xl border border-red-100/50 hover:shadow-lg transition-shadow">
               <div className="w-16 h-16 bg-gradient-to-br from-red-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-red-200">
                 <Users className="w-8 h-8 text-red-500" />
@@ -68,6 +68,17 @@ export function HomeFeatures() {
                 {t('feature3Desc')}
               </p>
             </div>
+            <Link href="/nearby" className="text-center p-6 bg-gradient-to-b from-red-50/50 to-transparent rounded-2xl border border-red-100/50 hover:shadow-lg transition-shadow cursor-pointer">
+              <div className="w-16 h-16 bg-gradient-to-br from-red-100 to-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-red-200">
+                <Navigation className="w-8 h-8 text-red-500" />
+              </div>
+              <h4 className="text-lg font-semibold text-gray-900 mb-2">
+                {t('feature4Title')}
+              </h4>
+              <p className="text-gray-600">
+                {t('feature4Desc')}
+              </p>
+            </Link>
           </div>
         </div>
       </section>
