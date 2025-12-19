@@ -138,6 +138,12 @@ model Profile {
   contactVisibility ContactVisibility @default(EVERYONE)  // 連絡先の公開対象
   isVerified      Boolean  @default(false)
 
+  // 位置情報（附近の人機能用）
+  latitude        Float?   // 緯度
+  longitude       Float?   // 経度
+  showNearby      Boolean  @default(false)  // 附近の人機能を有効にするか
+  lastLocationUpdate DateTime?  // 位置情報の最終更新日時
+
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }

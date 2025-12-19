@@ -5,7 +5,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { ArrowLeft, Bell, Lock, Eye, Shield, Trash2, LogOut } from 'lucide-react'
+import { ArrowLeft, Bell, Lock, Eye, Shield, Trash2, LogOut, Navigation } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default function SettingsPage() {
@@ -20,8 +20,28 @@ export default function SettingsPage() {
     showOnlineStatus: true,
     isProfilePublic: true,
   })
+  const [showNearby, setShowNearby] = useState(false)
+  const [isUpdatingNearby, setIsUpdatingNearby] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+
+  // 获取附近的人设置
+  useEffect(() => {
+    const fetchNearbySettings = async () => {
+      try {
+        const response = await fetch('/api/location')
+        if (response.ok) {
+          const data = await response.json()
+          setShowNearby(data.showNearby || false)
+        }
+      } catch (error) {
+        console.error('Failed to fetch nearby settings:', error)
+      }
+    }
+    if (session) {
+      fetchNearbySettings()
+    }
+  }, [session])
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -34,6 +54,25 @@ export default function SettingsPage() {
       ...prev,
       [key]: !prev[key],
     }))
+  }
+
+  const handleToggleNearby = async () => {
+    setIsUpdatingNearby(true)
+    try {
+      const newValue = !showNearby
+      const response = await fetch('/api/location', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ showNearby: newValue }),
+      })
+      if (response.ok) {
+        setShowNearby(newValue)
+      }
+    } catch (error) {
+      console.error('Failed to update nearby settings:', error)
+    } finally {
+      setIsUpdatingNearby(false)
+    }
   }
 
   const handleSignOut = async () => {
@@ -170,6 +209,28 @@ export default function SettingsPage() {
                 <span
                   className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
                     settings.isProfilePublic ? 'left-7' : 'left-1'
+                  }`}
+                />
+              </button>
+            </div>
+            <div className="flex items-center justify-between p-4">
+              <div className="flex items-center gap-3">
+                <Navigation className="w-5 h-5 text-red-400" />
+                <div>
+                  <p className="font-medium text-gray-900">{t('showNearby')}</p>
+                  <p className="text-sm text-gray-500">{t('showNearbyDesc')}</p>
+                </div>
+              </div>
+              <button
+                onClick={handleToggleNearby}
+                disabled={isUpdatingNearby}
+                className={`relative w-12 h-6 rounded-full transition-colors ${
+                  showNearby ? 'bg-red-500' : 'bg-gray-300'
+                } ${isUpdatingNearby ? 'opacity-50 cursor-not-allowed' : ''}`}
+              >
+                <span
+                  className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
+                    showNearby ? 'left-7' : 'left-1'
                   }`}
                 />
               </button>

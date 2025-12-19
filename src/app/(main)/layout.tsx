@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
-import { Search, Heart, MessageCircle, User, LogOut, Home, Sparkles } from 'lucide-react'
+import { Search, Heart, MessageCircle, User, LogOut, Home, Sparkles, Navigation } from 'lucide-react'
 import { LanguageSwitcher } from '@/components/ui/language-switcher'
 
 export default function MainLayout({
@@ -52,6 +52,7 @@ export default function MainLayout({
 
   const navItems = [
     { href: '/discover', icon: Search, labelKey: 'discover' as const },
+    { href: '/nearby', icon: Navigation, labelKey: 'nearby' as const },
     { href: '/likes', icon: Heart, labelKey: 'likes' as const },
     { href: '/messages', icon: MessageCircle, labelKey: 'messages' as const },
     { href: '/mypage', icon: User, labelKey: 'mypage' as const },

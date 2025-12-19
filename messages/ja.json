@@ -18,6 +18,7 @@
     "discover": "探す",
     "discoverHim": "彼を探す",
     "discoverHer": "彼女を探す",
+    "nearby": "近くの人",
     "likes": "いいね",
     "messages": "メッセージ",
     "mypage": "マイページ",
@@ -310,7 +311,23 @@
     "noBlockedUsers": "ブロックしているユーザーはいません",
     "blockedAt": "にブロック",
     "unblock": "解除",
-    "unblockNote": "ブロックを解除すると、相手があなたを検索できるようになります"
+    "unblockNote": "ブロックを解除すると、相手があなたを検索できるようになります",
+    "showNearby": "近くの人に表示",
+    "showNearbyDesc": "位置情報を共有して近くのユーザーに表示されるようにする"
+  },
+  "nearby": {
+    "title": "近くの人",
+    "enableTitle": "近くの人機能を有効にする",
+    "enableDescription": "位置情報を共有すると、近くにいる他のユーザーを見つけることができます。あなたも近くのユーザーに表示されます。",
+    "enableButton": "位置情報を有効にする",
+    "privacyNote": "位置情報は設定でいつでもオフにできます",
+    "locationTitle": "位置情報を取得",
+    "locationDescription": "現在地を取得して、近くにいるユーザーを表示します。",
+    "updateLocation": "位置情報を更新",
+    "updating": "更新中...",
+    "distance": "距離",
+    "noNearby": "近くにユーザーが見つかりませんでした",
+    "tryExpand": "距離を広げてみてください"
   },
   "photos": {
     "title": "写真管理",

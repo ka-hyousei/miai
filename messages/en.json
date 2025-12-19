@@ -16,9 +16,11 @@
   },
   "nav": {
     "discover": "Discover",
+    "nearby": "Nearby",
     "likes": "Likes",
     "messages": "Messages",
-    "mypage": "My Page"
+    "mypage": "My Page",
+    "backToHome": "Back to Home"
   },
   "home": {
     "title": "Omiai",
@@ -290,7 +292,23 @@
     "noBlockedUsers": "No blocked users",
     "blockedAt": "Blocked on",
     "unblock": "Unblock",
-    "unblockNote": "Unblocking will allow them to find you in search"
+    "unblockNote": "Unblocking will allow them to find you in search",
+    "showNearby": "Show in Nearby",
+    "showNearbyDesc": "Share your location to appear in nearby users' list"
+  },
+  "nearby": {
+    "title": "Nearby",
+    "enableTitle": "Enable Nearby Feature",
+    "enableDescription": "Share your location to find other users nearby. You will also appear in nearby users' list.",
+    "enableButton": "Enable Location",
+    "privacyNote": "You can disable location sharing anytime in settings",
+    "locationTitle": "Get Location",
+    "locationDescription": "Get your current location to see nearby users.",
+    "updateLocation": "Update Location",
+    "updating": "Updating...",
+    "distance": "Distance",
+    "noNearby": "No users found nearby",
+    "tryExpand": "Try expanding the search range"
   },
   "photos": {
     "title": "Photo Management",

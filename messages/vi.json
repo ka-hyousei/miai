@@ -16,9 +16,11 @@
   },
   "nav": {
     "discover": "Khám phá",
+    "nearby": "Gần đây",
     "likes": "Thích",
     "messages": "Tin nhắn",
-    "mypage": "Trang cá nhân"
+    "mypage": "Trang cá nhân",
+    "backToHome": "Về trang chủ"
   },
   "home": {
     "title": "Omiai",
@@ -290,7 +292,23 @@
     "noBlockedUsers": "Không có người dùng bị chặn",
     "blockedAt": "Đã chặn vào",
     "unblock": "Bỏ chặn",
-    "unblockNote": "Bỏ chặn sẽ cho phép họ tìm thấy bạn trong tìm kiếm"
+    "unblockNote": "Bỏ chặn sẽ cho phép họ tìm thấy bạn trong tìm kiếm",
+    "showNearby": "Hiển thị ở gần đây",
+    "showNearbyDesc": "Chia sẻ vị trí để hiển thị với người dùng gần đây"
+  },
+  "nearby": {
+    "title": "Gần đây",
+    "enableTitle": "Bật tính năng Gần đây",
+    "enableDescription": "Chia sẻ vị trí của bạn để tìm người dùng khác gần đây. Bạn cũng sẽ hiển thị với người dùng gần đây.",
+    "enableButton": "Bật vị trí",
+    "privacyNote": "Bạn có thể tắt chia sẻ vị trí bất cứ lúc nào trong cài đặt",
+    "locationTitle": "Lấy vị trí",
+    "locationDescription": "Lấy vị trí hiện tại của bạn để xem người dùng gần đây.",
+    "updateLocation": "Cập nhật vị trí",
+    "updating": "Đang cập nhật...",
+    "distance": "Khoảng cách",
+    "noNearby": "Không tìm thấy người dùng gần đây",
+    "tryExpand": "Thử mở rộng phạm vi tìm kiếm"
   },
   "photos": {
     "title": "Quản lý ảnh",
