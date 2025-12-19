@@ -113,11 +113,18 @@ export default function NearbyPage() {
     setError(null)
 
     try {
+      // ブラウザが位置情報APIをサポートしているか確認
+      if (!navigator.geolocation) {
+        setError('お使いのブラウザは位置情報をサポートしていません。')
+        setIsUpdatingLocation(false)
+        return
+      }
+
       // 获取浏览器位置
       const position = await new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
           enableHighAccuracy: true,
-          timeout: 10000,
+          timeout: 15000,
           maximumAge: 0,
         })
       })
@@ -137,16 +144,18 @@ export default function NearbyPage() {
 
       // 重新获取附近的人
       await fetchProfiles()
-    } catch (err) {
-      if (err instanceof GeolocationPositionError) {
-        switch (err.code) {
-          case err.PERMISSION_DENIED:
+    } catch (err: unknown) {
+      // GeolocationPositionError の判定
+      const geoError = err as { code?: number; PERMISSION_DENIED?: number; POSITION_UNAVAILABLE?: number; TIMEOUT?: number }
+      if (geoError.code !== undefined) {
+        switch (geoError.code) {
+          case 1: // PERMISSION_DENIED
             setError('位置情報の使用が拒否されました。ブラウザの設定で位置情報を許可してください。')
             break
-          case err.POSITION_UNAVAILABLE:
+          case 2: // POSITION_UNAVAILABLE
             setError('位置情報が取得できませんでした。')
             break
-          case err.TIMEOUT:
+          case 3: // TIMEOUT
             setError('位置情報の取得がタイムアウトしました。')
             break
           default:
