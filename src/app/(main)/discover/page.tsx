@@ -20,6 +20,7 @@ interface UserProfile {
   bio: string | null
   occupation: string | null
   nationality: string | null
+  hometown: string | null
   user: {
     photos: { url: string; isMain: boolean }[]
   }
@@ -279,10 +280,10 @@ export default function DiscoverPage() {
                       {profile.occupation}
                     </div>
                   )}
-                  {profile.nationality && (
+                  {profile.hometown && (
                     <div className="flex items-center gap-1 text-gray-600 text-sm mb-2">
                       <Globe className="w-3 h-3 text-red-400" />
-                      {profile.nationality}
+                      {profile.hometown}
                     </div>
                   )}
                   {likedUserIds.has(profile.userId) ? (
