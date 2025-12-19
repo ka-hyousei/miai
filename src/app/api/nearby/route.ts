@@ -127,6 +127,11 @@ export async function GET(request: NextRequest) {
     const userLat = currentUserProfile.latitude
     const userLon = currentUserProfile.longitude
 
+    console.log('=== Nearby Debug ===')
+    console.log('Current user location:', { lat: userLat, lon: userLon })
+    console.log('Max distance filter:', maxDistance, 'km')
+    console.log('Found profiles before distance filter:', profiles.length)
+
     const profilesWithDistance = profiles
       .map((profile) => {
         const distance = calculateDistance(
@@ -135,15 +140,23 @@ export async function GET(request: NextRequest) {
           profile.latitude!,
           profile.longitude!
         )
+        console.log(`Profile ${profile.nickname}: lat=${profile.latitude}, lon=${profile.longitude}, distance=${distance}km`)
         return {
           ...profile,
           distance,
           distanceText: formatDistance(distance),
         }
       })
-      .filter((profile) => profile.distance <= maxDistance)
+      .filter((profile) => {
+        const pass = profile.distance <= maxDistance
+        console.log(`Profile ${profile.nickname}: distance=${profile.distance}km, maxDistance=${maxDistance}km, pass=${pass}`)
+        return pass
+      })
       .sort((a, b) => a.distance - b.distance)
       .slice(0, 50) // 最多返回50个结果
+
+    console.log('Profiles after distance filter:', profilesWithDistance.length)
+    console.log('=== End Debug ===')
 
     // 获取已点赞的用户ID
     const likedUsers = await prisma.like.findMany({
