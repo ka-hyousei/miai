@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { ArrowLeft, CheckCircle, AlertCircle } from 'lucide-react'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
@@ -193,7 +192,7 @@ export default function ProfileEditPage() {
   if (status === 'loading' || isFetching) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-500" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500" />
       </div>
     )
   }
@@ -216,14 +215,14 @@ export default function ProfileEditPage() {
   const prefectureOptions = PREFECTURES.map((p) => ({ value: p, label: p }))
 
   return (
-    <div className="min-h-screen bg-gray-50 md:ml-64">
+    <div className="min-h-screen bg-gradient-to-b from-red-50 to-white md:ml-64">
       <div className="max-w-2xl mx-auto py-8 px-4">
         {/* Header */}
         <div className="flex items-center gap-4 mb-6">
-          <Link href="/mypage" className="p-2 hover:bg-gray-100 rounded-full">
-            <ArrowLeft className="w-5 h-5 text-gray-600" />
-          </Link>
-          <h1 className="text-xl font-bold text-gray-900">{t('edit')}</h1>
+          <button onClick={() => router.back()} className="p-2 hover:bg-red-100 rounded-full transition-colors">
+            <ArrowLeft className="w-5 h-5 text-red-600" />
+          </button>
+          <h1 className="text-xl font-bold text-red-700">{t('edit')}</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -240,8 +239,12 @@ export default function ProfileEditPage() {
           )}
 
           {/* 基本情報 */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('basicInfo')}</h2>
+          <div className="bg-gradient-to-b from-white to-red-50/30 rounded-xl shadow-sm p-6 border-2 border-red-200 relative">
+            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-red-400 rounded-tl-lg" />
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-red-400 rounded-tr-lg" />
+            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-red-400 rounded-bl-lg" />
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-red-400 rounded-br-lg" />
+            <h2 className="text-lg font-semibold text-red-700 mb-4">{t('basicInfo')}</h2>
             <div className="space-y-4">
               <Input
                 id="nickname"
@@ -322,8 +325,12 @@ export default function ProfileEditPage() {
           </div>
 
           {/* 自己紹介 */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('selfIntro')}</h2>
+          <div className="bg-gradient-to-b from-white to-red-50/30 rounded-xl shadow-sm p-6 border-2 border-red-200 relative">
+            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-red-400 rounded-tl-lg" />
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-red-400 rounded-tr-lg" />
+            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-red-400 rounded-bl-lg" />
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-red-400 rounded-br-lg" />
+            <h2 className="text-lg font-semibold text-red-700 mb-4">{t('selfIntro')}</h2>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -336,7 +343,7 @@ export default function ProfileEditPage() {
                   onChange={handleChange}
                   placeholder={t('bioPlaceholder')}
                   rows={5}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 />
               </div>
 
@@ -362,8 +369,12 @@ export default function ProfileEditPage() {
           </div>
 
           {/* 在日関連情報 */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+          <div className="bg-gradient-to-b from-white to-red-50/30 rounded-xl shadow-sm p-6 border-2 border-red-200 relative">
+            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-red-400 rounded-tl-lg" />
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-red-400 rounded-tr-lg" />
+            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-red-400 rounded-bl-lg" />
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-red-400 rounded-br-lg" />
+            <h2 className="text-lg font-semibold text-red-700 mb-2">
               {t('japanRelated')}（{t('optional')}）
             </h2>
             <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg mb-4">
@@ -431,8 +442,12 @@ export default function ProfileEditPage() {
           </div>
 
           {/* 連絡先情報 */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+          <div className="bg-gradient-to-b from-white to-red-50/30 rounded-xl shadow-sm p-6 border-2 border-red-200 relative">
+            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-red-400 rounded-tl-lg" />
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-red-400 rounded-tr-lg" />
+            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-red-400 rounded-bl-lg" />
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-red-400 rounded-br-lg" />
+            <h2 className="text-lg font-semibold text-red-700 mb-2">
               {t('contactInfo')}（{t('optional')}）
             </h2>
             <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg mb-4">
@@ -470,8 +485,12 @@ export default function ProfileEditPage() {
           </div>
 
           {/* 表示設定 */}
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('displaySettings')}</h2>
+          <div className="bg-gradient-to-b from-white to-red-50/30 rounded-xl shadow-sm p-6 border-2 border-red-200 relative">
+            <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-red-400 rounded-tl-lg" />
+            <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-red-400 rounded-tr-lg" />
+            <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-red-400 rounded-bl-lg" />
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-red-400 rounded-br-lg" />
+            <h2 className="text-lg font-semibold text-red-700 mb-4">{t('displaySettings')}</h2>
             <div className="space-y-4">
               <label className="flex items-center gap-3">
                 <input
@@ -479,7 +498,7 @@ export default function ProfileEditPage() {
                   name="showContact"
                   checked={formData.showContact}
                   onChange={handleChange}
-                  className="w-4 h-4 text-pink-500 rounded focus:ring-pink-500"
+                  className="w-4 h-4 text-red-500 rounded focus:ring-red-500"
                 />
                 <span className="text-sm text-gray-600">{t('showContact')}</span>
               </label>
@@ -502,7 +521,7 @@ export default function ProfileEditPage() {
           {/* Submit Button */}
           <Button
             type="submit"
-            className="w-full"
+            className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600"
             size="lg"
             isLoading={isLoading}
           >
