@@ -3,11 +3,34 @@
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
-import { Search } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Search, MapPin, Heart, MessageCircle } from 'lucide-react'
 
 export function HomeHero() {
   const { data: session, status } = useSession()
   const t = useTranslations('home')
+  const [likesCount, setLikesCount] = useState(0)
+  const [unreadCount, setUnreadCount] = useState(0)
+
+  useEffect(() => {
+    if (session) {
+      // いいね数を取得
+      fetch('/api/likes?type=received')
+        .then(res => res.json())
+        .then(data => setLikesCount(data.likes?.length || 0))
+        .catch(() => {})
+
+      // 未読メッセージ数を取得
+      fetch('/api/messages')
+        .then(res => res.json())
+        .then(data => {
+          const unread = data.conversations?.reduce((sum: number, conv: any) =>
+            sum + (conv.unreadCount || 0), 0) || 0
+          setUnreadCount(unread)
+        })
+        .catch(() => {})
+    }
+  }, [session])
 
   if (status === 'loading') {
     return (
@@ -21,27 +44,86 @@ export function HomeHero() {
 
   if (session) {
     return (
-      <div className="max-w-6xl mx-auto px-6 py-16 text-center">
+      <div className="max-w-6xl mx-auto px-6 py-12 text-center">
         {/* 装饰性边框 */}
-        <div className="inline-block mb-6">
+        <div className="inline-block mb-4">
           <div className="flex items-center gap-3">
             <span className="text-2xl text-yellow-500">✿</span>
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-red-600 via-red-500 to-orange-500 bg-clip-text text-transparent">
+            <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-600 via-red-500 to-orange-500 bg-clip-text text-transparent">
               {t('welcomeBack')}
             </h2>
             <span className="text-2xl text-yellow-500">✿</span>
           </div>
         </div>
-        <p className="text-xl text-gray-600 mb-10">
+        <p className="text-lg text-gray-600 mb-8">
           {t('loggedInSubtitle')}
         </p>
-        <Link
-          href="/discover"
-          className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white text-lg font-medium rounded-full hover:from-red-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl border-2 border-yellow-400/30"
-        >
-          <Search className="w-5 h-5" />
-          {t('startDiscover')}
-        </Link>
+
+        {/* 4つの快速入口 */}
+        <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+          {/* 探す */}
+          <Link
+            href="/discover"
+            className="flex flex-col items-center gap-2 p-5 bg-gradient-to-br from-white to-red-50 rounded-xl border-2 border-red-200 hover:border-red-400 hover:shadow-lg transition-all group"
+          >
+            <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Search className="w-6 h-6 text-white" />
+            </div>
+            <span className="font-medium text-gray-700">{t('startDiscover')}</span>
+          </Link>
+
+          {/* 附近の人 */}
+          <Link
+            href="/nearby"
+            className="flex flex-col items-center gap-2 p-5 bg-gradient-to-br from-white to-blue-50 rounded-xl border-2 border-blue-200 hover:border-blue-400 hover:shadow-lg transition-all group"
+          >
+            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+              <MapPin className="w-6 h-6 text-white" />
+            </div>
+            <span className="font-medium text-gray-700">{t('nearbyPeople')}</span>
+          </Link>
+
+          {/* いいね */}
+          <Link
+            href="/likes"
+            className="flex flex-col items-center gap-2 p-5 bg-gradient-to-br from-white to-pink-50 rounded-xl border-2 border-pink-200 hover:border-pink-400 hover:shadow-lg transition-all group relative"
+          >
+            {likesCount > 0 && (
+              <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                {likesCount}
+              </div>
+            )}
+            <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+              <Heart className="w-6 h-6 text-white" />
+            </div>
+            <span className="font-medium text-gray-700">{t('viewLikes')}</span>
+          </Link>
+
+          {/* メッセージ */}
+          <Link
+            href="/messages"
+            className="flex flex-col items-center gap-2 p-5 bg-gradient-to-br from-white to-green-50 rounded-xl border-2 border-green-200 hover:border-green-400 hover:shadow-lg transition-all group relative"
+          >
+            {unreadCount > 0 && (
+              <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                {unreadCount}
+              </div>
+            )}
+            <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+              <MessageCircle className="w-6 h-6 text-white" />
+            </div>
+            <span className="font-medium text-gray-700">{t('viewMessages')}</span>
+          </Link>
+        </div>
+
+        {/* 底部装饰 */}
+        <div className="mt-8 flex items-center justify-center gap-2 text-red-300 text-sm">
+          <span>—</span>
+          <span className="text-yellow-500">囍</span>
+          <span>缘定今生</span>
+          <span className="text-yellow-500">囍</span>
+          <span>—</span>
+        </div>
       </div>
     )
   }
