@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
-import { Crown, Check, Heart, MessageCircle, Eye, Shield, CreditCard, Ticket, AlertCircle } from 'lucide-react'
+import { Crown, Check, Heart, MessageCircle, Eye, Shield, CreditCard, Ticket, AlertCircle, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 type PaymentMethod = 'PAYPAY' | 'WECHAT'
@@ -121,6 +121,15 @@ export default function PremiumPage() {
   return (
     <div className="md:ml-64 min-h-screen bg-gradient-to-b from-pink-50 to-white py-8 px-4">
       <div className="max-w-2xl mx-auto">
+        {/* Back Button */}
+        <button
+          onClick={() => router.back()}
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span>戻る</span>
+        </button>
+
         {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full mb-4">
