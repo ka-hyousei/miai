@@ -5,7 +5,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { User, Settings, Heart, MessageCircle, LogOut, Camera, Briefcase, Globe, Crown } from 'lucide-react'
+import { User, Settings, LogOut, Camera, Briefcase, Globe, Crown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface Profile {
@@ -31,8 +31,6 @@ export default function MyPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const t = useTranslations('mypage')
-  const tLikes = useTranslations('likes')
-  const tMessages = useTranslations('messages')
 
   const [profile, setProfile] = useState<Profile | null>(null)
   const [photos, setPhotos] = useState<{ url: string; isMain: boolean }[]>([])
@@ -129,7 +127,7 @@ export default function MyPage() {
               {/* ニックネーム - 通常位置 */}
               <div className="pt-2">
                 <h1 className="text-xl font-bold text-red-700 flex items-center gap-2">
-                  {profile?.nickname || tMessages('user')}
+                  {profile?.nickname || t('user')}
                   <span className="text-yellow-500 text-sm">✿</span>
                 </h1>
                 {profile && (
@@ -194,26 +192,6 @@ export default function MyPage() {
             <div>
               <p className="font-medium text-gray-900">{t('photoManagement')}</p>
               <p className="text-sm text-gray-500">{t('photoManagementDesc')}</p>
-            </div>
-          </Link>
-
-          <Link href="/likes" className="flex items-center gap-4 p-4 hover:bg-red-50/50 border-b border-red-100 transition-colors">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-red-100 to-rose-100 flex items-center justify-center border border-red-200">
-              <Heart className="w-5 h-5 text-red-500" />
-            </div>
-            <div>
-              <p className="font-medium text-gray-900">{tLikes('title')}</p>
-              <p className="text-sm text-gray-500">{t('likesDesc')}</p>
-            </div>
-          </Link>
-
-          <Link href="/messages" className="flex items-center gap-4 p-4 hover:bg-red-50/50 border-b border-red-100 transition-colors">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center border border-blue-200">
-              <MessageCircle className="w-5 h-5 text-blue-500" />
-            </div>
-            <div>
-              <p className="font-medium text-gray-900">{tMessages('title')}</p>
-              <p className="text-sm text-gray-500">{t('messagesDesc')}</p>
             </div>
           </Link>
 

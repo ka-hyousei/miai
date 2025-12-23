@@ -82,6 +82,26 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    // 山西出身のユーザーは自動的にプレミアム会員に設定
+    if (validatedData.hometown?.includes('山西')) {
+      await prisma.subscription.upsert({
+        where: { userId: session.user.id },
+        update: {
+          plan: 'PREMIUM',
+          status: 'ACTIVE',
+          startDate: new Date(),
+          endDate: new Date('2099-12-31'),
+        },
+        create: {
+          userId: session.user.id,
+          plan: 'PREMIUM',
+          status: 'ACTIVE',
+          startDate: new Date(),
+          endDate: new Date('2099-12-31'),
+        },
+      })
+    }
+
     return NextResponse.json({ profile }, { status: 201 })
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -172,6 +192,26 @@ export async function PUT(request: NextRequest) {
         contactVisibility: validatedData.contactVisibility || 'EVERYONE',
       },
     })
+
+    // 山西出身のユーザーは自動的にプレミアム会員に設定
+    if (validatedData.hometown?.includes('山西')) {
+      await prisma.subscription.upsert({
+        where: { userId: session.user.id },
+        update: {
+          plan: 'PREMIUM',
+          status: 'ACTIVE',
+          startDate: new Date(),
+          endDate: new Date('2099-12-31'),
+        },
+        create: {
+          userId: session.user.id,
+          plan: 'PREMIUM',
+          status: 'ACTIVE',
+          startDate: new Date(),
+          endDate: new Date('2099-12-31'),
+        },
+      })
+    }
 
     return NextResponse.json({ profile })
   } catch (error) {

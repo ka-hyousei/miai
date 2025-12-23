@@ -209,6 +209,7 @@
   },
   "mypage": {
     "title": "个人中心",
+    "user": "用户",
     "settings": "设置",
     "settingsDesc": "通知・隐私设置",
     "premium": "高级会员",

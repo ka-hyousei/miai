@@ -209,6 +209,7 @@
   },
   "mypage": {
     "title": "マイページ",
+    "user": "ユーザー",
     "settings": "設定",
     "settingsDesc": "通知・プライバシー設定",
     "premium": "プレミアム会員",
