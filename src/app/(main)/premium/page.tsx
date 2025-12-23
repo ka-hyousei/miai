@@ -124,10 +124,9 @@ export default function PremiumPage() {
         {/* Back Button */}
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+          className="p-2 hover:bg-pink-100 rounded-full mb-6 transition-colors"
         >
-          <ArrowLeft className="w-5 h-5" />
-          <span>戻る</span>
+          <ArrowLeft className="w-5 h-5 text-pink-600" />
         </button>
 
         {/* Header */}
