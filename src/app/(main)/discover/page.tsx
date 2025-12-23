@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { Heart, MapPin, Briefcase, Globe, Search, RotateCcw } from 'lucide-react'
+import { Heart, MapPin, Briefcase, Globe, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { PREFECTURES, GENDER_OPTIONS, NATIONALITY_OPTIONS, VISA_TYPE_OPTIONS } from '@/lib/constants'
@@ -44,7 +44,7 @@ export default function DiscoverPage() {
     nationality: '',
     visaType: '',
   })
-  const [searchTrigger, setSearchTrigger] = useState(0)
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -85,21 +85,21 @@ export default function DiscoverPage() {
 
   useEffect(() => {
     if (session) {
-      fetchProfiles(true)
+      fetchProfiles(true).then(() => setIsInitialLoad(false))
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session])
 
+  // フィルター変更時に自動検索（初回ロード後のみ）
   useEffect(() => {
-    if (session && searchTrigger > 0) {
-      fetchProfiles()
+    if (session && !isInitialLoad) {
+      const debounceTimer = setTimeout(() => {
+        fetchProfiles()
+      }, 300)
+      return () => clearTimeout(debounceTimer)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTrigger])
-
-  const handleSearch = () => {
-    setSearchTrigger(prev => prev + 1)
-  }
+  }, [filters])
 
   const handleClear = () => {
     setFilters({
@@ -110,7 +110,6 @@ export default function DiscoverPage() {
       nationality: '',
       visaType: '',
     })
-    setSearchTrigger(prev => prev + 1)
   }
 
   const handleNationalityChange = (value: string) => {
@@ -223,12 +222,8 @@ export default function DiscoverPage() {
               />
             )}
           </div>
-          <div className="flex gap-3 mt-4">
-            <Button onClick={handleSearch} className="flex-1 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600">
-              <Search className="w-4 h-4 mr-2" />
-              {t('search')}
-            </Button>
-            <Button onClick={handleClear} variant="outline" className="flex-1 border-red-300 text-red-600 hover:bg-red-50">
+          <div className="flex justify-end mt-4">
+            <Button onClick={handleClear} variant="outline" className="border-red-300 text-red-600 hover:bg-red-50">
               <RotateCcw className="w-4 h-4 mr-2" />
               {t('clear')}
             </Button>
