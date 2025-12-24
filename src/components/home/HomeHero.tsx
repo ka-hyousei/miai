@@ -3,14 +3,28 @@
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import { Search, MapPin, Heart, MessageCircle } from 'lucide-react'
+import { Search, MapPin, Heart, MessageCircle, Sparkles } from 'lucide-react'
+
+interface DailyPick {
+  id: string
+  nickname: string
+  age: number
+  prefecture: string
+  bio: string | null
+  mainPhoto: string | null
+  isLiked: boolean
+}
 
 export function HomeHero() {
   const { data: session, status } = useSession()
   const t = useTranslations('home')
   const [likesCount, setLikesCount] = useState(0)
   const [unreadCount, setUnreadCount] = useState(0)
+  const [dailyPick, setDailyPick] = useState<DailyPick | null>(null)
+  const [dailyPickLoading, setDailyPickLoading] = useState(true)
+  const [isLiking, setIsLiking] = useState(false)
 
   useEffect(() => {
     if (session) {
@@ -29,8 +43,36 @@ export function HomeHero() {
           setUnreadCount(unread)
         })
         .catch(() => {})
+
+      // 今日のおすすめを取得
+      fetch('/api/daily-pick')
+        .then(res => res.json())
+        .then(data => {
+          setDailyPick(data.pick || null)
+          setDailyPickLoading(false)
+        })
+        .catch(() => setDailyPickLoading(false))
     }
   }, [session])
+
+  const handleLikeDailyPick = async () => {
+    if (!dailyPick || isLiking) return
+    setIsLiking(true)
+    try {
+      const res = await fetch('/api/likes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ toUserId: dailyPick.id }),
+      })
+      if (res.ok) {
+        setDailyPick({ ...dailyPick, isLiked: true })
+      }
+    } catch {
+      // エラー時は何もしない
+    } finally {
+      setIsLiking(false)
+    }
+  }
 
   if (status === 'loading') {
     return (
@@ -55,9 +97,72 @@ export function HomeHero() {
             <span className="text-2xl text-yellow-500">✿</span>
           </div>
         </div>
-        <p className="text-lg text-gray-600 mb-8">
+        <p className="text-lg text-gray-600 mb-6">
           {t('loggedInSubtitle')}
         </p>
+
+        {/* 今日の縁 - Daily Pick */}
+        {!dailyPickLoading && dailyPick && (
+          <div className="mb-8 max-w-md mx-auto">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Sparkles className="w-5 h-5 text-yellow-500" />
+              <h3 className="text-lg font-bold text-gray-700">{t('dailyPick')}</h3>
+              <Sparkles className="w-5 h-5 text-yellow-500" />
+            </div>
+            <div className="bg-gradient-to-br from-white via-red-50 to-orange-50 rounded-2xl border-2 border-red-200 p-4 shadow-lg">
+              <div className="flex items-center gap-4">
+                {/* 写真 */}
+                <Link href={`/profile/${dailyPick.id}`} className="shrink-0">
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-3 border-red-300 shadow-md">
+                    {dailyPick.mainPhoto ? (
+                      <Image
+                        src={dailyPick.mainPhoto}
+                        alt={dailyPick.nickname}
+                        width={80}
+                        height={80}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-red-100 to-orange-100 flex items-center justify-center">
+                        <span className="text-2xl text-red-300">👤</span>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+
+                {/* 情報 */}
+                <div className="flex-1 text-left min-w-0">
+                  <Link href={`/profile/${dailyPick.id}`}>
+                    <h4 className="font-bold text-gray-800 text-lg truncate hover:text-red-600 transition-colors">
+                      {dailyPick.nickname}
+                    </h4>
+                  </Link>
+                  <p className="text-sm text-gray-600">
+                    {dailyPick.age}{t('yearsOld')} · {dailyPick.prefecture}
+                  </p>
+                  {dailyPick.bio && (
+                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                      {dailyPick.bio}
+                    </p>
+                  )}
+                </div>
+
+                {/* いいねボタン */}
+                <button
+                  onClick={handleLikeDailyPick}
+                  disabled={dailyPick.isLiked || isLiking}
+                  className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+                    dailyPick.isLiked
+                      ? 'bg-pink-100 text-pink-500 cursor-default'
+                      : 'bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-600 hover:to-rose-600 shadow-md hover:shadow-lg'
+                  }`}
+                >
+                  <Heart className={`w-6 h-6 ${dailyPick.isLiked ? 'fill-current' : ''}`} />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 4つの快速入口 */}
         <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">

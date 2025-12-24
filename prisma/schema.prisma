@@ -32,6 +32,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   contactViews  ContactView[]  // カードで解放した連絡先
+  dailyRecommendations DailyRecommendation[] @relation("UserRecommendations")  // 受け取った毎日の推薦
+  recommendedTo        DailyRecommendation[] @relation("TargetRecommendations") // 推薦された対象
 }
 
 // NextAuth用アカウント
@@ -251,6 +253,21 @@ model ContactView {
 
   @@unique([userId, viewedUserId])
   @@index([userId])
+}
+
+// 毎日のおすすめ（今日の縁）
+model DailyRecommendation {
+  id        String   @id @default(cuid())
+  userId    String   // 推薦を受けるユーザー
+  targetId  String   // 推薦される対象ユーザー
+  date      DateTime @db.Date // 推薦日
+  createdAt DateTime @default(now())
+
+  user      User     @relation("UserRecommendations", fields: [userId], references: [id], onDelete: Cascade)
+  target    User     @relation("TargetRecommendations", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date]) // 1日1人のみ
+  @@index([userId, date])
 }
 
 // Enums
