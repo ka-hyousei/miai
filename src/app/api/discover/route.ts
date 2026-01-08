@@ -100,7 +100,9 @@ export async function GET(request: NextRequest) {
         },
       },
       orderBy: {
-        createdAt: 'desc',
+        user: {
+          lastSeen: 'desc',  // オンライン優先、最近ログインしたユーザー順
+        },
       },
       take: 50,
     })
