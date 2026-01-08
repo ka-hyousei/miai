@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
     })
 
     const excludeUserIds = new Set<string>()
-    excludeUserIds.add(session.user.id) // 自分自身も除外
+    // 自分自身は除外しない（検索結果に表示する）
     blockedUserIds.forEach((block) => {
       excludeUserIds.add(block.blockerId)
       excludeUserIds.add(block.blockedUserId)
