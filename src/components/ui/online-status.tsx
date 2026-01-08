@@ -17,7 +17,7 @@ export function getOnlineStatus(lastSeen: string | Date | null | undefined): 'on
   const diffMinutes = (now.getTime() - lastSeenDate.getTime()) / (1000 * 60)
 
   if (diffMinutes < 5) return 'online'      // 5分以内 = オンライン
-  if (diffMinutes < 60) return 'recent'     // 1時間以内 = 最近
+  if (diffMinutes < 180) return 'recent'    // 3時間以内 = 最近
   if (diffMinutes < 1440) return 'away'     // 24時間以内 = 離席中
   return 'offline'                           // それ以外 = オフライン
 }
