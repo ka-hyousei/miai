@@ -12,7 +12,15 @@
     "search": "Search",
     "login": "Login",
     "logout": "Logout",
-    "register": "Sign Up"
+    "register": "Sign Up",
+    "online": "Online",
+    "offline": "Offline",
+    "minutesAgo": "{minutes}m ago",
+    "hoursAgo": "{hours}h ago",
+    "daysAgo": "{days}d ago",
+    "weeksAgo": "{weeks}w ago",
+    "monthsAgo": "{months}mo ago",
+    "justNow": "Now"
   },
   "nav": {
     "discover": "Discover",

@@ -43,7 +43,9 @@
       "Bash(git remote set-url:*)",
       "Bash(cmdkey /list:*)",
       "Bash(vercel env rm:*)",
-      "Bash(vercel --prod:*)"
+      "Bash(vercel --prod:*)",
+      "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_6hxcKCtl5MBP@ep-rough-violet-ahzr1tmi-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require\" node:*)",
+      "Bash(PGPASSWORD=npg_6hxcKCtl5MBP psql:*)"
     ]
   }
 }

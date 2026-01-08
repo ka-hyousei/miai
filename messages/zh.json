@@ -12,7 +12,15 @@
     "search": "搜索",
     "login": "登录",
     "logout": "退出登录",
-    "register": "注册"
+    "register": "注册",
+    "online": "在线",
+    "offline": "离线",
+    "minutesAgo": "{minutes}分钟前",
+    "hoursAgo": "{hours}小时前",
+    "daysAgo": "{days}天前",
+    "weeksAgo": "{weeks}周前",
+    "monthsAgo": "{months}个月前",
+    "justNow": "刚刚"
   },
   "nav": {
     "discover": "发现",

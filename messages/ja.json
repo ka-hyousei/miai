@@ -12,7 +12,15 @@
     "search": "検索",
     "login": "ログイン",
     "logout": "ログアウト",
-    "register": "新規登録"
+    "register": "新規登録",
+    "online": "オンライン",
+    "offline": "オフライン",
+    "minutesAgo": "{minutes}分前",
+    "hoursAgo": "{hours}時間前",
+    "daysAgo": "{days}日前",
+    "weeksAgo": "{weeks}週間前",
+    "monthsAgo": "{months}ヶ月前",
+    "justNow": "今"
   },
   "nav": {
     "discover": "探す",

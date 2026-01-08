@@ -22,33 +22,34 @@ export function getOnlineStatus(lastSeen: string | Date | null | undefined): 'on
   return 'offline'                           // それ以外 = オフライン
 }
 
-// 相対的な時間表示を取得
-export function getRelativeTime(lastSeen: string | Date | null | undefined): string {
-  if (!lastSeen) return ''
+// 相対的な時間の差分情報を取得
+function getTimeDiff(lastSeen: string | Date | null | undefined): { type: string; value: number } | null {
+  if (!lastSeen) return null
 
   const lastSeenDate = new Date(lastSeen)
   const now = new Date()
   const diffMinutes = Math.floor((now.getTime() - lastSeenDate.getTime()) / (1000 * 60))
 
-  if (diffMinutes < 1) return '今'
-  if (diffMinutes < 60) return `${diffMinutes}分前`
+  if (diffMinutes < 1) return { type: 'justNow', value: 0 }
+  if (diffMinutes < 60) return { type: 'minutes', value: diffMinutes }
 
   const diffHours = Math.floor(diffMinutes / 60)
-  if (diffHours < 24) return `${diffHours}時間前`
+  if (diffHours < 24) return { type: 'hours', value: diffHours }
 
   const diffDays = Math.floor(diffHours / 24)
-  if (diffDays < 7) return `${diffDays}日前`
+  if (diffDays < 7) return { type: 'days', value: diffDays }
 
   const diffWeeks = Math.floor(diffDays / 7)
-  if (diffWeeks < 4) return `${diffWeeks}週間前`
+  if (diffWeeks < 4) return { type: 'weeks', value: diffWeeks }
 
   const diffMonths = Math.floor(diffDays / 30)
-  return `${diffMonths}ヶ月前`
+  return { type: 'months', value: diffMonths }
 }
 
 export function OnlineStatus({ lastSeen, showText = true, size = 'md' }: OnlineStatusProps) {
   const t = useTranslations('common')
   const status = getOnlineStatus(lastSeen)
+  const timeDiff = getTimeDiff(lastSeen)
 
   const sizeClasses = {
     sm: 'w-2 h-2',
@@ -63,11 +64,31 @@ export function OnlineStatus({ lastSeen, showText = true, size = 'md' }: OnlineS
     offline: 'bg-gray-300',
   }
 
-  const statusTexts: Record<string, string> = {
-    online: 'オンライン',
-    recent: getRelativeTime(lastSeen),
-    away: getRelativeTime(lastSeen),
-    offline: getRelativeTime(lastSeen) || 'オフライン',
+  // 翻訳を使用して相対時間を取得
+  const getRelativeTimeText = (): string => {
+    if (!timeDiff) return t('offline')
+
+    switch (timeDiff.type) {
+      case 'justNow':
+        return t('justNow')
+      case 'minutes':
+        return t('minutesAgo', { minutes: timeDiff.value })
+      case 'hours':
+        return t('hoursAgo', { hours: timeDiff.value })
+      case 'days':
+        return t('daysAgo', { days: timeDiff.value })
+      case 'weeks':
+        return t('weeksAgo', { weeks: timeDiff.value })
+      case 'months':
+        return t('monthsAgo', { months: timeDiff.value })
+      default:
+        return t('offline')
+    }
+  }
+
+  const getStatusText = (): string => {
+    if (status === 'online') return t('online')
+    return getRelativeTimeText()
   }
 
   return (
@@ -79,7 +100,7 @@ export function OnlineStatus({ lastSeen, showText = true, size = 'md' }: OnlineS
       />
       {showText && (
         <span className={`text-xs ${status === 'online' ? 'text-green-600' : 'text-gray-500'}`}>
-          {statusTexts[status]}
+          {getStatusText()}
         </span>
       )}
     </div>

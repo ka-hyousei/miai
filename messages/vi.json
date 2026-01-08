@@ -12,7 +12,15 @@
     "search": "Tìm kiếm",
     "login": "Đăng nhập",
     "logout": "Đăng xuất",
-    "register": "Đăng ký"
+    "register": "Đăng ký",
+    "online": "Trực tuyến",
+    "offline": "Ngoại tuyến",
+    "minutesAgo": "{minutes} phút trước",
+    "hoursAgo": "{hours} giờ trước",
+    "daysAgo": "{days} ngày trước",
+    "weeksAgo": "{weeks} tuần trước",
+    "monthsAgo": "{months} tháng trước",
+    "justNow": "Vừa xong"
   },
   "nav": {
     "discover": "Khám phá",

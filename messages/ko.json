@@ -12,7 +12,15 @@
     "search": "검색",
     "login": "로그인",
     "logout": "로그아웃",
-    "register": "회원가입"
+    "register": "회원가입",
+    "online": "온라인",
+    "offline": "오프라인",
+    "minutesAgo": "{minutes}분 전",
+    "hoursAgo": "{hours}시간 전",
+    "daysAgo": "{days}일 전",
+    "weeksAgo": "{weeks}주 전",
+    "monthsAgo": "{months}개월 전",
+    "justNow": "방금"
   },
   "nav": {
     "discover": "탐색",
