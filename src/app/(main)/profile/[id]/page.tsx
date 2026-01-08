@@ -28,6 +28,7 @@ import {
   Eye
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { OnlineStatus } from '@/components/ui/online-status'
 
 interface ProfileData {
   id: string
@@ -54,6 +55,8 @@ interface ProfileData {
   showContact: boolean
   contactVisibility: string
   user: {
+    id: string
+    lastSeen: string | null
     photos: { id: string; url: string; isMain: boolean }[]
   }
 }
@@ -309,9 +312,12 @@ export default function ProfileDetailPage() {
         <div className="p-4 space-y-6">
           {/* Basic Info */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">
-              {profile.nickname}, {calculateAge(profile.birthDate)}
-            </h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">
+                {profile.nickname}, {calculateAge(profile.birthDate)}
+              </h2>
+              <OnlineStatus lastSeen={profile.user.lastSeen} size="md" />
+            </div>
             <div className="flex items-center gap-2 text-gray-600 mt-1">
               <MapPin className="w-4 h-4" />
               <span>{profile.prefecture}{profile.city && ` ${profile.city}`}</span>

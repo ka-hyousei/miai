@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 import { Heart, MapPin, Briefcase, Globe, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
+import { OnlineStatus } from '@/components/ui/online-status'
 import { PREFECTURES, GENDER_OPTIONS, NATIONALITY_OPTIONS, VISA_TYPE_OPTIONS } from '@/lib/constants'
 
 interface UserProfile {
@@ -22,6 +23,8 @@ interface UserProfile {
   nationality: string | null
   hometown: string | null
   user: {
+    id: string
+    lastSeen: string | null
     photos: { url: string; isMain: boolean }[]
   }
 }
@@ -256,6 +259,10 @@ export default function DiscoverPage() {
                         No Photo
                       </div>
                     )}
+                    {/* オンラインステータス */}
+                    <div className="absolute top-2 right-2 bg-white/90 rounded-full px-2 py-1 shadow-sm">
+                      <OnlineStatus lastSeen={profile.user.lastSeen} size="sm" />
+                    </div>
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-4">
                       <h3 className="text-white font-semibold flex items-center gap-2">
                         {profile.nickname}, {calculateAge(profile.birthDate)}

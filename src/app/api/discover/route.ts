@@ -89,7 +89,9 @@ export async function GET(request: NextRequest) {
       },
       include: {
         user: {
-          include: {
+          select: {
+            id: true,
+            lastSeen: true,
             photos: {
               where: { isMain: true },
               take: 1,

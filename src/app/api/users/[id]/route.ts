@@ -21,7 +21,9 @@ export async function GET(
       where: { id: profileId },
       include: {
         user: {
-          include: {
+          select: {
+            id: true,
+            lastSeen: true,
             photos: {
               orderBy: { order: 'asc' },
             },
