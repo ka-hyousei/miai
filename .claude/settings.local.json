@@ -45,7 +45,17 @@
       "Bash(vercel env rm:*)",
       "Bash(vercel --prod:*)",
       "Bash(DATABASE_URL=\"postgresql://neondb_owner:npg_6hxcKCtl5MBP@ep-rough-violet-ahzr1tmi-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require\" node:*)",
-      "Bash(PGPASSWORD=npg_6hxcKCtl5MBP psql:*)"
+      "Bash(PGPASSWORD=npg_6hxcKCtl5MBP psql:*)",
+      "Bash(timeout:*)",
+      "Bash(gh run list:*)",
+      "Bash(node scripts/check-daily-pick.js:*)",
+      "Bash(dir:*)",
+      "Bash(node scripts/check-id.mjs:*)",
+      "Bash(node scripts/check-recommendations.mjs:*)",
+      "Bash(node scripts/list-tables.mjs:*)",
+      "Bash(node scripts/check-prod.mjs:*)",
+      "Bash(node scripts/test-daily-pick-email.mjs:*)",
+      "Bash(node scripts/test-email-to-kiyosi.mjs:*)"
     ]
   }
 }
