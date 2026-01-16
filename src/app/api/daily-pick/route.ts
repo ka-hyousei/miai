@@ -75,7 +75,7 @@ export async function GET() {
     // ログインユーザーのプロフィールを取得
     const currentUserProfile = await prisma.profile.findUnique({
       where: { userId },
-      select: { id: true, nickname: true, gender: true, prefecture: true, birthDate: true },
+      select: { id: true, nickname: true, gender: true, prefecture: true, birthDate: true, emailNotifications: true },
     })
 
     if (!currentUserProfile) {
@@ -199,12 +199,18 @@ export async function GET() {
       },
     })
 
-    // 被推薦者にメール通知を送信（通知設定がオンの場合）
-    if (selected.emailNotifications && selected.user.email) {
+    // 推薦を受けたユーザーにメール通知を送信（通知設定がオンの場合）
+    // 現在ログイン中のユーザーのメールアドレスを取得
+    const currentUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true },
+    })
+
+    if (currentUserProfile.emailNotifications && currentUser?.email) {
       sendDailyPickNotificationEmail(
-        selected.user.email,
-        currentUserProfile.nickname,
-        currentUserProfile.id
+        currentUser.email,
+        selected.nickname,
+        selected.id  // 被推薦者の Profile ID
       ).catch((err) => {
         console.error('Failed to send daily pick notification email:', err)
       })
