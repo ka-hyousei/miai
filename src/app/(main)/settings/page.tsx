@@ -22,24 +22,38 @@ export default function SettingsPage() {
   })
   const [showNearby, setShowNearby] = useState(false)
   const [isUpdatingNearby, setIsUpdatingNearby] = useState(false)
+  const [isUpdatingEmail, setIsUpdatingEmail] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
-  // 获取附近的人设置
+  // 获取设置
   useEffect(() => {
-    const fetchNearbySettings = async () => {
+    const fetchSettings = async () => {
       try {
-        const response = await fetch('/api/location')
-        if (response.ok) {
-          const data = await response.json()
+        // 获取附近的人和邮件通知设置
+        const [locationRes, notificationRes] = await Promise.all([
+          fetch('/api/location'),
+          fetch('/api/notifications/settings')
+        ])
+
+        if (locationRes.ok) {
+          const data = await locationRes.json()
           setShowNearby(data.showNearby || false)
         }
+
+        if (notificationRes.ok) {
+          const data = await notificationRes.json()
+          setSettings(prev => ({
+            ...prev,
+            emailNotifications: data.emailNotifications ?? true
+          }))
+        }
       } catch (error) {
-        console.error('Failed to fetch nearby settings:', error)
+        console.error('Failed to fetch settings:', error)
       }
     }
     if (session) {
-      fetchNearbySettings()
+      fetchSettings()
     }
   }, [session])
 
@@ -49,7 +63,29 @@ export default function SettingsPage() {
     }
   }, [status, router])
 
-  const handleToggle = (key: keyof typeof settings) => {
+  const handleToggle = async (key: keyof typeof settings) => {
+    // 对于邮件通知，需要保存到数据库
+    if (key === 'emailNotifications') {
+      setIsUpdatingEmail(true)
+      try {
+        const newValue = !settings.emailNotifications
+        const response = await fetch('/api/notifications/settings', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ emailNotifications: newValue }),
+        })
+        if (response.ok) {
+          setSettings(prev => ({ ...prev, emailNotifications: newValue }))
+        }
+      } catch (error) {
+        console.error('Failed to update email notifications:', error)
+      } finally {
+        setIsUpdatingEmail(false)
+      }
+      return
+    }
+
+    // 其他设置只在本地切换（暂未实现保存）
     setSettings(prev => ({
       ...prev,
       [key]: !prev[key],
@@ -136,9 +172,10 @@ export default function SettingsPage() {
               </div>
               <button
                 onClick={() => handleToggle('emailNotifications')}
+                disabled={isUpdatingEmail}
                 className={`relative w-12 h-6 rounded-full transition-colors ${
                   settings.emailNotifications ? 'bg-pink-500' : 'bg-gray-300'
-                }`}
+                } ${isUpdatingEmail ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <span
                   className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${

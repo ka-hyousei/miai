@@ -140,6 +140,7 @@ model Profile {
   showContact     Boolean  @default(true)   // 連絡先を公開するか（デフォルト公開）
   contactVisibility ContactVisibility @default(EVERYONE)  // 連絡先の公開対象
   isVerified      Boolean  @default(false)
+  emailNotifications Boolean @default(true) // 推薦通知メールを受け取るか
 
   // 位置情報（附近の人機能用）
   latitude        Float?   // 緯度

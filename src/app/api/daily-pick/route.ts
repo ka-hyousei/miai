@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { sendDailyPickNotificationEmail } from '@/lib/mail'
 
 export async function GET() {
   try {
@@ -74,7 +75,7 @@ export async function GET() {
     // ログインユーザーのプロフィールを取得
     const currentUserProfile = await prisma.profile.findUnique({
       where: { userId },
-      select: { gender: true, prefecture: true, birthDate: true },
+      select: { id: true, nickname: true, gender: true, prefecture: true, birthDate: true },
     })
 
     if (!currentUserProfile) {
@@ -133,7 +134,9 @@ export async function GET() {
       },
       include: {
         user: {
-          include: {
+          select: {
+            id: true,
+            email: true,
             photos: {
               where: { isMain: true },
               take: 1,
@@ -195,6 +198,17 @@ export async function GET() {
         date: today,
       },
     })
+
+    // 被推薦者にメール通知を送信（通知設定がオンの場合）
+    if (selected.emailNotifications && selected.user.email) {
+      sendDailyPickNotificationEmail(
+        selected.user.email,
+        currentUserProfile.nickname,
+        currentUserProfile.id
+      ).catch((err) => {
+        console.error('Failed to send daily pick notification email:', err)
+      })
+    }
 
     const mainPhoto = selected.user.photos[0]
 
