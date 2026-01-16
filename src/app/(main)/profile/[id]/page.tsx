@@ -134,8 +134,12 @@ export default function ProfileDetailPage() {
           setIsPremium(data.isPremium || false)
           setContactCards(data.contactCards || 0)
           setHasViewedContact(data.hasViewedContact || false)
-        } else if (response.status === 404) {
-          router.push('/discover')
+        } else if (response.status === 404 || response.status === 403) {
+          // 404: 找不到资料, 403: 被屏蔽
+          // 直接返回，显示 profileNotFound 消息
+          console.log(`Profile fetch failed: ${response.status} for profileId: ${profileId}`)
+        } else {
+          console.error(`Unexpected error: ${response.status} for profileId: ${profileId}`)
         }
       } catch (error) {
         console.error('Failed to fetch profile:', error)

@@ -8,7 +8,8 @@ import { useState, useEffect } from 'react'
 import { Search, MapPin, Heart, MessageCircle, Sparkles } from 'lucide-react'
 
 interface DailyPick {
-  id: string
+  id: string        // Profile ID（プロフィールページ用）
+  userId: string    // User ID（いいね用）
   nickname: string
   age: number
   prefecture: string
@@ -62,7 +63,7 @@ export function HomeHero() {
       const res = await fetch('/api/likes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ toUserId: dailyPick.id }),
+        body: JSON.stringify({ toUserId: dailyPick.userId }),
       })
       if (res.ok) {
         setDailyPick({ ...dailyPick, isLiked: true })

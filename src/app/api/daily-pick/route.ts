@@ -56,7 +56,8 @@ export async function GET() {
 
       return NextResponse.json({
         pick: {
-          id: target.id,
+          id: profile.id,        // Profile ID（プロフィールページ用）
+          userId: target.id,     // User ID（いいね用）
           nickname: profile.nickname,
           age: calculateAge(profile.birthDate),
           prefecture: profile.prefecture,
@@ -199,7 +200,8 @@ export async function GET() {
 
     return NextResponse.json({
       pick: {
-        id: selected.userId,
+        id: selected.id,           // Profile ID（プロフィールページ用）
+        userId: selected.userId,   // User ID（いいね用）
         nickname: selected.nickname,
         age: calculateAge(selected.birthDate),
         prefecture: selected.prefecture,
