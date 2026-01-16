@@ -287,6 +287,101 @@ export async function sendDailyPickNotificationEmail(
   })
 }
 
+// いいね通知メール
+export async function sendLikeNotificationEmail(
+  targetEmail: string,
+  fromUserNickname: string,
+  fromUserProfileId: string
+) {
+  const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
+  const profileUrl = `${baseUrl}/profile/${fromUserProfileId}`
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #dc2626; margin: 0; }
+        .content { background: linear-gradient(135deg, #fef2f2 0%, #fff7ed 100%); padding: 30px; border-radius: 10px; border: 2px solid #fecaca; }
+        .highlight-box {
+          background: #fff;
+          border: 2px solid #ec4899;
+          border-radius: 10px;
+          padding: 25px;
+          text-align: center;
+          margin: 20px 0;
+        }
+        .nickname {
+          font-size: 28px;
+          font-weight: bold;
+          color: #ec4899;
+          margin-bottom: 10px;
+        }
+        .message {
+          font-size: 18px;
+          color: #666;
+        }
+        .heart {
+          color: #ec4899;
+          font-size: 24px;
+        }
+        .button {
+          display: inline-block;
+          background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+          color: white !important;
+          padding: 14px 40px;
+          text-decoration: none;
+          border-radius: 25px;
+          margin: 20px 0;
+          font-weight: bold;
+          font-size: 16px;
+        }
+        .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+        .unsubscribe { color: #999; font-size: 12px; margin-top: 20px; }
+        .decoration { color: #f59e0b; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h1>🏮 ミアイ 🏮</h1>
+        </div>
+        <div class="content">
+          <h2 style="text-align: center; color: #ec4899;"><span class="heart">💕</span> いいねが届きました <span class="heart">💕</span></h2>
+          <div class="highlight-box">
+            <div class="nickname">${fromUserNickname}</div>
+            <div class="message">さんがあなたに「いいね」しました！</div>
+          </div>
+          <p style="text-align: center;">
+            素敵な出会いのチャンスです！<br>
+            プロフィールをチェックして、気になったら「いいね」を返しましょう。
+          </p>
+          <p style="text-align: center;">
+            <a href="${profileUrl}" class="button">プロフィールを見る</a>
+          </p>
+        </div>
+        <div class="footer">
+          <p><span class="decoration">囍</span> ミアイ - 在日華人のための出会い <span class="decoration">囍</span></p>
+          <p class="unsubscribe">
+            ※このメールの配信を停止するには、アプリの設定画面から通知設定を変更してください。
+          </p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `
+
+  return sendEmail({
+    to: targetEmail,
+    subject: `【ミアイ】${fromUserNickname}さんがあなたに「いいね」しました！`,
+    html,
+  })
+}
+
 export async function sendPasswordResetEmail(email: string, token: string) {
   const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000'
   const resetUrl = `${baseUrl}/reset-password?token=${token}`

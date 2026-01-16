@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { sendLikeNotificationEmail } from '@/lib/mail'
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,6 +53,35 @@ export async function POST(request: NextRequest) {
         },
       },
     })
+
+    // いいね通知メールを送信
+    // 送信者（現在のユーザー）のプロフィールを取得
+    const fromUserProfile = await prisma.profile.findUnique({
+      where: { userId: session.user.id },
+      select: { id: true, nickname: true },
+    })
+
+    // 受信者（いいねされた人）の情報を取得
+    const toUser = await prisma.user.findUnique({
+      where: { id: toUserId },
+      select: {
+        email: true,
+        profile: {
+          select: { emailNotifications: true },
+        },
+      },
+    })
+
+    // 通知設定がオンで、メールアドレスがある場合のみ送信
+    if (fromUserProfile && toUser?.email && toUser.profile?.emailNotifications) {
+      sendLikeNotificationEmail(
+        toUser.email,
+        fromUserProfile.nickname,
+        fromUserProfile.id
+      ).catch((err) => {
+        console.error('Failed to send like notification email:', err)
+      })
+    }
 
     return NextResponse.json({
       like,
