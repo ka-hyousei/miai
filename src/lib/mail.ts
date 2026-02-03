@@ -1,19 +1,13 @@
 import nodemailer from 'nodemailer'
+import dns from 'dns'
+
+// IPv4を優先（Vercelのサーバーレス環境でのDNS問題を回避）
+dns.setDefaultResultOrder('ipv4first')
 
 // トランスポーターを取得（環境変数を毎回読み込む）
 function getTransporter() {
   if (process.env.SMTP_HOST) {
-    // Gmail用設定
-    if (process.env.SMTP_HOST === 'smtp.gmail.com') {
-      return nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD,
-        },
-      })
-    }
-    // その他のSMTPサーバー
+    // 全てのSMTPサーバー（Gmail含む）で明示的な設定を使用
     return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '587'),
@@ -22,6 +16,9 @@ function getTransporter() {
         user: process.env.SMTP_USER,
         pass: process.env.SMTP_PASSWORD,
       },
+      // DNS解決の問題を回避
+      dnsTimeout: 30000,
+      socketTimeout: 30000,
     })
   }
   // 開発環境: JSON Transport（コンソール出力）
